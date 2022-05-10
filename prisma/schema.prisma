@@ -1,0 +1,35 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Account {
+  id    String  @id @unique
+  name  String
+  email String
+  admin Boolean @default(false)
+  dev   Boolean @default(false)
+  player Player?
+}
+
+model Player {
+  id   String @id @unique @default(cuid())
+  name String
+  role String?
+  money Int @default(0)
+  account Account? @relation(fields: [accountId], references: [id])
+  accountId String
+
+}
+
+model KeyV {
+  key        String  @id @unique
+  value      String?
+  valueArray Json?
+}
