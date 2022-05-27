@@ -1,6 +1,6 @@
 import { ButtonInteraction, MessageEmbedOptions, PermissionString } from "discord.js"
 import { ButtonOptions } from "../../typings/index.d"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class Button {
     /**

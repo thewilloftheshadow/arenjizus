@@ -1,6 +1,6 @@
 import { Message, MessageEmbedOptions, PermissionString } from "discord.js"
 import { TextCommandOptions } from "../../typings/index.d"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class TextCommand {
     /**

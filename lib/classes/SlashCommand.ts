@@ -2,7 +2,7 @@ import {
     ApplicationCommandOptionData, CommandInteraction, MessageEmbedOptions, PermissionString
 } from "discord.js"
 import { SlashCommandOptions } from "../../typings/index.d"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class SlashCommand {
     /**

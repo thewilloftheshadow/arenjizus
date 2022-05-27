@@ -2,7 +2,7 @@ import { Intents, PermissionString, PresenceData } from "discord.js"
 
 export default {
     prefixes: process.env.NODE_ENV === "production" ? ["!"] : ["!!"],
-    botName: "Tusk",
+    botName: "Blobby",
 
     version: "0.1.0",
     admins: ["439223656200273932", "557691883518951435"],

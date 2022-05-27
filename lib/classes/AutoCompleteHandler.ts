@@ -1,5 +1,5 @@
 import { AutocompleteInteraction } from "discord.js"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 import AutoComplete from "./AutoComplete"
 
 export default class AutoCompleteHandler {
@@ -53,8 +53,6 @@ export default class AutoCompleteHandler {
     public async handleAutoComplete(interaction: AutocompleteInteraction) {
         const name = [
             interaction.commandName,
-            interaction.options.getSubcommandGroup(false) || "",
-            interaction.options.getSubcommand(false) || "",
             interaction.options.getFocused(true).name || "",
         ]
             .filter(Boolean)

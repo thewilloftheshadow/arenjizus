@@ -1,5 +1,5 @@
 import Config from "../../config/bot.config"
-import BetterClient from "../../lib/extensions/TuskClient"
+import BetterClient from "../../lib/extensions/BlobbyClient"
 
 const client = new BetterClient({
     allowedMentions: { parse: ["users"], },

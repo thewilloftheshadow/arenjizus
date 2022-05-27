@@ -1,7 +1,6 @@
 {
-    "name": "tusk",
-    "version": "2.0.0",
-    "description": "Rewrite of The Narwhal",
+    "name": "advanced-mafia",
+    "version": "1.0.0",
     "main": "dist/src/index.js",
     "scripts": {
         "dev": "npm run build && cross-env NODE_ENV=development node .",
@@ -10,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/narwhalventures/tusk.git"
+        "url": "git+https://github.com/thewilloftheshadow/advancedmafia.git"
     },
     "author": "Shadow",
     "license": "private",

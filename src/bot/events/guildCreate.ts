@@ -6,12 +6,6 @@ export default class GuildCreate extends EventHandler {
         const stats = await this.client.fetchStats()
         this.client.logger.info(`Joined guild ${guild.name} (${guild.id}) with ${guild.memberCount} members, now in ${stats.guilds} guilds(s)!`)
 
-        await this.client.prisma.guild.create({
-            data: {
-                id: guild.id,
-            },
-        })
-
         return this.client.logger.webhookLog("guild", {
             content: `**__Joined a New Guild (${stats.guilds} Total)__**\n**Guild Name:** \`${guild.name}\`\n**Guild ID:** \`${
                 guild.id

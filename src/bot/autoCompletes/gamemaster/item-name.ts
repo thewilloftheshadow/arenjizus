@@ -1,9 +1,9 @@
 import { AutocompleteInteraction } from "discord.js"
 import AutoComplete from "../../../../lib/classes/AutoComplete"
-import TuskClient from "../../../../lib/extensions/TuskClient"
+import BlobbyClient from "../../../../lib/extensions/BlobbyClient"
 
 export default class Item extends AutoComplete {
-    constructor(client: TuskClient) {
+    constructor(client: BlobbyClient) {
         super("item-name", client)
     }
 

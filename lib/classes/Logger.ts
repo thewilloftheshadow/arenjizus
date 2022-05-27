@@ -5,6 +5,7 @@ import {
 import { format } from "util"
 import { WebhookClient, WebhookMessageOptions } from "discord.js"
 import init from "../utilities/sentry"
+import { GenerateTimestampOptions } from "../../typings/index.d"
 
 export class Logger {
     /**
@@ -85,6 +86,24 @@ export class Logger {
             })
         }
         return this.webhooks[type.toLowerCase()].send(options)
+    }
+
+    public async gameLog(msg: string) {
+        return this.webhookLog("game", {
+            content: `${this.generateTimestamp()}: ${msg}`,
+        })
+    }
+
+    /**
+     * Generate a unix timestamp for Discord to be rendered locally per user.
+     * @param options - The options to use for the timestamp.
+     * @returns The generated timestamp.
+     */
+    private generateTimestamp(options?: GenerateTimestampOptions): string {
+        let timestamp = options?.timestamp || new Date()
+        const type = options?.type || "f"
+        if (timestamp instanceof Date) timestamp = timestamp.getTime()
+        return `<t:${Math.floor(timestamp / 1000)}:${type}>`
     }
 }
 

@@ -6,7 +6,7 @@ import DropDown from "../classes/DropDown"
 import * as Logger from "../classes/Logger"
 import Config from "../../config/bot.config"
 import Functions from "../utilities/functions"
-import { CachedStats, Stats } from "../../typings/index.d"
+import { CachedStats, Stats } from "../../typings"
 import TextCommand from "../classes/TextCommand"
 import EventHandler from "../classes/EventHandler"
 import SlashCommand from "../classes/SlashCommand"
@@ -16,17 +16,11 @@ import TextCommandHandler from "../classes/TextCommandHandler"
 import SlashCommandHandler from "../classes/SlashCommandHandler"
 import AutoCompleteHandler from "../classes/AutoCompleteHandler"
 import AutoComplete from "../classes/AutoComplete"
-import GiveawayManager from "../classes/GiveawayManager"
-import BroadcastManager from "../classes/BroadcastManager"
-import EmbedBuilder from "../classes/EmbedBuilder"
 import ModalSubmitHandler from "../classes/ModalSubmitHandler"
 import ModalSubmit from "../classes/ModalSubmit"
 
 export default class TuskClient extends Client {
     public usersUsingBot: Set<string>
-    public giveawayManager: GiveawayManager
-    public broadcastManager: BroadcastManager
-    public embedBuilder: EmbedBuilder
     public readonly config
     public readonly functions: Functions
     public readonly logger: Logger.Logger
@@ -67,10 +61,6 @@ export default class TuskClient extends Client {
         this.config = Config
         this.functions = new Functions(this)
         this.logger = Logger.default
-
-        this.giveawayManager = new GiveawayManager(this)
-        this.broadcastManager = new BroadcastManager(this)
-        this.embedBuilder = new EmbedBuilder(this)
 
         this.slashCommandHandler = new SlashCommandHandler(this)
         this.slashCommands = new Collection()

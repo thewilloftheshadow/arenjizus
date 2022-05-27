@@ -3,7 +3,7 @@ import { inspect } from "util"
 import StopWatch from "../../../../lib/classes/StopWatch"
 import TextCommand from "../../../../lib/classes/TextCommand"
 import Type from "../../../../lib/classes/Type"
-import BetterClient from "../../../../lib/extensions/TuskClient"
+import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
 export default class Eval extends TextCommand {
     constructor(client: BetterClient) {

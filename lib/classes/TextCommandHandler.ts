@@ -1,6 +1,6 @@
 import { Message, Snowflake } from "discord.js"
 import TextCommand from "./TextCommand"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class TextCommandHandler {
     /**

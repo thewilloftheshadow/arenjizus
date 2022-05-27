@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import ModalSubmit from "./ModalSubmit"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 import { ModalSubmitInteraction } from "discord.js"
 
 export default class ModalSubmitHandler {

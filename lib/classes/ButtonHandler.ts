@@ -1,7 +1,7 @@
 /* eslint-disable import/order */
 import Button from "./Button"
 import { ButtonInteraction } from "discord.js"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class ButtonHandler {
     /**

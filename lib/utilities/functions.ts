@@ -10,13 +10,14 @@ import {
     PermissionString,
     Snowflake,
     User,
-    UserResolvable,
 } from "discord.js"
 import { existsSync, mkdirSync, readdirSync } from "fs"
 import { PetitioRequest } from "petitio"
-import { Embed } from "@prisma/client"
+import {
+    Item, Player, PlayerItems, PlayerRoles, Role
+} from "@prisma/client"
 import { permissionNames } from "./permissions"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 import { GeneratedMessage, GenerateTimestampOptions } from "../../typings/index.d"
 
 export default class Functions {
@@ -292,29 +293,6 @@ export default class Functions {
         return typeof input === "function"
     }
 
-    /**
-     * Get a user from the database
-     * @param user - The user to check.
-     * @returns The prisma db user.
-     */
-    public getUserDatabase(user: UserResolvable) {
-        const id = this.client.users.resolveId(user)
-        if (!id) return null
-        return this.client.prisma.user.findFirst({ where: { id } })
-    }
-
-    public buildEmbedFromDb(embedData: Embed) {
-        const embed = new MessageEmbed()
-        if (embedData.title) embed.setTitle(embedData.title)
-        if (embedData.description) embed.setDescription(embedData.description)
-        if (embedData.color) embed.setColor(embedData.color)
-        if (embedData.footer) embed.setFooter({ text: embedData.footer })
-        if (embedData.image) embed.setImage(embedData.image)
-        if (embedData.thumbnail) embed.setThumbnail(embedData.thumbnail)
-
-        return embed
-    }
-
     public emojiList(items: string[], doFirst?: boolean) {
         if (!items || items.length === 0) throw new Error("No items were specified")
         const emoji = (i: number) => {
@@ -325,25 +303,53 @@ export default class Functions {
         return items.map((x, i) => `${emoji(i)} ${x}`).join("\n")
     }
 
-    public parseRedeemItems(items: string[], formatted = true): string[] | { name: string; amount: number }[] {
-        const itemInfo: { name: string; amount: number }[] = []
-        items.forEach((x) => {
-            const [name, amount] = x.split("-")
-            if (!name || !amount) return
-            itemInfo.push({
-                name: name.trim(),
-                amount: parseInt(amount.trim(), 10),
-            })
-        })
-        if (formatted) {
-            return itemInfo.map((x) => `${x.amount}x ${x.name}`) || "No items specified"
-        }
-        return itemInfo || {}
-    }
-
     public getEmojiUrl(emojiString: string): string {
         const animated = emojiString.split(":")[0] === "<a"
         const id = emojiString.split(":")[2]?.replace(">", "")
         return `https://cdn.discordapp.com/emojis/${id}.${animated ? "gif" : "png"}`
+    }
+
+    public itemEmbed(item: (Item & {
+        players: PlayerItems[]
+    })): MessageEmbed {
+        const embed = new MessageEmbed()
+            .setTitle(item.name)
+            .setThumbnail(this.client.user?.avatarURL() || "")
+            .setColor("RANDOM")
+            .setImage("https://i.imgur.com/iB0VQk2.png")
+        if (item.description) embed.description = item.description
+        embed.description = `Price: ${item.price}`
+        embed.addField(`${item.players.length} Players:`, item.players.map((x) => x.playerName).join(", ") ?? "None")
+        return embed
+    }
+
+    public playerEmbed(player: (Player & {
+        roles: PlayerRoles[];
+        items: PlayerItems[];
+    })): MessageEmbed {
+        const embed = new MessageEmbed()
+            .setTitle(player.name)
+            .setThumbnail(this.client.user?.avatarURL() || "")
+            .setColor("RANDOM")
+            .setImage("https://i.imgur.com/iB0VQk2.png")
+
+        embed.description = `Money: ${player.money}\n`
+        embed.description += `Alive: ${player.alive}\n`
+        if (player.roles) embed.description += `Roles: ${player.roles.map((x) => x.roleName).join(", ")}\n`
+        if (player.items) embed.description += `Items: ${player.items.map((x) => x.itemName).join(", ")}\n`
+        return embed
+    }
+
+    public roleEmbed(role: (Role & {
+        players: PlayerRoles[];
+    })): MessageEmbed {
+        const embed = new MessageEmbed()
+            .setTitle(role.name)
+            .setThumbnail(this.client.user?.avatarURL() || "")
+            .setColor("RANDOM")
+            .setImage("https://i.imgur.com/iB0VQk2.png")
+        if (role.description) embed.description = role.description
+        embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") ?? "None")
+        return embed
     }
 }

@@ -1,5 +1,5 @@
 import { AutocompleteInteraction } from "discord.js"
-import BetterClient from "../extensions/TuskClient"
+import BetterClient from "../extensions/BlobbyClient"
 
 export default class AutoComplete {
     /**

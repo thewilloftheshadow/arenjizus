@@ -4,126 +4,57 @@ generator client {
 }
 
 datasource db {
-    provider             = "postgres"
-    url                  = "postgresql://postgres:narwhaldb@localhost:5432/narwhal"
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
     referentialIntegrity = "prisma"
 }
 
-enum GiveawayType {
-    NITRO
-    GIFT_CARD
-    DANK_MEMER
-    OTHER
+model Player {
+    id    String        @id @unique @default(cuid())
+    name  String
+    money Int           @default(10)
+    alive Boolean       @default(true)
+    roles PlayerRoles[]
+    items PlayerItems[]
 }
 
-model Guild {
-    id               String            @unique // ID of this guild
-    createdAt        DateTime          @default(now()) // Date created
-    initialSetup     Boolean           @default(false) // Has been intially setup
-    giveawaySettings GiveawaySetting[] // List of giveaway settings
+model Role {
+    id          String        @id @unique @default(cuid())
+    name        String
+    description String
+    players     PlayerRoles[]
 }
 
-model GiveawaySetting {
-    guild Guild @relation(fields: [guildId], references: id)
+model PlayerRoles {
+    player     Player   @relation(fields: [playerName], references: [name])
+    playerName   String
+    role       Role     @relation(fields: [roleName], references: [name])
+    roleName     String
+    assignedAt DateTime @default(now())
 
-    guildId String // ID of the guild for this setting
-    type    GiveawayType // Type of giveaway, e.g. "nitro" or "dank_memer"
-    ping    String // Ping to send when the giveaway is started
-    channel String // Channel to send the giveaway in
-    enabled Boolean      @default(false) // Is this giveaway type enabled?
-
-    @@unique([guildId, type])
-}
-
-model User {
-    id         String    @unique // User ID
-    createdAt  DateTime  @default(now()) // Date created
-    flags      Flag[] // List of flags
-    voteTime   DateTime? // Date last voted
-    language   String    @default("en") // Language to use for the bot
-    lastPlayed DateTime? // Date last played
-
-    updatedAt DateTime    @updatedAt
-    EntryData EntryData[]
-}
-
-model Flag {
-    user   User   @relation(fields: [userId], references: id)
-    userId String // ID of the user for this flag
-
-    flag  String // Flag to set
-    value Boolean @default(true) // Value to set the flag to
-
-    @@unique([userId, flag])
-}
-
-model Giveaway {
-    id       String       @unique @default(uuid()) // ID of this giveaway 
-    prize    String
-    time     Int //length in milliseconds of the giveaway ending
-    startsAt Int? // epoch date of the giveaway starting, set once the schedule button is pressed
-    endsAt   Int? // epoch date of the giveaway ending, set once the giveaway is broadcasted
-    type     GiveawayType
-    doPing   Boolean      @default(false) // Should the bot ping on broadcast?
-
-    started   Boolean @default(false) // Has the giveaway started?
-    ended     Boolean @default(false) // Has the giveaway ended?
-    scheduled Boolean @default(false) // Has the giveaway been scheduled?
-    canceled  Boolean @default(false) // Has the giveaway been canceled?
-
-    winners     String[] // List of winner IDs
-    oldWinners  String[] // List of old winner IDs after a reroll
-    winnerCount Int // Number of winners
-
-    embed   Embed   @relation(fields: [embedId], references: [id]) // Embed to send when the giveaway is broadcasted
-    embedId String // ID of the embed to sent
-    message String? // Message to send when the giveaway is broadcasted
-
-    staff String // Staff who sent the giveaway
-
-    createdAt DateTime @default(now()) // Date created
-
-    updatedAt DateTime    @updatedAt
-    entries   EntryData[] // List of entries
-}
-
-model Embed {
-    id          String     @unique @default(uuid()) // ID of this embed
-    title       String?
-    description String?
-    color       Int        @default(00000000) // Color of the embed
-    thumbnail   String?
-    image       String?
-    footer      String?
-    giveaway    Giveaway[]
-}
-
-model EntryData {
-    giveaway   Giveaway @relation(fields: [giveawayId], references: id)
-    giveawayId String // ID of the giveaway for this entry set
-
-    userId String // User ID
-    user   User   @relation(fields: [userId], references: id)
-
-    guild String[] // List of guild IDs for this entry set
-    bonus Int // Bonus points for this entry set
-
-    @@id([giveawayId, userId])
+    @@id([playerName, roleName])
 }
 
 model Item {
-    id          String  @unique @default(uuid()) // ID of this item
-    name        String @unique // Name of the item
-    description String? // Description of the item
-    emoji       String? // Emoji of the item
+    id          String        @id @unique @default(cuid())
+    name        String
+    price       Int
+    description String
+    players     PlayerItems[]
+}
 
-    feedable  Boolean @default(false) // Can this item be fed?
-    feedValue Int     @default(0) // Number of entries this is worth when fed
+model PlayerItems {
+    player     Player   @relation(fields: [playerName], references: [name])
+    playerName   String
+    item       Item     @relation(fields: [itemName], references: [name])
+    itemName     String
+    assignedAt DateTime @default(now())
 
-    playChance Int @default(0) // Chance of this item being given from /play
+    @@id([playerName, itemName])
+}
 
-    canCode Boolean @default(true) // Whether this can be added to a /code
-
-    redeemable  Boolean  @default(false) // Whether this can be redeemed for other items
-    redeemItems String[] // List of items this can be redeemed for, formatted by `name-amount`
+model KeyV {
+    key        String  @id @unique
+    value      String?
+    valueArray Json?
 }
