@@ -314,12 +314,11 @@ export default class Functions {
     })): MessageEmbed {
         const embed = new MessageEmbed()
             .setTitle(item.name)
-            .setThumbnail(this.client.user?.avatarURL() || "")
             .setColor("RANDOM")
             .setImage("https://i.imgur.com/iB0VQk2.png")
         if (item.description) embed.description = item.description
         embed.description = `Price: ${item.price}`
-        embed.addField(`${item.players.length} Players:`, item.players.map((x) => x.playerName).join(", ") ?? "None")
+        embed.addField(`${item.players.length} Players:`, item.players.map((x) => x.playerName).join(", ") || "** **", true)
         return embed
     }
 
@@ -329,14 +328,13 @@ export default class Functions {
     })): MessageEmbed {
         const embed = new MessageEmbed()
             .setTitle(player.name)
-            .setThumbnail(this.client.user?.avatarURL() || "")
             .setColor("RANDOM")
             .setImage("https://i.imgur.com/iB0VQk2.png")
 
         embed.description = `Money: ${player.money}\n`
         embed.description += `Alive: ${player.alive}\n`
-        if (player.roles) embed.description += `Roles: ${player.roles.map((x) => x.roleName).join(", ")}\n`
-        if (player.items) embed.description += `Items: ${player.items.map((x) => x.itemName).join(", ")}\n`
+        if (player.roles) embed.addField(`${player.roles.length} Roles:`, `${player.roles.map((x) => x.roleName).join(", ")}` || "** **", true)
+        if (player.items) embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => x.itemName).join(", ")}` || "** **", true)
         return embed
     }
 
@@ -345,11 +343,10 @@ export default class Functions {
     })): MessageEmbed {
         const embed = new MessageEmbed()
             .setTitle(role.name)
-            .setThumbnail(this.client.user?.avatarURL() || "")
             .setColor("RANDOM")
             .setImage("https://i.imgur.com/iB0VQk2.png")
         if (role.description) embed.description = role.description
-        embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") ?? "None")
+        embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
         return embed
     }
 }

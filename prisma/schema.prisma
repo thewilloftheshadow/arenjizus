@@ -49,6 +49,7 @@ model PlayerItems {
     item       Item     @relation(fields: [itemName], references: [name])
     itemName     String
     assignedAt DateTime @default(now())
+    amount    Int      @default(1)
 
     @@id([playerName, itemName])
 }

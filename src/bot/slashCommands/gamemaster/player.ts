@@ -32,6 +32,24 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the player",
                             required: true,
+                        },
+                        {
+                            type: "INTEGER",
+                            name: "money",
+                            description: "The amount of money the player has",
+                        }
+                    ],
+                },
+                {
+                    type: "SUB_COMMAND",
+                    name: "update",
+                    description: "update a player",
+                    options: [
+                        {
+                            type: "STRING",
+                            name: "name",
+                            description: "The name of the player",
+                            required: true,
                             autocomplete: true
                         },
                         {
@@ -83,7 +101,7 @@ export default class Ping extends SlashCommand {
                     })
                 )
             }
-            return interaction.editReply(`${JSON.stringify(player, null, 2)}`)
+            return interaction.editReply({ embeds: [this.client.functions.playerEmbed(player)] })
         }
         case "create": {
             const create: Prisma.PlayerCreateInput = {
@@ -102,6 +120,40 @@ export default class Ping extends SlashCommand {
             })
             this.client.logger.gameLog(`Player ${player.name} was created.`)
             return interaction.editReply({ content: "Player successfully created:", embeds: [this.client.functions.playerEmbed(player)] })
+        }
+        case "update": {
+            let player = await this.client.prisma.player.findFirst({
+                where: {
+                    name,
+                },
+                include: {
+                    items: true,
+                    roles: true
+                }
+            })
+            if (!player) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player not found",
+                        description: `The player ${name} was not found in the database.`,
+                    })
+                )
+            }
+            const data: Prisma.PlayerUpdateInput = {}
+            const money = interaction.options.getInteger("money")
+            if (money) data.money = money
+            player = await this.client.prisma.player.update({
+                where: {
+                    id: player.id,
+                },
+                data,
+                include: {
+                    items: true,
+                    roles: true
+                }
+            })
+            this.client.logger.gameLog(`Player ${player.name} was updated.`)
+            return interaction.editReply({ content: "Player successfully updated:", embeds: [this.client.functions.playerEmbed(player)] })
         }
         case "delete": {
             const player = await this.client.prisma.player.findFirst({

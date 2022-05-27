@@ -17,16 +17,16 @@ export default class Ping extends SlashCommand {
                             name: "player",
                             description: "The name of the player",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "STRING",
                             name: "role",
                             description: "The name of the role",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
-                    ]
+                    ],
                 },
                 {
                     type: "SUB_COMMAND",
@@ -38,7 +38,7 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the role",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                     ],
                 },
@@ -51,8 +51,27 @@ export default class Ping extends SlashCommand {
                             type: "STRING",
                             name: "name",
                             description: "The name of the role",
+                            required: true
+                        },
+                        {
+                            type: "STRING",
+                            name: "description",
+                            description: "The description of the role",
                             required: true,
-                            autocomplete: true
+                        },
+                    ],
+                },
+                {
+                    type: "SUB_COMMAND",
+                    name: "update",
+                    description: "Update an role",
+                    options: [
+                        {
+                            type: "STRING",
+                            name: "name",
+                            description: "The name of the role",
+                            required: true,
+                            autocomplete: true,
                         },
                         {
                             type: "STRING",
@@ -72,10 +91,10 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the role",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                     ],
-                }
+                },
             ],
         })
     }
@@ -92,8 +111,8 @@ export default class Ping extends SlashCommand {
                     name,
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             if (!role) {
                 return interaction.editReply(
@@ -105,6 +124,37 @@ export default class Ping extends SlashCommand {
             }
             return interaction.editReply({ embeds: [this.client.functions.roleEmbed(role)] })
         }
+        case "update": {
+            let role = await this.client.prisma.role.findFirst({
+                where: {
+                    name,
+                },
+                include: {
+                    players: true,
+                },
+            })
+            if (!role) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Role not found",
+                        description: `The role ${name} was not found in the database.`,
+                    })
+                )
+            }
+            role = await this.client.prisma.role.update({
+                where: {
+                    id: role.id,
+                },
+                data: {
+                    description: interaction.options.getString("description") || "",
+                },
+                include: {
+                    players: true,
+                },
+            })
+            this.client.logger.gameLog(`Role ${role.name} was updated.`)
+            return interaction.editReply({ content: "Role successfully updated:", embeds: [this.client.functions.roleEmbed(role)] })
+        }
         case "create": {
             const role = await this.client.prisma.role.create({
                 data: {
@@ -112,8 +162,8 @@ export default class Ping extends SlashCommand {
                     description: interaction.options.getString("description") || "",
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             this.client.logger.gameLog(`Role ${role.name} was created.`)
             return interaction.editReply({ content: "Role successfully created:", embeds: [this.client.functions.roleEmbed(role)] })
