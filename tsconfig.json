@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "lib": ["ESNext"],
+
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+
+        "rootDir": ".",
+        "outDir": "dist",
+
+        "strict": true,
+        "alwaysStrict": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitOverride": true,
+
+        "skipLibCheck": true,
+
+        "pretty": true,
+
+        "typeRoots": ["node_modules/@types", "typings/"]
+    },
+    "main": "src/index.ts"
+}
