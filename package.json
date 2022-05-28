@@ -17,6 +17,7 @@
         "@sentry/types": "^6.15.0",
         "@types/got": "^9.6.12",
         "@types/node": "^16.11.9",
+        "@types/shuffle-array": "^1.0.2",
         "@typescript-eslint/eslint-plugin": "^5.14.0",
         "@typescript-eslint/parser": "^5.14.0",
         "cross-env": "^7.0.3",
@@ -44,6 +45,7 @@
         "ms": "^2.1.3",
         "petitio": "^1.4.0",
         "rimraf": "^3.0.2",
+        "shuffle-array": "^1.0.1",
         "string-template": "^1.0.0",
         "topgg-autoposter": "^2.0.1"
     },
