@@ -309,27 +309,26 @@ export default class Functions {
         return `https://cdn.discordapp.com/emojis/${id}.${animated ? "gif" : "png"}`
     }
 
-    public itemEmbed(item: (Item & {
-        players: PlayerItems[]
-    })): MessageEmbed {
-        const embed = new MessageEmbed()
-            .setTitle(item.name)
-            .setColor("RANDOM")
-            .setImage("https://i.imgur.com/iB0VQk2.png")
-        if (item.description) embed.description = item.description
-        embed.description = `Price: ${item.price}`
+    public itemEmbed(
+        item: Item & {
+            players: PlayerItems[]
+        }
+    ): MessageEmbed {
+        const embed = new MessageEmbed().setTitle(item.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
+            .setDescription("")
+        if (item.description) embed.description += `${item.description}\n\n`
+        embed.description += `Price: ${item.price}`
         embed.addField(`${item.players.length} Players:`, item.players.map((x) => x.playerName).join(", ") || "** **", true)
         return embed
     }
 
-    public playerEmbed(player: (Player & {
-        roles: PlayerRoles[];
-        items: PlayerItems[];
-    })): MessageEmbed {
-        const embed = new MessageEmbed()
-            .setTitle(player.name)
-            .setColor("RANDOM")
-            .setImage("https://i.imgur.com/iB0VQk2.png")
+    public playerEmbed(
+        player: Player & {
+            roles: PlayerRoles[]
+            items: PlayerItems[]
+        }
+    ): MessageEmbed {
+        const embed = new MessageEmbed().setTitle(player.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
 
         embed.description = `Money: ${player.money}\n`
         embed.description += `Alive: ${player.alive}\n`
@@ -338,13 +337,12 @@ export default class Functions {
         return embed
     }
 
-    public roleEmbed(role: (Role & {
-        players: PlayerRoles[];
-    })): MessageEmbed {
-        const embed = new MessageEmbed()
-            .setTitle(role.name)
-            .setColor("RANDOM")
-            .setImage("https://i.imgur.com/iB0VQk2.png")
+    public roleEmbed(
+        role: Role & {
+            players: PlayerRoles[]
+        }
+    ): MessageEmbed {
+        const embed = new MessageEmbed().setTitle(role.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
         if (role.description) embed.description = role.description
         embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
         return embed

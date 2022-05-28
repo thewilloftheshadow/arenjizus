@@ -42,6 +42,27 @@ export default class Ping extends SlashCommand {
                 },
                 {
                     type: "SUB_COMMAND",
+                    name: "revoke",
+                    description: "Revoke all items of a type from a player",
+                    options: [
+                        {
+                            type: "STRING",
+                            name: "item",
+                            description: "The name of the item",
+                            required: true,
+                            autocomplete: true
+                        },
+                        {
+                            type: "STRING",
+                            name: "player",
+                            description: "The name of the player",
+                            required: true,
+                            autocomplete: true
+                        },
+                    ],
+                },
+                {
+                    type: "SUB_COMMAND",
                     name: "view",
                     description: "View an item",
                     options: [
@@ -177,6 +198,33 @@ export default class Ping extends SlashCommand {
 
             this.client.logger.gameLog(`${playerName} has been given ${amount} ${itemName}`)
             return interaction.editReply(`${playerName} has been given ${amount} ${itemName}`)
+        }
+        case "revoke": {
+            const itemName = interaction.options.getString("item", true)
+            const playerName = interaction.options.getString("player", true)
+            const item = await this.client.prisma.item.findFirst({
+                where: {
+                    name: itemName
+                }
+            })
+            const player = await this.client.prisma.player.findFirst({
+                where: {
+                    name: playerName
+                }
+            })
+            if (!item) return interaction.reply("Item not found")
+            if (!player) return interaction.reply("Player not found")
+            await this.client.prisma.playerItems.delete({
+                where: {
+                    playerName_itemName: {
+                        playerName,
+                        itemName
+                    }
+                }
+            })
+
+            this.client.logger.gameLog(`${playerName} has had all of their ${itemName} revoked`)
+            return interaction.editReply(`${playerName} has had all of their ${itemName} revoked`)
         }
 
         case "view": {

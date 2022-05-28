@@ -30,6 +30,27 @@ export default class Ping extends SlashCommand {
                 },
                 {
                     type: "SUB_COMMAND",
+                    name: "unassign",
+                    description: "Unassign a role to a player",
+                    options: [
+                        {
+                            type: "STRING",
+                            name: "player",
+                            description: "The name of the player",
+                            required: true,
+                            autocomplete: true,
+                        },
+                        {
+                            type: "STRING",
+                            name: "role",
+                            description: "The name of the role",
+                            required: true,
+                            autocomplete: true,
+                        },
+                    ],
+                },
+                {
+                    type: "SUB_COMMAND",
                     name: "view",
                     description: "View an role",
                     options: [
@@ -243,6 +264,47 @@ export default class Ping extends SlashCommand {
             })
             this.client.logger.gameLog(`Player ${player.name} was assigned to role ${role.name}.`)
             return interaction.editReply({ content: "Player successfully assigned to role." })
+        }
+        case "unassign": {
+            const playerName = interaction.options.getString("player", true)
+            const roleName = interaction.options.getString("role", true)
+
+            const role = await this.client.prisma.role.findFirst({
+                where: {
+                    name: roleName,
+                },
+            })
+            if (!role) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Role not found",
+                        description: `The role ${roleName} was not found in the database.`,
+                    })
+                )
+            }
+            const player = await this.client.prisma.player.findFirst({
+                where: {
+                    name: playerName,
+                },
+            })
+            if (!player) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player not found",
+                        description: `The player ${playerName} was not found in the database.`,
+                    })
+                )
+            }
+            await this.client.prisma.playerRoles.delete({
+                where: {
+                    playerName_roleName: {
+                        playerName: player.name,
+                        roleName: role.name,
+                    }
+                },
+            })
+            this.client.logger.gameLog(`Player ${player.name} was unassigned from role ${role.name}.`)
+            return interaction.editReply({ content: "Player successfully unassigned from role." })
         }
         default:
             break
