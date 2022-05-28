@@ -318,7 +318,7 @@ export default class Functions {
             .setDescription("")
         if (item.description) embed.description += `${item.description}\n\n`
         embed.description += `Price: ${item.price}`
-        embed.addField(`${item.players.length} Players:`, item.players.map((x) => x.playerName).join(", ") || "** **", true)
+        embed.addField(`${item.players.length} Players:`, item.players.map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **", true)
         return embed
     }
 
@@ -333,7 +333,7 @@ export default class Functions {
         embed.description = `Money: ${player.money}\n`
         embed.description += `Alive: ${player.alive}\n`
         if (player.roles) embed.addField(`${player.roles.length} Roles:`, `${player.roles.map((x) => x.roleName).join(", ")}` || "** **", true)
-        if (player.items) embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => x.itemName).join(", ")}` || "** **", true)
+        if (player.items) embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => `${x.amount}x ${x.itemName}`).join(", ")}` || "** **", true)
         return embed
     }
 
