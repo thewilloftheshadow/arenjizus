@@ -1,5 +1,6 @@
+/* eslint-disable no-case-declarations */
 import { Prisma } from "@prisma/client"
-import { CommandInteraction } from "discord.js"
+import { CommandInteraction, MessageEmbed } from "discord.js"
 import SlashCommand from "../../../../lib/classes/SlashCommand"
 import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
@@ -72,6 +73,11 @@ export default class Ping extends SlashCommand {
                             autocomplete: true
                         },
                     ],
+                },
+                {
+                    type: "SUB_COMMAND",
+                    name: "list",
+                    description: "List all players with their roles",
                 }
             ],
         })
@@ -191,6 +197,17 @@ export default class Ping extends SlashCommand {
             this.client.logger.gameLog(`Player ${player.name} was deleted.`)
             return interaction.editReply({ content: "Player successfully deleted." })
         }
+        case "list":
+            const players = await this.client.prisma.player.findMany({
+                include: {
+                    roles: true,
+                }
+            })
+            const embed = new MessageEmbed().setTitle("All Player Roles")
+            players.forEach((player) => {
+                embed.description += `${player.name} - ${player.roles.map((role) => role.roleName).join(", ")}\n`
+            })
+            return interaction.editReply({ embeds: [embed] })
         default:
             break
         }
