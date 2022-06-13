@@ -203,7 +203,7 @@ export default class Ping extends SlashCommand {
                     roles: true,
                 }
             })
-            const embed = new MessageEmbed().setTitle("All Player Roles")
+            const embed = new MessageEmbed().setTitle("All Player Roles").setDescription("")
             players.forEach((player) => {
                 embed.description += `${player.name} - ${player.roles.map((role) => role.roleName).join(", ")}\n`
             })
