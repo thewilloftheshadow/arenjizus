@@ -10,12 +10,13 @@ datasource db {
 }
 
 model Player {
-    id    String        @id @unique @default(cuid())
-    name  String
-    money Int           @default(10)
-    alive Boolean       @default(true)
-    roles PlayerRoles[]
-    items PlayerItems[]
+    id        String        @id @unique @default(cuid())
+    discordId String?
+    name      String
+    money     Int           @default(10)
+    alive     Boolean       @default(true)
+    roles     PlayerRoles[]
+    items     PlayerItems[]
 }
 
 model Role {
