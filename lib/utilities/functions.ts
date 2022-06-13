@@ -316,7 +316,7 @@ export default class Functions {
     ): MessageEmbed {
         const embed = new MessageEmbed().setTitle(item.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
             .setDescription("")
-        if (item.description) embed.description += `${item.description}\n\n`
+        if (item.description) embed.description += `${item.description.slice(0, 1500)}\n\n`
         embed.description += `Price: ${item.price}`
         embed.addField(`${item.players.length} Players:`, item.players.map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **", true)
         return embed
@@ -333,7 +333,7 @@ export default class Functions {
         embed.description = `Money: ${player.money}\n`
         embed.description += `Alive: ${player.alive}\n`
         if (player.roles) embed.addField(`${player.roles.length} Roles:`, `${player.roles.map((x) => x.roleName).join(", ")}` || "** **", true)
-        if (player.items) embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => `${x.amount}x ${x.itemName}`).join(", ")}` || "** **", true)
+        if (player.items) { embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => `${x.amount}x ${x.itemName}`).join(", ")}` || "** **", true) }
         return embed
     }
 
@@ -343,7 +343,7 @@ export default class Functions {
         }
     ): MessageEmbed {
         const embed = new MessageEmbed().setTitle(role.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
-        if (role.description) embed.description = role.description
+        if (role.description) embed.description = role.description.slice(0, 1500)
         embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
         return embed
     }

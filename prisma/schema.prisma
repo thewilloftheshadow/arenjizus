@@ -21,15 +21,15 @@ model Player {
 model Role {
     id          String        @id @unique @default(cuid())
     name        String
-    description String
+    description String        @db.LongText
     players     PlayerRoles[]
 }
 
 model PlayerRoles {
     player     Player   @relation(fields: [playerName], references: [name])
-    playerName   String
+    playerName String
     role       Role     @relation(fields: [roleName], references: [name])
-    roleName     String
+    roleName   String
     assignedAt DateTime @default(now())
 
     @@id([playerName, roleName])
@@ -39,17 +39,17 @@ model Item {
     id          String        @id @unique @default(cuid())
     name        String
     price       Int
-    description String
+    description String        @db.LongText
     players     PlayerItems[]
 }
 
 model PlayerItems {
     player     Player   @relation(fields: [playerName], references: [name])
-    playerName   String
+    playerName String
     item       Item     @relation(fields: [itemName], references: [name])
-    itemName     String
+    itemName   String
     assignedAt DateTime @default(now())
-    amount    Int      @default(1)
+    amount     Int      @default(1)
 
     @@id([playerName, itemName])
 }
