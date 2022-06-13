@@ -4,10 +4,10 @@ export default {
     prefixes: process.env.NODE_ENV === "production" ? ["!"] : ["!!"],
     botName: "Blobby",
 
-    version: "0.1.0",
-    admins: ["439223656200273932", "557691883518951435"],
+    version: "1.0.0",
+    admins: ["439223656200273932"],
 
-    supportServer: "https://discord.gg/NfF3MyjyS8",
+    supportServer: "https://inv.wtf/shadow",
 
     presence: {
         status: "online",
@@ -19,7 +19,7 @@ export default {
         ],
     } as PresenceData,
 
-    hastebin: "https://haste.jtjs.org",
+    hastebin: "https://haste.narwhal.cool/",
 
     colors: {
         primary: "5865F2",
