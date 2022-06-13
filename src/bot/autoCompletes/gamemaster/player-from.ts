@@ -4,11 +4,11 @@ import BlobbyClient from "../../../../lib/extensions/BlobbyClient"
 
 export default class Player extends AutoComplete {
     constructor(client: BlobbyClient) {
-        super("role-player", client)
+        super("player-from", client)
     }
 
     override async run(interaction: AutocompleteInteraction) {
-        const name = interaction.options.getString("player")
+        const name = interaction.options.getString("from")
         this.client.logger.debug(name)
 
         const allPlayers = await this.client.prisma.player.findMany({

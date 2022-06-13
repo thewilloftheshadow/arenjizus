@@ -81,18 +81,25 @@ export default class Ping extends SlashCommand {
                 },
                 {
                     type: "SUB_COMMAND",
-                    name: "balance",
-                    description: "Update the balance of a player, using + or - before the number",
+                    name: "transfer",
+                    description: "Transfer money between players",
                     options: [
                         {
                             type: "STRING",
-                            name: "name",
-                            description: "The name of the player",
+                            name: "from",
+                            description: "The name of the player to transfer from",
                             required: true,
                             autocomplete: true,
                         },
                         {
                             type: "STRING",
+                            name: "to",
+                            description: "The name of the player to transfer to",
+                            required: true,
+                            autocomplete: true,
+                        },
+                        {
+                            type: "INTEGER",
                             name: "amount",
                             description: "The amount to update the balance by",
                             required: true,
@@ -249,49 +256,64 @@ export default class Ping extends SlashCommand {
             })
             return interaction.editReply({ embeds: [embed] })
         }
-        case "balance": {
-            const amount = interaction.options.getString("amount", true)
-            if (!amount) return interaction.editReply("You must specify an amount to update the balance by.")
-            let changeBy = 0
-            const changeType = amount.slice(0, 1)
-            switch (changeType) {
-            case "+":
-                changeBy = parseInt(amount, 10)
-                break
-            case "-":
-                changeBy = 0 - parseInt(amount, 10)
-                break
-            default:
-                return interaction.editReply("You must specify a + or - before the amount.")
-            }
-            const player = await this.client.prisma.player.findFirst({
+        case "transfer": {
+            const from = interaction.options.getString("from", true)
+            const to = interaction.options.getString("to", true)
+            const amount = interaction.options.getInteger("amount", true)
+            const fromPlayer = await this.client.prisma.player.findFirst({
                 where: {
-                    name,
+                    name: from,
                 },
             })
-            if (!player) {
+            const toPlayer = await this.client.prisma.player.findFirst({
+                where: {
+                    name: to,
+                },
+            })
+            if (!fromPlayer) {
                 return interaction.editReply(
                     this.client.functions.generateErrorMessage({
                         title: "Player not found",
-                        description: `The player ${name} was not found in the database.`,
+                        description: `The player ${from} was not found in the database.`,
                     })
                 )
             }
-
-            const newPlayer = await this.client.prisma.player.update({
+            if (!toPlayer) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player not found",
+                        description: `The player ${to} was not found in the database.`,
+                    })
+                )
+            }
+            if (fromPlayer.money < amount) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Insufficient funds",
+                        description: `The player ${from} does not have enough money to transfer ${amount} to ${to}.`,
+                    })
+                )
+            }
+            const fromMoney = fromPlayer.money - amount
+            const toMoney = toPlayer.money + amount
+            await this.client.prisma.player.update({
                 where: {
-                    id: player.id,
+                    id: fromPlayer.id,
                 },
                 data: {
-                    money: player.money + changeBy,
-                },
-                include: {
-                    items: true,
-                    roles: true,
+                    money: fromMoney,
                 },
             })
-            this.client.logger.gameLog(`Player ${player.name}'s balance was updated by ${amount}.`)
-            return interaction.editReply({ content: "Player balance updated:", embeds: [this.client.functions.playerEmbed(newPlayer)] })
+            await this.client.prisma.player.update({
+                where: {
+                    id: toPlayer.id,
+                },
+                data: {
+                    money: toMoney,
+                },
+            })
+            this.client.logger.gameLog(`Player ${from} transferred ${amount} to ${to}.`)
+            return interaction.editReply({ content: `${amount} has been successfully transferred.` })
         }
         case "link": {
             const user = interaction.options.getUser("user", true)
@@ -306,6 +328,19 @@ export default class Ping extends SlashCommand {
                     this.client.functions.generateErrorMessage({
                         title: "Player not found",
                         description: `The player ${name} was not found in the database.`,
+                    })
+                )
+            }
+            const linked = await this.client.prisma.player.findFirst({
+                where: {
+                    discordId: user.id,
+                },
+            })
+            if (linked) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "User already linked",
+                        description: `The user ${user.tag} is already linked to ${linked.name}.`,
                     })
                 )
             }

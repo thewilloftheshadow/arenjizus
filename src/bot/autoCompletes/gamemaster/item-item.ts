@@ -17,13 +17,10 @@ export default class Item extends AutoComplete {
             },
         })
 
-        this.client.logger.debug(allItems)
-
         if (name) {
             const items = allItems.filter((item: { name: string }) => item.name.toLowerCase().includes(name.toLowerCase()))
             return interaction.respond(items.map((item: { name: string }) => ({ name: item.name, value: item.name })))
         }
-        this.client.logger.debug("No name")
         return interaction.respond(allItems.map((item: { name: string }) => ({ name: item.name, value: item.name })))
     }
 }

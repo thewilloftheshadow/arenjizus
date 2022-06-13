@@ -17,13 +17,10 @@ export default class Role extends AutoComplete {
             },
         })
 
-        this.client.logger.debug(allRoles)
-
         if (name) {
             const roles = allRoles.filter((role: { name: string }) => role.name.toLowerCase().includes(name.toLowerCase()))
             return interaction.respond(roles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
         }
-        this.client.logger.debug("No name")
         return interaction.respond(allRoles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
     }
 }

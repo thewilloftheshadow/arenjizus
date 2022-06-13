@@ -17,13 +17,10 @@ export default class Player extends AutoComplete {
             },
         })
 
-        this.client.logger.debug(allPlayers)
-
         if (name) {
             const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(name.toLowerCase()))
             return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
         }
-        this.client.logger.debug("No name")
         return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
     }
 }
