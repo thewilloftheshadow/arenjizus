@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "npm run build && cross-env NODE_ENV=development node .",
         "start": "cross-env NODE_ENV=production node .",
-        "build": "rimraf dist && tsc && prisma generate"
+        "build": "rimraf dist && prisma generate && tsc"
     },
     "repository": {
         "type": "git",
