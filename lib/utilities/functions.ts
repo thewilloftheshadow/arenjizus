@@ -345,6 +345,7 @@ export default class Functions {
         const embed = new MessageEmbed().setTitle(role.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
         if (role.description) embed.description = role.description.slice(0, 1500)
         embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
+        if (role.name.toLowerCase().includes("bezos")) embed.setImage("https://tenor.com/bgUX6.gif")
         return embed
     }
 }
