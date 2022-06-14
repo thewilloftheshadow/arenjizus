@@ -10,13 +10,21 @@ datasource db {
 }
 
 model Player {
-    id        String        @id @unique @default(cuid())
+    id        String         @id @unique @default(cuid())
     discordId String?
     name      String
-    money     Int           @default(10)
-    alive     Boolean       @default(true)
+    money     Int            @default(10)
+    alive     Boolean        @default(true)
     roles     PlayerRoles[]
     items     PlayerItems[]
+    ballData  PlayerBallData?
+}
+
+model PlayerBallData {
+    name     String
+    avatar   String
+    player   Player @relation(fields: [playerId], references: [id])
+    playerId String
 }
 
 model Role {
