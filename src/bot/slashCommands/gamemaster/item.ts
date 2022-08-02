@@ -17,14 +17,14 @@ export default class Ping extends SlashCommand {
                             name: "item",
                             description: "The name of the item",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "STRING",
                             name: "player",
                             description: "The name of the player",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "INTEGER",
@@ -36,8 +36,8 @@ export default class Ping extends SlashCommand {
                             type: "BOOLEAN",
                             name: "payment",
                             description: "Deduct the price from the players balance?",
-                            required: true
-                        }
+                            required: true,
+                        },
                     ],
                 },
                 {
@@ -50,21 +50,21 @@ export default class Ping extends SlashCommand {
                             name: "item",
                             description: "The name of the item",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "STRING",
                             name: "player",
                             description: "The name of the player",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "INTEGER",
                             name: "amount",
                             description: "The amount of items to revoke",
                             required: true,
-                        }
+                        },
                     ],
                 },
                 {
@@ -77,7 +77,7 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the item",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                     ],
                 },
@@ -90,7 +90,7 @@ export default class Ping extends SlashCommand {
                             type: "STRING",
                             name: "name",
                             description: "The name of the item",
-                            required: true
+                            required: true,
                         },
                         {
                             type: "STRING",
@@ -117,7 +117,7 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the item",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                         {
                             type: "STRING",
@@ -143,10 +143,45 @@ export default class Ping extends SlashCommand {
                             name: "name",
                             description: "The name of the item",
                             required: true,
-                            autocomplete: true
+                            autocomplete: true,
                         },
                     ],
-                }
+                },
+
+                {
+                    type: "SUB_COMMAND",
+                    name: "transfer",
+                    description: "Transfer items between players",
+                    options: [
+                        {
+                            type: "STRING",
+                            name: "from",
+                            description: "The name of the player to transfer from",
+                            required: true,
+                            autocomplete: true,
+                        },
+                        {
+                            type: "STRING",
+                            name: "to",
+                            description: "The name of the player to transfer to",
+                            required: true,
+                            autocomplete: true,
+                        },
+                        {
+                            type: "STRING",
+                            name: "name",
+                            description: "The item to transfer",
+                            required: true,
+                            autocomplete: true,
+                        },
+                        {
+                            type: "INTEGER",
+                            name: "amount",
+                            description: "The amount of items to transfer",
+                            required: true,
+                        },
+                    ],
+                },
             ],
         })
     }
@@ -164,65 +199,67 @@ export default class Ping extends SlashCommand {
             const payment = interaction.options.getBoolean("payment", true)
             const item = await this.client.prisma.item.findFirst({
                 where: {
-                    name: itemName
-                }
+                    name: itemName,
+                },
             })
             const player = await this.client.prisma.player.findFirst({
                 where: {
-                    name: playerName
-                }
+                    name: playerName,
+                },
             })
             if (!item) return interaction.reply("Item not found")
             if (!player) return interaction.reply("Player not found")
             const cost = amount * item.price
             if (payment) {
-                if (player.money < cost) { return interaction.editReply(`The player does not have enough money to buy ${amount} ${itemName}`) }
+                if (player.money < cost) {
+                    return interaction.editReply(`The player does not have enough money to buy ${amount} ${itemName}`)
+                }
                 await this.client.prisma.player.update({
                     where: {
-                        id: player.id
+                        id: player.id,
                     },
                     data: {
-                        money: player.money - cost
-                    }
+                        money: player.money - cost,
+                    },
                 })
             }
             const playerItemData = await this.client.prisma.playerItems.findFirst({
                 where: {
                     player: {
-                        id: player.id
+                        id: player.id,
                     },
                     item: {
-                        id: item.id
-                    }
-                }
+                        id: item.id,
+                    },
+                },
             })
             if (!playerItemData) {
                 await this.client.prisma.playerItems.create({
                     data: {
                         player: {
                             connect: {
-                                id: player.id
-                            }
+                                id: player.id,
+                            },
                         },
                         item: {
                             connect: {
-                                id: item.id
-                            }
+                                id: item.id,
+                            },
                         },
-                        amount: amount ?? 1
-                    }
+                        amount: amount ?? 1,
+                    },
                 })
             } else {
                 await this.client.prisma.playerItems.update({
                     where: {
                         playerName_itemName: {
                             playerName: player.name,
-                            itemName: item.name
-                        }
+                            itemName: item.name,
+                        },
                     },
                     data: {
-                        amount: playerItemData.amount + amount
-                    }
+                        amount: playerItemData.amount + amount,
+                    },
                 })
             }
 
@@ -234,13 +271,13 @@ export default class Ping extends SlashCommand {
             const playerName = interaction.options.getString("player", true)
             const item = await this.client.prisma.item.findFirst({
                 where: {
-                    name: itemName
-                }
+                    name: itemName,
+                },
             })
             const player = await this.client.prisma.player.findFirst({
                 where: {
-                    name: playerName
-                }
+                    name: playerName,
+                },
             })
             if (!item) return interaction.reply("Item not found")
             if (!player) return interaction.reply("Player not found")
@@ -248,12 +285,12 @@ export default class Ping extends SlashCommand {
             const playerItemData = await this.client.prisma.playerItems.findFirst({
                 where: {
                     player: {
-                        id: player.id
+                        id: player.id,
                     },
                     item: {
-                        id: item.id
-                    }
-                }
+                        id: item.id,
+                    },
+                },
             })
             if (!playerItemData) return interaction.reply("Player does not have this item")
             if (playerItemData.amount <= amount) {
@@ -261,21 +298,21 @@ export default class Ping extends SlashCommand {
                     where: {
                         playerName_itemName: {
                             playerName,
-                            itemName
-                        }
-                    }
+                            itemName,
+                        },
+                    },
                 })
             } else {
                 await this.client.prisma.playerItems.update({
                     where: {
                         playerName_itemName: {
                             playerName,
-                            itemName
-                        }
+                            itemName,
+                        },
                     },
                     data: {
-                        amount: playerItemData.amount - amount
-                    }
+                        amount: playerItemData.amount - amount,
+                    },
                 })
             }
 
@@ -289,8 +326,8 @@ export default class Ping extends SlashCommand {
                     name,
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             if (!item) {
                 return interaction.editReply(
@@ -310,8 +347,8 @@ export default class Ping extends SlashCommand {
                     price: interaction.options.getNumber("price", true),
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             this.client.logger.gameLog(`Item ${item.name} was created.`)
             return interaction.editReply({ content: "Item successfully created:", embeds: [this.client.functions.itemEmbed(item)] })
@@ -322,8 +359,8 @@ export default class Ping extends SlashCommand {
                     name,
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             if (!item) {
                 return interaction.editReply(
@@ -342,8 +379,8 @@ export default class Ping extends SlashCommand {
                     price: interaction.options.getNumber("price", true),
                 },
                 include: {
-                    players: true
-                }
+                    players: true,
+                },
             })
             this.client.logger.gameLog(`Item ${item.name} was updated.`)
             return interaction.editReply({ content: "Item successfully updated:", embeds: [this.client.functions.itemEmbed(item)] })
@@ -376,6 +413,146 @@ export default class Ping extends SlashCommand {
             })
             this.client.logger.gameLog(`Item ${item.name} was deleted.`)
             return interaction.editReply({ content: "Item successfully deleted." })
+        }
+        case "transfer": {
+            const from = interaction.options.getString("from", true)
+            const to = interaction.options.getString("to", true)
+            const itemName = interaction.options.getString("item", true)
+            const amount = interaction.options.getInteger("amount", true)
+            const fromPlayer = await this.client.prisma.player.findFirst({
+                where: {
+                    name: from,
+                },
+                include: {
+                    items: true
+                }
+            })
+            const toPlayer = await this.client.prisma.player.findFirst({
+                where: {
+                    name: to,
+                },
+                include: {
+                    items: true
+                }
+            })
+            const item = await this.client.prisma.item.findFirst({
+                where: {
+                    name: itemName,
+                },
+            })
+            if (!fromPlayer) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player not found",
+                        description: `The player ${from} was not found in the database.`,
+                    })
+                )
+            }
+            if (!toPlayer) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player not found",
+                        description: `The player ${to} was not found in the database.`,
+                    })
+                )
+            }
+            if (!item) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Item not found",
+                        description: `The item ${name} was not found in the database.`,
+                    })
+                )
+            }
+            const fromPlayerItemData = await this.client.prisma.playerItems.findFirst({
+                where: {
+                    player: {
+                        id: fromPlayer.id,
+                    },
+                    item: {
+                        id: item.id,
+                    },
+                },
+            })
+            if (!fromPlayerItemData) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player does not have this item",
+                        description: `${from} does not have ${name}`,
+                    })
+                )
+            }
+            if (fromPlayerItemData.amount < amount) {
+                return interaction.editReply(
+                    this.client.functions.generateErrorMessage({
+                        title: "Player does not have enough of this item",
+                        description: `${from} does not have ${amount} ${name}`,
+                    })
+                )
+            }
+            if (fromPlayerItemData.amount === amount) {
+                await this.client.prisma.playerItems.delete({
+                    where: {
+                        playerName_itemName: {
+                            playerName: toPlayer.name,
+                            itemName: item.name,
+                        },
+                    },
+                })
+            } else {
+                await this.client.prisma.playerItems.update({
+                    where: {
+                        playerName_itemName: {
+                            playerName: toPlayer.name,
+                            itemName: item.name,
+                        },
+                    },
+                    data: {
+                        amount: fromPlayerItemData.amount - amount,
+                    },
+                })
+            }
+            const toPlayerItemData = await this.client.prisma.playerItems.findFirst({
+                where: {
+                    player: {
+                        id: toPlayer.id,
+                    },
+                    item: {
+                        id: item.id,
+                    },
+                },
+            })
+            if (!toPlayerItemData) {
+                await this.client.prisma.playerItems.create({
+                    data: {
+                        player: {
+                            connect: {
+                                id: toPlayer.id,
+                            },
+                        },
+                        item: {
+                            connect: {
+                                id: item.id,
+                            },
+                        },
+                        amount,
+                    },
+                })
+            } else {
+                await this.client.prisma.playerItems.update({
+                    where: {
+                        playerName_itemName: {
+                            playerName: toPlayer.name,
+                            itemName: item.name,
+                        },
+                    },
+                    data: {
+                        amount: toPlayerItemData.amount + amount,
+                    },
+                })
+            }
+            this.client.logger.gameLog(`${from} gave ${amount} ${name} to ${to}.`)
+            return interaction.editReply({ content: `${amount}x ${item.name} has been successfully transferred.` })
         }
         default:
             break
