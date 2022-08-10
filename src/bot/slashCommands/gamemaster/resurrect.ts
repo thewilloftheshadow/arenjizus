@@ -40,5 +40,6 @@ export default class Ping extends SlashCommand {
                 alive: true,
             },
         })
+        return interaction.editReply("<a:atada_big:543825795727228942>")
     }
 }
