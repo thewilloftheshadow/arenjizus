@@ -14,6 +14,11 @@ export default class Ping extends SlashCommand {
                     required: true,
                     autocomplete: true,
                 },
+                {
+                    type: "BOOLEAN",
+                    name: "fake",
+                    description: "Whether this death is faked (e.g. ketchup) or real",
+                },
             ],
         })
     }
@@ -21,6 +26,7 @@ export default class Ping extends SlashCommand {
     override async run(interaction: CommandInteraction) {
         await interaction.deferReply()
         const name = interaction.options.getString("name", true)
+        const fake = interaction.options.getString("fake", false)
         const player = await this.client.prisma.player.findFirst({
             where: {
                 name,
@@ -37,14 +43,12 @@ export default class Ping extends SlashCommand {
                 id: player.id,
             },
             data: {
-                alive: false,
+                alive: fake ? "FAKED" : "DEAD",
             },
         })
-        
-        return interaction.editReply(
-            {
-                content: "<:aukilling:762406290898288640><:aukilled:762406290952814632>"
-            }
-        )
+
+        return interaction.editReply({
+            content: "<:aukilling:762406290898288640><:aukilled:762406290952814632>",
+        })
     }
 }

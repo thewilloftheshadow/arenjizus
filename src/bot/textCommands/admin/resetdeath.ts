@@ -1,4 +1,4 @@
-import { Message } from "discord.js"
+import { Message, TextChannel } from "discord.js"
 import TextCommand from "../../../../lib/classes/TextCommand"
 import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
@@ -11,6 +11,9 @@ export default class Eval extends TextCommand {
     }
 
     override async run(message: Message) {
+        if (!message.channel.isText()) return message.reply("This command can only be used in text channels.")
+        const channel = message.channel as TextChannel
+        if (channel.name !== "reset") return message.reply("This command can only be used in a channel called \"reset\" for safety reasons.")
         this.client.prisma.player.updateMany({
             data: {
                 alive: "ALIVE",

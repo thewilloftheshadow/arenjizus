@@ -37,7 +37,7 @@ export default class Ping extends SlashCommand {
                 id: player.id,
             },
             data: {
-                alive: true,
+                alive: "ALIVE",
             },
         })
         return interaction.editReply("<a:atada_big:543825795727228942>")
