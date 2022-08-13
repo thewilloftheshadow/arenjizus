@@ -316,8 +316,8 @@ export default class Ping extends SlashCommand {
                 })
             }
 
-            this.client.logger.gameLog(`${playerName} has had all of their ${itemName} revoked`)
-            return interaction.editReply(`${playerName} has had all of their ${itemName} revoked`)
+            this.client.logger.gameLog(`${playerName} has had ${amount} of their ${itemName} revoked`)
+            return interaction.editReply(`${playerName} has had ${amount} of their ${itemName} revoked`)
         }
 
         case "view": {
