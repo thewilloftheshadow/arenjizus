@@ -260,7 +260,7 @@ export default class Ping extends SlashCommand {
             const embed = new MessageEmbed().setTitle("All Player Roles").setDescription("")
             players.forEach((player) => {
                 // eslint-disable-next-line no-nested-ternary
-                const deathEmoji = player.deathStatus === "ALIVE" ? "😃" : player.deathStatus === "FAKED" ? "" : player.deathStatus === "DEAD" ? "💀" : "??"
+                const deathEmoji = player.deathStatus === "ALIVE" ? "😃" : player.deathStatus === "FAKED" ? "👻" : player.deathStatus === "DEAD" ? "💀" : "??"
                 embed.description += `${deathEmoji} ${player.name} - ${player.roles
                     .map((role) => role.roleName)
                     .join(", ")} ($${player.money})\n`
