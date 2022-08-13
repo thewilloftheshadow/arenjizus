@@ -62,7 +62,7 @@ export default class Ping extends SlashCommand {
                             type: "STRING",
                             name: "new-name",
                             description: "A new name for this player",
-                        }
+                        },
                     ],
                 },
                 {
@@ -259,9 +259,11 @@ export default class Ping extends SlashCommand {
             })
             const embed = new MessageEmbed().setTitle("All Player Roles").setDescription("")
             players.forEach((player) => {
-                embed.description += `${player.deathStatus ? "😃" : "💀"} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")} ($${
-                    player.money
-                })\n`
+                // eslint-disable-next-line no-nested-ternary
+                const deathEmoji = player.deathStatus === "ALIVE" ? "😃" : player.deathStatus === "FAKED" ? "" : player.deathStatus === "DEAD" ? "💀" : "??"
+                embed.description += `${deathEmoji} ${player.name} - ${player.roles
+                    .map((role) => role.roleName)
+                    .join(", ")} ($${player.money})\n`
             })
             return interaction.editReply({ embeds: [embed] })
         }
