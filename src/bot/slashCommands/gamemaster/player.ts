@@ -123,7 +123,7 @@ export default class Ping extends SlashCommand {
                             name: "user",
                             description: "The Discord user to link to",
                             required: true,
-                        }
+                        },
                     ],
                 },
             ],
@@ -252,7 +252,9 @@ export default class Ping extends SlashCommand {
             })
             const embed = new MessageEmbed().setTitle("All Player Roles").setDescription("")
             players.forEach((player) => {
-                embed.description += `${player.alive ? "😃" : "💀"} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")}\n`
+                embed.description += `${player.alive ? "😃" : "💀"} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")} ($${
+                    player.money
+                })\n`
             })
             return interaction.editReply({ embeds: [embed] })
         }
