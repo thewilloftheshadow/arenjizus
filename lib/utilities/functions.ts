@@ -331,7 +331,7 @@ export default class Functions {
         const embed = new MessageEmbed().setTitle(player.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
 
         embed.description = `Money: ${player.money}\n`
-        embed.description += `Death Status: ${this.titleCase(player.alive)}\n`
+        embed.description += `Death Status: ${this.titleCase(player.deathStatus)}\n`
         if (player.roles) embed.addField(`${player.roles.length} Roles:`, `${player.roles.map((x) => x.roleName).join(", ")}` || "** **", true)
         if (player.items) {
             embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => `${x.amount}x ${x.itemName}`).join(", ")}` || "** **", true)

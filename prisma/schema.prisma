@@ -6,7 +6,7 @@ generator client {
 datasource db {
     provider             = "mysql"
     url                  = env("DATABASE_URL")
-    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
     referentialIntegrity = "prisma"
 }
 
@@ -17,13 +17,13 @@ enum Death {
 }
 
 model Player {
-    id        String        @id @unique @default(cuid())
-    discordId String?
-    name      String        @unique
-    money     Int           @default(10)
-    alive     Death         @default(ALIVE)
-    roles     PlayerRoles[]
-    items     PlayerItems[]
+    id          String        @id @unique @default(cuid())
+    discordId   String?
+    name        String        @unique
+    money       Int           @default(10)
+    deathStatus Death         @default(ALIVE)
+    roles       PlayerRoles[]
+    items       PlayerItems[]
     //ballData  PlayerBallData?
 }
 

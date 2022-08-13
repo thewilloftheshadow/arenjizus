@@ -43,7 +43,7 @@ export default class Ping extends SlashCommand {
                 id: player.id,
             },
             data: {
-                alive: fake ? "FAKED" : "DEAD",
+                deathStatus: fake ? "FAKED" : "DEAD",
             },
         })
 

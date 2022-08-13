@@ -24,7 +24,7 @@ export default class Ping extends SlashCommand {
 
         const roles = rolesData.map((role) => role.name)
         const items = itemsData.map((item) => item.name)
-        const players = playersData.map((player) => ` ${player.alive ? "😃" : "💀"} ${player.name}`)
+        const players = playersData.map((player) => ` ${player.deathStatus ? "😃" : "💀"} ${player.name}`)
 
         const doText = interaction.options.getBoolean("text-only", false) || false
 

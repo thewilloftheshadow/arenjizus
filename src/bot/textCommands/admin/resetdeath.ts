@@ -16,7 +16,7 @@ export default class Eval extends TextCommand {
         if (channel.name !== "reset") return message.reply("This command can only be used in a channel called \"reset\" for safety reasons.")
         this.client.prisma.player.updateMany({
             data: {
-                alive: "ALIVE",
+                deathStatus: "ALIVE",
             },
         })
         message.reply("Everyone is now alive")
