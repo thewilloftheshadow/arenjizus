@@ -417,7 +417,7 @@ export default class Ping extends SlashCommand {
         case "transfer": {
             const from = interaction.options.getString("from", true)
             const to = interaction.options.getString("to", true)
-            const itemName = interaction.options.getString("item", true)
+            const itemName = interaction.options.getString("name", true)
             const amount = interaction.options.getInteger("amount", true)
             const fromPlayer = await this.client.prisma.player.findFirst({
                 where: {
