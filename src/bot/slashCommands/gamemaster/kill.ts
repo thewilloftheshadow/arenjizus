@@ -26,7 +26,7 @@ export default class Ping extends SlashCommand {
     override async run(interaction: CommandInteraction) {
         await interaction.deferReply()
         const name = interaction.options.getString("name", true)
-        const fake = interaction.options.getString("fake", false)
+        const fake = interaction.options.getBoolean("fake", false)
         const player = await this.client.prisma.player.findFirst({
             where: {
                 name,
