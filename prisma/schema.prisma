@@ -6,30 +6,37 @@ generator client {
 datasource db {
     provider             = "mysql"
     url                  = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
     referentialIntegrity = "prisma"
 }
 
-model Player {
-    id        String         @id @unique @default(cuid())
-    discordId String?
-    name      String
-    money     Int            @default(10)
-    alive     Boolean        @default(true)
-    roles     PlayerRoles[]
-    items     PlayerItems[]
-    ballData  PlayerBallData?
+enum Death {
+    ALIVE
+    DEAD
+    FAKED
 }
 
-model PlayerBallData {
-    name     String
-    avatar   String
-    player   Player @relation(fields: [playerId], references: [id])
-    playerId String
+model Player {
+    id        String        @id @unique @default(cuid())
+    discordId String?
+    name      String        @unique
+    money     Int           @default(10)
+    alive     Death         @default(ALIVE)
+    roles     PlayerRoles[]
+    items     PlayerItems[]
+    //ballData  PlayerBallData?
 }
+
+// model PlayerBallData {
+//     name     String
+//     avatar   String
+//     player   Player @relation(fields: [playerId], references: [id])
+//     playerId String @unique
+// }
 
 model Role {
     id          String        @id @unique @default(cuid())
-    name        String
+    name        String        @unique
     description String        @db.LongText
     players     PlayerRoles[]
 }
@@ -46,7 +53,7 @@ model PlayerRoles {
 
 model Item {
     id          String        @id @unique @default(cuid())
-    name        String
+    name        String        @unique
     price       Int
     description String        @db.LongText
     players     PlayerItems[]
