@@ -23,6 +23,6 @@ export default class Ping extends SlashCommand {
         const itemList = items.split(",")
         const shuffledItems = shuffle(itemList)
         const shuffledItemsString = shuffledItems.join(", ")
-        await interaction.editReply(`${shuffledItemsString}`)
+        await interaction.reply(`${shuffledItemsString}`)
     }
 }

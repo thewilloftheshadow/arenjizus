@@ -58,6 +58,11 @@ export default class Ping extends SlashCommand {
                             name: "money",
                             description: "The amount of money the player has",
                         },
+                        {
+                            type: "STRING",
+                            name: "new-name",
+                            description: "A new name for this player",
+                        }
                     ],
                 },
                 {
@@ -194,7 +199,9 @@ export default class Ping extends SlashCommand {
             }
             const data: Prisma.PlayerUpdateInput = {}
             const money = interaction.options.getInteger("money")
+            const newName = interaction.options.getString("new-name")
             if (money) data.money = money
+            if (newName) data.name = newName
             player = await this.client.prisma.player.update({
                 where: {
                     id: player.id,
