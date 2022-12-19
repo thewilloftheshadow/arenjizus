@@ -28,7 +28,7 @@ export default {
         error: "ED4245",
     },
 
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_WEBHOOKS],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_WEBHOOKS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 
     requiredPermissions: ["EMBED_LINKS", "SEND_MESSAGES", "USE_EXTERNAL_EMOJIS"] as PermissionString[],
 }
