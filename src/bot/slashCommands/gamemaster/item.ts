@@ -494,7 +494,7 @@ export default class Ping extends SlashCommand {
                 await this.client.prisma.playerItems.delete({
                     where: {
                         playerName_itemName: {
-                            playerName: toPlayer.name,
+                            playerName: fromPlayer.name,
                             itemName: item.name,
                         },
                     },
@@ -503,7 +503,7 @@ export default class Ping extends SlashCommand {
                 await this.client.prisma.playerItems.update({
                     where: {
                         playerName_itemName: {
-                            playerName: toPlayer.name,
+                            playerName: fromPlayer.name,
                             itemName: item.name,
                         },
                     },
