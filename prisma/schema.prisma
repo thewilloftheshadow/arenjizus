@@ -42,9 +42,9 @@ model Role {
 }
 
 model PlayerRoles {
-    player     Player   @relation(fields: [playerName], references: [name])
+    player     Player   @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     playerName String
-    role       Role     @relation(fields: [roleName], references: [name])
+    role       Role     @relation(fields: [roleName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     roleName   String
     assignedAt DateTime @default(now())
 
@@ -60,9 +60,9 @@ model Item {
 }
 
 model PlayerItems {
-    player     Player   @relation(fields: [playerName], references: [name])
+    player     Player   @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     playerName String
-    item       Item     @relation(fields: [itemName], references: [name])
+    item       Item     @relation(fields: [itemName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     itemName   String
     assignedAt DateTime @default(now())
     amount     Int      @default(1)
