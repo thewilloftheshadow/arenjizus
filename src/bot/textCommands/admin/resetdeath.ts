@@ -5,7 +5,7 @@ import BetterClient from "../../../../lib/extensions/BlobbyClient"
 export default class Eval extends TextCommand {
     constructor(client: BetterClient) {
         super("reset", client, {
-            description: "Evaluates arbitrary JavaScript code.",
+            description: "Reset the game.",
             devOnly: true,
         })
     }
@@ -19,6 +19,8 @@ export default class Eval extends TextCommand {
                 deathStatus: "ALIVE",
             },
         })
+        await this.client.prisma.playerRoles.deleteMany()
+        await this.client.prisma.playerItems.deleteMany()
         message.reply("Everyone is now alive")
     }
 }

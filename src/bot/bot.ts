@@ -2,7 +2,7 @@ import Config from "../../config/bot.config"
 import BetterClient from "../../lib/extensions/BlobbyClient"
 
 const client = new BetterClient({
-    allowedMentions: { parse: ["users"], },
+    allowedMentions: { parse: ["users"] },
     restTimeOffset: 10,
     restGlobalRateLimit: 50,
     invalidRequestWarningInterval: 500,

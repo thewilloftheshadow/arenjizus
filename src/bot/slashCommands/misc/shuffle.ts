@@ -13,8 +13,8 @@ export default class Ping extends SlashCommand {
                     name: "items",
                     description: "The items to shuffle, separated by commas",
                     required: true,
-                }
-            ]
+                },
+            ],
         })
     }
 

@@ -1,3 +1,6 @@
+/* eslint-disable no-empty-function */
+/* eslint-disable no-unused-vars */
+/* eslint-disable tsdoc/syntax */
 import { Message, MessageEmbedOptions, PermissionString } from "discord.js"
 import { TextCommandOptions } from "../../typings/index.d"
 import BetterClient from "../extensions/BlobbyClient"
@@ -132,5 +135,6 @@ export default class TextCommand {
      * @param _message The message that was created.
      * @param _args
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async run(_message: Message, _args: string[]): Promise<any> {}
 }

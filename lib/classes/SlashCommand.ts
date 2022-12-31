@@ -105,15 +105,15 @@ export default class SlashCommand {
         if (interaction.guild && this.permissions.length && !interaction.memberPermissions?.has(this.permissions)) {
             return {
                 title: "Missing Permissions",
-                description: `You need the ${this.permissions
-                    .join(", ")} permission${this.permissions.length > 1 ? "s" : ""} to run this command.`,
+                description: `You need the ${this.permissions.join(", ")} permission${this.permissions.length > 1 ? "s" : ""} to run this command.`,
             }
         }
         if (interaction.guild && this.clientPermissions.length && !interaction.guild?.me?.permissions.has(this.clientPermissions)) {
             return {
                 title: "Missing Permissions",
-                description: `I need the ${this.clientPermissions
-                    .join(", ")} permission${this.clientPermissions.length > 1 ? "s" : ""} to run this command.`,
+                description: `I need the ${this.clientPermissions.join(", ")} permission${
+                    this.clientPermissions.length > 1 ? "s" : ""
+                } to run this command.`,
             }
         }
 

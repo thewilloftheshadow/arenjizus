@@ -17,7 +17,7 @@ export default class Eval extends TextCommand {
         this.client.logger.info(`${message.author.tag} ran eval in ${message.guild?.name} ${message.guild?.id}, ${args.join(" ")}`)
 
         const {
-            success, result, time, type,
+            success, result, time, type
         } = await this.eval(message, args.join(" "))
         if (message.content.includes("--silent")) return null
 
@@ -79,8 +79,8 @@ export default class Eval extends TextCommand {
                 type.addValue(result)
             }
             success = true
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             if (!syncTime) syncTime = stopwatch.toString()
             if (!type) type = new Type(error)

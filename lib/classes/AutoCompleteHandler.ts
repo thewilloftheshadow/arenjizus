@@ -51,12 +51,7 @@ export default class AutoCompleteHandler {
      * @param interaction - The interaction created.
      */
     public async handleAutoComplete(interaction: AutocompleteInteraction) {
-        const name = [
-            interaction.commandName,
-            interaction.options.getFocused(true).name || "",
-        ]
-            .filter(Boolean)
-            .join("-")
+        const name = [interaction.commandName, interaction.options.getFocused(true).name || ""].filter(Boolean).join("-")
         this.client.logger.debug(name)
         const autoComplete = this.fetchAutoComplete(name)
         if (!autoComplete) return

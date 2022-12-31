@@ -17,8 +17,8 @@ export default class Ping extends SlashCommand {
             },
             include: {
                 roles: true,
-                items: true
-            }
+                items: true,
+            },
         })
         if (!player) {
             return interaction.editReply(

@@ -33,12 +33,13 @@ export default class DropdownHandler {
      * Load all the dropdowns in the dropdowns directory.
      */
     public loadDropDowns(): void {
-        this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/dropDowns`, "", true).forEach((parentFolder) => this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/dropDowns`, ".js").forEach(async (fileName) => {
-            const dropDownFile = await import(`../../src/bot/buttons/${parentFolder}/${fileName}`)
-            // eslint-disable-next-line new-cap
-            const dropDown: DropDown = new dropDownFile.default(this.client)
-            return this.client.dropDowns.set(dropDown.name, dropDown)
-        }))
+        this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/dropDowns`, "", true).forEach((parentFolder) =>
+            this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/dropDowns`, ".js").forEach(async (fileName) => {
+                const dropDownFile = await import(`../../src/bot/buttons/${parentFolder}/${fileName}`)
+                // eslint-disable-next-line new-cap
+                const dropDown: DropDown = new dropDownFile.default(this.client)
+                return this.client.dropDowns.set(dropDown.name, dropDown)
+            }))
     }
 
     /**
@@ -90,7 +91,7 @@ export default class DropdownHandler {
                 this.client.functions.generateErrorMessage({
                     title: "Command Cooldown",
                     description: "Please wait a second before running this button again!",
-                }),
+                })
             )
         }
 
@@ -105,7 +106,7 @@ export default class DropdownHandler {
                     description: `An unexpected error was encountered while running this drop down, my developers have already been notified! Feel free to join my support server in the mean time!`,
                     footer: { text: `Sentry Event ID: ${sentryId} ` },
                 },
-                true,
+                true
             )
             if (interaction.replied) return interaction.followUp(toSend)
             return interaction.reply({

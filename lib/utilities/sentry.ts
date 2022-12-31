@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { format } from "util"
 import { load } from "dotenv-extended"
 import * as Sentry from "@sentry/node"
@@ -18,54 +20,57 @@ export default function init() {
 
         /**
          * Capture a Sentry error about an interaction.
-         * @param error The error to capture.
-         * @param interaction The interaction that caused the error.
-         * @returnsThe sentry error ID.
+         * @param error  - The error to capture.
+         * @param interaction  - The interaction that caused the error.
+         * @returns - The sentry error ID.
          */
-        captureWithInteraction: (error: any, interaction: Interaction): Promise<string> => new Promise((resolve, _) => {
-            Sentry.withScope((scope) => {
-                scope.setExtra("Environment", process.env.NODE_ENV)
-                scope.setUser({
-                    username: interaction.user.tag,
-                    id: interaction.user.id,
-                })
-                scope.setExtra("Interaction", format(interaction))
+        captureWithInteraction: (error: any, interaction: Interaction): Promise<string> =>
+            new Promise((resolve, _) => {
+                Sentry.withScope((scope) => {
+                    scope.setExtra("Environment", process.env.NODE_ENV)
+                    scope.setUser({
+                        username: interaction.user.tag,
+                        id: interaction.user.id,
+                    })
+                    scope.setExtra("Interaction", format(interaction))
 
-                resolve(Sentry.captureException(error))
-            })
-        }),
+                    resolve(Sentry.captureException(error))
+                })
+            }),
 
         /**
          * Capture a Sentry error about a message.
-         * @param error The error to capture.
-         * @param message The message that caused the error.
-         * @returnsThe sentry error ID.
+         * @param error  - The error to capture.
+         * @param message  - The message that caused the error.
+         * @returns - The sentry error ID.
          */
-        captureWithMessage: (error: any, message: Message): Promise<string> => new Promise((resolve, _) => {
-            Sentry.withScope((scope) => {
-                scope.setExtra("Environment", process.env.NODE_ENV)
-                scope.setUser({
-                    username: message.author.tag,
-                    id: message.author.id,
-                })
-                scope.setExtra("Message", format(message))
+        captureWithMessage: (error: any, message: Message): Promise<string> =>
+            new Promise((resolve, _) => {
+                Sentry.withScope((scope) => {
+                    scope.setExtra("Environment", process.env.NODE_ENV)
+                    scope.setUser({
+                        username: message.author.tag,
+                        id: message.author.id,
+                    })
+                    scope.setExtra("Message", format(message))
 
-                resolve(Sentry.captureException(error))
-            })
-        }),
+                    resolve(Sentry.captureException(error))
+                })
+            }),
 
         /**
          * Capture a Sentry error with extra details.
-         * @param error The error to capture.
-         * @param extras Extra details to add to the error.
-         * @returnsThe sentry error ID.
+         * @param error - The error to capture.
+         * @param extras - Extra details to add to the error.
+         * @returns - The sentry error ID.
          */
-        captureWithExtras: (error: any, extras: Record<string, any>) => new Promise((resolve, _) => {
-            Sentry.withScope((scope) => {
-                scope.setExtra("Environment", process.env.NODE_ENV)
-                Object.entries(extras).forEach(([key, value]) => scope.setExtra(key, format(value)))
-                resolve(Sentry.captureException(error))
-            })
-        }),
+        captureWithExtras: (error: any, extras: Record<string, any>) =>
+            new Promise((resolve, _) => {
+                Sentry.withScope((scope) => {
+                    scope.setExtra("Environment", process.env.NODE_ENV)
+                    Object.entries(extras).forEach(([key, value]) => scope.setExtra(key, format(value)))
+                    resolve(Sentry.captureException(error))
+                })
+            }),
     }
 }

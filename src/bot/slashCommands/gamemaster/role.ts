@@ -72,7 +72,7 @@ export default class Ping extends SlashCommand {
                             type: "STRING",
                             name: "name",
                             description: "The name of the role",
-                            required: true
+                            required: true,
                         },
                         {
                             type: "STRING",
@@ -300,7 +300,7 @@ export default class Ping extends SlashCommand {
                     playerName_roleName: {
                         playerName: player.name,
                         roleName: role.name,
-                    }
+                    },
                 },
             })
             this.client.logger.gameLog(`Player ${player.name} was unassigned from role ${role.name}.`)

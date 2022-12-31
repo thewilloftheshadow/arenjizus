@@ -424,16 +424,16 @@ export default class Ping extends SlashCommand {
                     name: from,
                 },
                 include: {
-                    items: true
-                }
+                    items: true,
+                },
             })
             const toPlayer = await this.client.prisma.player.findFirst({
                 where: {
                     name: to,
                 },
                 include: {
-                    items: true
-                }
+                    items: true,
+                },
             })
             const item = await this.client.prisma.item.findFirst({
                 where: {

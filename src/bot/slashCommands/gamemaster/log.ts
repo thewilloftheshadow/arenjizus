@@ -12,8 +12,8 @@ export default class Ping extends SlashCommand {
                     name: "entry",
                     description: "The entry to add",
                     required: true,
-                }
-            ]
+                },
+            ],
         })
     }
 
