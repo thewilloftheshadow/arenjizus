@@ -1,22 +1,9 @@
 import { createHash } from "crypto"
 import * as petitio from "petitio"
-import {
-    AnyChannel,
-    GuildChannel,
-    MessageActionRow,
-    MessageButton,
-    MessageEmbed,
-    MessageEmbedOptions,
-    PermissionString,
-    Snowflake,
-    User,
-} from "discord.js"
+import { AnyChannel, GuildChannel, MessageActionRow, MessageButton, MessageEmbed, MessageEmbedOptions, Snowflake, User } from "discord.js"
 import { existsSync, mkdirSync, readdirSync } from "fs"
 import { PetitioRequest } from "petitio"
-import {
-    Item, Player, PlayerItems, PlayerRoles, Role
-} from "@prisma/client"
-import { permissionNames } from "./permissions"
+import { Item, Player, PlayerItems, PlayerRoles, Role } from "@prisma/client"
 import BetterClient from "../extensions/BlobbyClient"
 import { GeneratedMessage, GenerateTimestampOptions } from "../../typings/index.d"
 
@@ -164,17 +151,6 @@ export default class Functions {
     }
 
     /**
-     * Get the proper name of a permission.
-     * @param permission - The permission to get the name of.
-     * @returns The proper name of the permission.
-     */
-    public getPermissionName(permission: PermissionString): string {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        if (permissionNames.has(permission)) return permissionNames.get(permission)!
-        return permission
-    }
-
-    /**
      * Generate a unix timestamp for Discord to be rendered locally per user.
      * @param options - The options to use for the timestamp.
      * @returns The generated timestamp.
@@ -197,9 +173,9 @@ export default class Functions {
         if (user.startsWith("!")) user = user.slice(1)
         try {
             return (
-                this.client.users.cache.get(user)
-                || this.client.users.cache.find((u) => u.tag.toLowerCase() === user?.toLowerCase())
-                || (await this.client.users.fetch(user))
+                this.client.users.cache.get(user) ||
+                this.client.users.cache.find((u) => u.tag.toLowerCase() === user?.toLowerCase()) ||
+                (await this.client.users.fetch(user))
             )
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
@@ -216,9 +192,9 @@ export default class Functions {
         else if (channel.startsWith("<#") && channel.endsWith(">")) channel = channel.slice(2, -1)
         try {
             return (
-                this.client.channels.cache.get(channel)
-                || this.client.channels.cache.find((c) => (c instanceof GuildChannel ? c.name.toLowerCase() === channel.toLowerCase() : false))
-                || (await this.client.channels.fetch(channel))
+                this.client.channels.cache.get(channel) ||
+                this.client.channels.cache.find((c) => (c instanceof GuildChannel ? c.name.toLowerCase() === channel.toLowerCase() : false)) ||
+                (await this.client.channels.fetch(channel))
             )
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
@@ -314,8 +290,7 @@ export default class Functions {
             players: PlayerItems[]
         }
     ): MessageEmbed {
-        const embed = new MessageEmbed().setTitle(item.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
-            .setDescription("")
+        const embed = new MessageEmbed().setTitle(item.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png").setDescription("")
         if (item.description) embed.description += `${item.description.slice(0, 1500)}\n\n`
         embed.description += `Price: ${item.price}`
         embed.addField(`${item.players.length} Players:`, item.players.map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **", true)

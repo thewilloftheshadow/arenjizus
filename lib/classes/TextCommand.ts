@@ -104,17 +104,15 @@ export default class TextCommand {
         if (message.guild && this.permissions.length && !message.member?.permissions.has(this.permissions)) {
             return {
                 title: "Missing Permissions",
-                description: `You need the ${this.permissions
-                    .map((permission) => `**${this.client.functions.getPermissionName(permission)}**`)
-                    .join(", ")} permission${this.permissions.length > 1 ? "s" : ""} to run this command.`,
+                description: `You need the ${this.permissions.join(", ")} permission${this.permissions.length > 1 ? "s" : ""} to run this command.`,
             }
         }
         if (message.guild && this.clientPermissions.length && !message.guild?.me?.permissions.has(this.clientPermissions)) {
             return {
                 title: "Missing Permissions",
-                description: `I need the ${this.clientPermissions
-                    .map((permission) => `**${this.client.functions.getPermissionName(permission)}**`)
-                    .join(", ")} permission${this.clientPermissions.length > 1 ? "s" : ""} to run this command.`,
+                description: `I need the ${this.clientPermissions.join(", ")} permission${
+                    this.clientPermissions.length > 1 ? "s" : ""
+                } to run this command.`,
             }
         }
 

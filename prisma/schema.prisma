@@ -1,13 +1,11 @@
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["referentialIntegrity"]
+    provider = "prisma-client-js"
 }
 
 datasource db {
-    provider             = "mysql"
-    url                  = env("DATABASE_URL")
-    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
-    referentialIntegrity = "prisma"
+    provider          = "mysql"
+    url               = env("DATABASE_URL")
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 enum Death {
@@ -17,22 +15,28 @@ enum Death {
 }
 
 model Player {
-    id          String        @id @unique @default(cuid())
+    id          String          @id @unique @default(cuid())
     discordId   String?
-    name        String        @unique
-    money       Int           @default(10)
-    deathStatus Death         @default(ALIVE)
+    name        String          @unique
+    money       Int             @default(10)
+    deathStatus Death           @default(ALIVE)
     roles       PlayerRoles[]
     items       PlayerItems[]
-    //ballData  PlayerBallData?
+    ballData    PlayerBallData?
+
+    votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name])
+    votedForName String?
+    voteWorth    Int?
+
+    playersVotedFor Player[] @relation("votedFor")
 }
 
-// model PlayerBallData {
-//     name     String
-//     avatar   String
-//     player   Player @relation(fields: [playerId], references: [id])
-//     playerId String @unique
-// }
+model PlayerBallData {
+    name     String
+    avatar   String
+    player   Player @relation(fields: [playerId], references: [id])
+    playerId String @unique
+}
 
 model Role {
     id          String        @id @unique @default(cuid())
@@ -71,7 +75,8 @@ model PlayerItems {
 }
 
 model KeyV {
-    key        String  @id @unique
-    value      String?
-    valueArray Json?
+    key          String   @id @unique
+    value        String?
+    valueArray   Json?
+    valueBoolean Boolean?
 }

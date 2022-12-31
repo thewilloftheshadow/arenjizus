@@ -106,7 +106,6 @@ export default class SlashCommand {
             return {
                 title: "Missing Permissions",
                 description: `You need the ${this.permissions
-                    .map((permission) => `**${this.client.functions.getPermissionName(permission)}**`)
                     .join(", ")} permission${this.permissions.length > 1 ? "s" : ""} to run this command.`,
             }
         }
@@ -114,7 +113,6 @@ export default class SlashCommand {
             return {
                 title: "Missing Permissions",
                 description: `I need the ${this.clientPermissions
-                    .map((permission) => `**${this.client.functions.getPermissionName(permission)}**`)
                     .join(", ")} permission${this.clientPermissions.length > 1 ? "s" : ""} to run this command.`,
             }
         }
