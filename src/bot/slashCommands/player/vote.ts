@@ -4,7 +4,7 @@ import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
 export default class Vote extends SlashCommand {
     constructor(client: BetterClient) {
-        super("me", client, {
+        super("vote", client, {
             description: `Vote for a player`,
             options: [
                 {
