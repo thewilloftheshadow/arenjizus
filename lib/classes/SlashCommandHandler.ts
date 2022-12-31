@@ -36,6 +36,7 @@ export default class SlashCommandHandler {
         this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/slashCommands`, "", true).forEach((parentFolder) =>
             this.client.functions.getFiles(`${this.client.__dirname}/dist/src/bot/slashCommands/${parentFolder}`, ".js").forEach(async (fileName) => {
                 const commandFile = await import(`../../src/bot/slashCommands/${parentFolder}/${fileName}`)
+                this.client.logger.debug(fileName)
                 // eslint-disable-next-line new-cap
                 const command: SlashCommand = new commandFile.default(this.client)
                 return this.client.slashCommands.set(command.name, command)
