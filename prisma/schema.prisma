@@ -27,7 +27,7 @@ model Player {
 
     votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
     votedForName String?
-    voteWorth    Int?
+    voteWorth    Int     @default(1)
 
     playersVotedFor Player[] @relation("votedFor")
 
