@@ -17,6 +17,8 @@ export default class Eval extends TextCommand {
         this.client.prisma.player.updateMany({
             data: {
                 deathStatus: "ALIVE",
+				money: 10,
+				voteWorth: 1
             },
         })
         await this.client.prisma.playerRoles.deleteMany()
