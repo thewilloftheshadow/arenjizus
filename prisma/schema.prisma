@@ -6,6 +6,7 @@ datasource db {
     provider          = "mysql"
     url               = env("DATABASE_URL")
     shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    relationMode      = "prisma"
 }
 
 enum Death {
@@ -24,17 +25,19 @@ model Player {
     items       PlayerItems[]
     ballData    PlayerBallData?
 
-    votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name])
+    votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
     votedForName String?
     voteWorth    Int?
 
     playersVotedFor Player[] @relation("votedFor")
+
+    @@index([votedForName])
 }
 
 model PlayerBallData {
     name     String
     avatar   String
-    player   Player @relation(fields: [playerId], references: [id])
+    player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     playerId String @unique
 }
 
@@ -53,6 +56,8 @@ model PlayerRoles {
     assignedAt DateTime @default(now())
 
     @@id([playerName, roleName])
+    @@index([roleName])
+    @@index([playerName])
 }
 
 model Item {
@@ -72,6 +77,8 @@ model PlayerItems {
     amount     Int      @default(1)
 
     @@id([playerName, itemName])
+    @@index([playerName])
+    @@index([itemName])
 }
 
 model KeyV {
