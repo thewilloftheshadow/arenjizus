@@ -5,7 +5,7 @@ export default {
     botName: "Blobby",
 
     version: "1.0.0",
-    admins: ["439223656200273932"],
+    admins: ["439223656200273932", "461298571786977309"],
 
     supportServer: "https://inv.wtf/shadow",
 
