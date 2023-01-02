@@ -38,11 +38,16 @@ export default class Ping extends SlashCommand {
 
         const raw = await channel.messages.fetch({ limit: 50 })
 
-        const messages = raw.sort((a, b) => b.createdTimestamp - a.createdTimestamp).first(amount).reverse()
+        const messages = raw
+            .sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+            .first(amount)
+            .reverse()
 
         const hooks = await thisChannel.fetchWebhooks()
         let hook = hooks.find((h) => h.owner?.id === this.client.user?.id)
         if (!hook) hook = await thisChannel.createWebhook(this.client.user.username, { avatar: this.client.user.displayAvatarURL() })
+
+        this.client.logger.gameLog(`Spying on <#${channel.id}> for ${amount} messages in <#${thisChannel}>`)
 
         thisChannel.send("*Beginning transmission...*")
 

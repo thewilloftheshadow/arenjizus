@@ -212,7 +212,7 @@ export default class Ping extends SlashCommand {
                     roles: true,
                 },
             })
-            this.client.logger.gameLog(`Player ${player.name} was updated.`)
+            this.client.logger.gameLog(`Player ${player.name} was updated. ${player.money !== money ? `Money: ${player.money}` : ""} ${player.name !== newName ? `Name: ${player.name}` : ""}`)
             return interaction.editReply({ content: "Player successfully updated:", embeds: [this.client.functions.playerEmbed(player)] })
         }
         case "delete": {
