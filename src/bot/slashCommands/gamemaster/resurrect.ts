@@ -32,6 +32,8 @@ export default class Ping extends SlashCommand {
             )
         }
 
+        await this.client.logger.gameLog(`${name} has been resurrected!`)
+
         await this.client.prisma.player.update({
             where: {
                 id: player.id,

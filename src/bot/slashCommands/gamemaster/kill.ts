@@ -47,6 +47,8 @@ export default class Ping extends SlashCommand {
             },
         })
 
+        await this.client.logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
+
         return interaction.editReply({
             content: "<:aukilling:762406290898288640><:aukilled:762406290952814632> 👻",
         })
