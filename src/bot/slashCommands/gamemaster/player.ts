@@ -200,6 +200,11 @@ export default class Ping extends SlashCommand {
             const data: Prisma.PlayerUpdateInput = {}
             const money = interaction.options.getInteger("money")
             const newName = interaction.options.getString("new-name")
+            this.client.logger.gameLog(
+                `Player ${player.name} was updated. ${player.money !== money ? `Money: ${player.money}` : ""} ${
+                    player.name !== newName ? `Name: ${player.name}` : ""
+                }`
+            )
             if (money) data.money = money
             if (newName) data.name = newName
             player = await this.client.prisma.player.update({
@@ -212,7 +217,6 @@ export default class Ping extends SlashCommand {
                     roles: true,
                 },
             })
-            this.client.logger.gameLog(`Player ${player.name} was updated. ${player.money !== money ? `Money: ${player.money}` : ""} ${player.name !== newName ? `Name: ${player.name}` : ""}`)
             return interaction.editReply({ content: "Player successfully updated:", embeds: [this.client.functions.playerEmbed(player)] })
         }
         case "delete": {
