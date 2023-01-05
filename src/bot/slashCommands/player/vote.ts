@@ -84,7 +84,8 @@ export default class Vote extends SlashCommand {
         })
         if (dayChat?.value) {
             const channel = this.client.channels.resolve(dayChat.value) as TextBasedChannel
-            channel.send(`${player.name} has voted for ${playerChosen.name}!`).catch(() => {})
+            const m = await channel.send(`${player.name} has voted for ${playerChosen.name}!`).catch(() => {})
+            m?.pin().catch(() => {})
         }
 
         this.client.logger.gameLog(`${player.name} has voted for ${playerChosen.name} (worth ${player.voteWorth} votes)!`)
