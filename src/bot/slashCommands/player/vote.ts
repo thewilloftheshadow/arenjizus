@@ -87,6 +87,8 @@ export default class Vote extends SlashCommand {
             channel.send(`${player.name} has voted for ${playerChosen.name}!`).catch(() => {})
         }
 
+        this.client.logger.gameLog(`${player.name} has voted for ${playerChosen.name} (worth ${player.voteWorth} votes)!`)
+
         return interaction.editReply({ content: `Success!` })
     }
 }
