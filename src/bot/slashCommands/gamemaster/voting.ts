@@ -179,13 +179,13 @@ export default class Ping extends SlashCommand {
             if (channel.type !== "GUILD_TEXT") return interaction.editReply("Channel must be a text channel")
             await this.client.prisma.keyV.upsert({
                 where: {
-                    key: "daychat",
+                    key: "dayChat",
                 },
                 update: {
                     value: channel.id,
                 },
                 create: {
-                    key: "daychat",
+                    key: "dayChat",
                     value: channel.id,
                 },
             })
