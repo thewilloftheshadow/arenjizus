@@ -24,17 +24,21 @@ export default class Ping extends SlashCommand {
 
         players.forEach((x) => {
             const user = x.discordId
+            if (!user) return
             const name = x.name.replace(/ /g, "-").toLowerCase()
             const theirChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${name}`)
             if (!theirChannel) {
                 interaction.followUp(`Couldn't find channel for ${x.name} (${user})!`)
             } else {
                 const sendChannel = theirChannel as TextChannel
-                sendChannel.send(`<@${user}>\n${interaction.options.getString("question", true)}`)
+                sendChannel.send({ content: `<@${user}>\n${interaction.options.getString("question", true)}`, allowedMentions: { users: [user] } })
             }
         })
 
         const gm = interaction.guild.channels.cache.find((x) => x.name === "gm-gamemasters") as TextChannel
-        gm.send(`<@&1058507082917216326>\n${interaction.options.getString("question", true)}`)
+        gm.send({
+            content: `<@&1058507082917216326>\n${interaction.options.getString("question", true)}`,
+            allowedMentions: { roles: ["1058507082917216326"] },
+        })
     }
 }
