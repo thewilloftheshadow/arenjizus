@@ -37,7 +37,6 @@ export default class Vote extends SlashCommand {
             where: {
                 discordId: interaction.user.id,
             },
-            include: {},
         })
         if (!player) {
             return interaction.editReply(
