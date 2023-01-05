@@ -312,6 +312,7 @@ export default class Functions {
 
         embed.description = `Money: ${player.money}\n`
         embed.description += `Death Status: ${this.titleCase(player.deathStatus)}\n`
+        embed.description += `Robberies Left: ${player.robberiesLeft}\n`
         if (player.roles) embed.addField(`${player.roles.length} Roles:`, `${player.roles.map((x) => x.roleName).join(", ")}` || "** **", true)
         if (player.items) {
             embed.addField(`${player.items.length} Items:`, `${player.items.map((x) => `${x.amount}x ${x.itemName}`).join(", ")}` || "** **", true)

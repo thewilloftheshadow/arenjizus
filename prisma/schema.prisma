@@ -16,14 +16,15 @@ enum Death {
 }
 
 model Player {
-    id          String          @id @unique @default(cuid())
-    discordId   String?
-    name        String          @unique
-    money       Int             @default(10)
-    deathStatus Death           @default(ALIVE)
-    roles       PlayerRoles[]
-    items       PlayerItems[]
-    ballData    PlayerBallData?
+    id            String          @id @unique @default(cuid())
+    discordId     String?
+    name          String          @unique
+    money         Int             @default(10)
+    deathStatus   Death           @default(ALIVE)
+    robberiesLeft Int             @default(3)
+    roles         PlayerRoles[]
+    items         PlayerItems[]
+    ballData      PlayerBallData?
 
     votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
     votedForName String?

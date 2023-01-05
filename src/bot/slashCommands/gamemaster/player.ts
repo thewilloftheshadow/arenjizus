@@ -200,10 +200,11 @@ export default class Ping extends SlashCommand {
             const data: Prisma.PlayerUpdateInput = {}
             const money = interaction.options.getInteger("money")
             const newName = interaction.options.getString("new-name")
+            const robberiesLeft = interaction.options.getInteger("robberies-left")
             this.client.logger.gameLog(
                 `Player ${player.name} was updated. ${player.money !== money ? `Money: ${player.money}` : ""} ${
                     player.name !== newName ? `Name: ${player.name}` : ""
-                }`
+                } ${robberiesLeft !== player.robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""}`
             )
             if (money) data.money = money
             if (newName) data.name = newName
