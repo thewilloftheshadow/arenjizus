@@ -53,7 +53,7 @@ export default class Vote extends SlashCommand {
         }
         const playerChosen = await this.client.prisma.player.findFirst({
             where: {
-                name: interaction.options.getString("player", true),
+                name: interaction.options.getString("name", true),
             },
         })
         if (!playerChosen) {
