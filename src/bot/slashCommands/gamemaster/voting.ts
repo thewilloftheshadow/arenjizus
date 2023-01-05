@@ -103,12 +103,12 @@ export default class Ping extends SlashCommand {
                 .setDescription("")
             Object.keys(votes).forEach((vote) => {
                 if (vote === "No Vote") {
-                    embed.description += `No votes:\n> ${votes[vote].map((y) => y.from).join(", ")}\n`
+                    embed.description += `No votes:\n> ${votes[vote].map((y) => y.from).join(", ")}\n\n`
                     return
                 }
                 const x = votes[vote]
                 const worth = x.reduce((a, b) => a + b.worth, 0)
-                embed.description += `${worth} vote${worth === 1 ? "" : "s"} for ${vote}:\n> ${x.map((y) => `${y.from} (${y.worth})`).join(", ")}\n\n`
+                embed.description += `**${worth} vote${worth === 1 ? "" : "s"} for ${vote}**:\n> ${x.map((y) => `${y.from} (${y.worth})`).join(", ")}\n\n`
             })
             return interaction.editReply({ embeds: [embed] })
 
