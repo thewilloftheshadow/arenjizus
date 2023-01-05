@@ -67,6 +67,19 @@ export default class Ping extends SlashCommand {
                         },
                     ],
                 },
+                {
+                    type: "SUB_COMMAND",
+                    name: "set_daychat",
+                    description: "Set the daychat channel",
+                    options: [
+                        {
+                            type: "CHANNEL",
+                            name: "channel",
+                            description: "The channel to set as the daychat channel",
+                            required: true,
+                        },
+                    ],
+                },
             ],
         })
     }
@@ -160,6 +173,23 @@ export default class Ping extends SlashCommand {
                 },
             })
             return interaction.editReply(`Set ${player2}'s vote to ${vote}`)
+
+        case "set_daychat":
+            const channel = interaction.options.getChannel("channel", true)
+            if (channel.type !== "GUILD_TEXT") return interaction.editReply("Channel must be a text channel")
+            await this.client.prisma.keyV.upsert({
+                where: {
+                    key: "daychat",
+                },
+                update: {
+                    value: channel.id,
+                },
+                create: {
+                    key: "daychat",
+                    value: channel.id,
+                },
+            })
+            return interaction.editReply(`Set daychat to ${channel}`)
         }
     }
 }
