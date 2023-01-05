@@ -90,13 +90,35 @@ export default class Ping extends SlashCommand {
 
         switch (interaction.options.getSubcommand()) {
         case "show":
-            const votes = players.map((player) =>
-                (player.votedForName
-                    ? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"} for ${player.votedForName}`
-                    : `${player.name} - No vote`))
+            const votes: { [key: string]: { from: string; worth: number }[] } = {}
+            players.forEach((player) => {
+                const vote = player.votedForName || "No Vote"
+                if (votes[vote]) {
+                    votes[vote].push({ from: player.name, worth: player.voteWorth })
+                } else {
+                    votes[vote] = [{ from: player.name, worth: player.voteWorth }]
+                }
+            })
             const embed = new MessageEmbed().setTitle("Current Votes").setColor("RANDOM").setTimestamp()
-                .setDescription(votes.join("\n"))
+                .setDescription("")
+            Object.keys(votes).forEach((vote) => {
+                if (vote === "No Vote") {
+                    embed.description += `No votes:\n> ${votes[vote].map((y) => y.from).join(", ")}\n`
+                    return
+                }
+                const x = votes[vote]
+                const worth = x.reduce((a, b) => a + b.worth, 0)
+                embed.description += `${worth} vote${worth === 1 ? "" : "s"} for ${vote}:\n> ${x.map((y) => y.from).join(", ")}\n`
+            })
             return interaction.editReply({ embeds: [embed] })
+
+            // const votes = players.map((player) =>
+            //     (player.votedForName
+            //         ? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"} for ${player.votedForName}`
+            //         : `${player.name} - No vote`))
+            // const embed = new MessageEmbed().setTitle("Current Votes").setColor("RANDOM").setTimestamp()
+            //     .setDescription(votes.join("\n"))
+            // return interaction.editReply({ embeds: [embed] })
 
         case "close":
             await this.client.prisma.keyV.upsert({
