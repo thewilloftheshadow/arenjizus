@@ -63,7 +63,7 @@ export default class Ping extends SlashCommand {
                             type: "STRING",
                             name: "vote",
                             description: "The player to vote for",
-                            required: true,
+                            required: false,
                         },
                     ],
                 },
@@ -157,7 +157,7 @@ export default class Ping extends SlashCommand {
 
         case "setvote":
             const player2 = interaction.options.getString("player", true)
-            const vote = interaction.options.getString("vote", true)
+            const vote = interaction.options.getString("vote", false)
             const playerData2 = await this.client.prisma.player.findUnique({
                 where: {
                     name: player2,
