@@ -6,7 +6,7 @@ export default class ChannelCreate extends EventHandler {
         if (channel.parentId === "1058510589686730883") {
             await channel.permissionOverwrites.create("1058507292435292250", {
                 SEND_MESSAGES: false,
-                VIEW_CHANNEL: false,
+                VIEW_CHANNEL: true,
             })
         }
     }
