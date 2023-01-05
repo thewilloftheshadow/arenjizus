@@ -108,7 +108,7 @@ export default class Ping extends SlashCommand {
                 }
                 const x = votes[vote]
                 const worth = x.reduce((a, b) => a + b.worth, 0)
-                embed.description += `${worth} vote${worth === 1 ? "" : "s"} for ${vote}:\n> ${x.map((y) => y.from).join(", ")}\n`
+                embed.description += `${worth} vote${worth === 1 ? "" : "s"} for ${vote}:\n> ${x.map((y) => `${y.from} (${y.worth})`).join(", ")}\n\n`
             })
             return interaction.editReply({ embeds: [embed] })
 
