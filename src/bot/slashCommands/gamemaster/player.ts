@@ -59,6 +59,11 @@ export default class Ping extends SlashCommand {
                             description: "The amount of money the player has",
                         },
                         {
+                            type: "INTEGER",
+                            name: "robberies-left",
+                            description: "The amount of robberies the player has left",
+                        },
+                        {
                             type: "STRING",
                             name: "new-name",
                             description: "A new name for this player",
