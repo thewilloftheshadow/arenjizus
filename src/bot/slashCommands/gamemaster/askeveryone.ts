@@ -1,0 +1,36 @@
+import { CommandInteraction, TextChannel } from "discord.js"
+import SlashCommand from "../../../../lib/classes/SlashCommand"
+import BetterClient from "../../../../lib/extensions/BlobbyClient"
+
+export default class Ping extends SlashCommand {
+    constructor(client: BetterClient) {
+        super("askeveryone", client, {
+            description: `Ask everyone something, Office cutaway style`,
+            options: [
+                {
+                    type: "STRING",
+                    name: "question",
+                    description: "The question to ask",
+                    required: true,
+                },
+            ],
+        })
+    }
+
+    override async run(interaction: CommandInteraction) {
+        await interaction.reply(`Sending...`)
+        if (!interaction.guild) return
+        const players = await this.client.prisma.player.findMany()
+
+        players.forEach((x) => {
+            const user = x.discordId
+            const theirChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${x.name}`)
+            if (!theirChannel) interaction.followUp(`Couldn't find channel for ${x.name} (${user})!`)
+            const sendChannel = theirChannel as TextChannel
+            sendChannel.send(`<@${user}>\n${interaction.options.getString("question", true)}`)
+        })
+
+        const gm = interaction.guild.channels.cache.find((x) => x.name === "gm-gamemasters") as TextChannel
+        gm.send(`<@&1058507082917216326>\n${interaction.options.getString("question", true)}`)
+    }
+}

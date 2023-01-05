@@ -8,6 +8,7 @@ export default class ChannelCreate extends EventHandler {
                 SEND_MESSAGES: false,
                 VIEW_CHANNEL: true,
             })
+            this.client.logger.gameLog(`<#${channel.id}> was created`)
         }
     }
 }
