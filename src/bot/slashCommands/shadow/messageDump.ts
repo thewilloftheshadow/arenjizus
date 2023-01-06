@@ -23,9 +23,12 @@ export default class Ping extends SlashCommand {
         if (!interaction.guild) return
         const channels = await interaction.guild.channels.fetch()
         const messages: MessageStored[] = []
+
+        const blacklisted = ["highlights", "status-tracker", "discord-log", "welcome", "about-the-game", "bot-spam", "rwlboard"]
+
         for await (const chan of channels.values()) {
-            if (chan.isText()) {
-                const channelMessages = await chan.messages.fetch()
+            if (chan.isText() && !blacklisted.includes(chan.name)) {
+                const channelMessages = await chan.messages.fetch({ limit: 100000 })
                 for await (const msg of channelMessages.values()) {
                     messages.push({
                         time: msg.createdAt,
