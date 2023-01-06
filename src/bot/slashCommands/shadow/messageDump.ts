@@ -8,6 +8,7 @@ type MessageStored = {
     id: string
     author: string
     content: string
+    channel: string
 }
 
 export default class Ping extends SlashCommand {
@@ -31,14 +32,15 @@ export default class Ping extends SlashCommand {
                         id: msg.id,
                         author: msg.author ? msg.author.tag : "Unknown",
                         content: msg.content,
+                        channel: chan.name,
                     })
                 }
             }
         }
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
         // eslint-disable-next-line no-tabs
-        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}^$^${msg.author}^$^${msg.content}`)
-        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.tsv")
+        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}^^${msg.author}^^${msg.channel}^^${msg.content}`)
+        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.csv")
         this.client.logger.info(sortedMessages)
         return interaction.editReply({ files: [attachment] })
     }
