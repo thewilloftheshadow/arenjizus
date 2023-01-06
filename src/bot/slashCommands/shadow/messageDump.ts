@@ -31,11 +31,7 @@ export default class Ping extends SlashCommand {
                         time: msg.createdAt,
                         id: msg.id,
                         author: msg.author ? msg.author.tag : "Unknown",
-                        content: msg.content.replace(
-                            `
-`,
-                            " "
-                        ),
+                        content: msg.content.replace(/\n/g, " "),
                         channel: chan.name,
                     })
                 }
@@ -43,7 +39,7 @@ export default class Ping extends SlashCommand {
         }
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
         // eslint-disable-next-line no-tabs
-        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}^^${msg.author}^^#${msg.channel}^^${msg.content}`)
+        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${msg.content || "No content"}`)
         const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.csv")
         this.client.logger.info(sortedMessages)
         return interaction.editReply({ files: [attachment] })
