@@ -31,7 +31,11 @@ export default class Ping extends SlashCommand {
                         time: msg.createdAt,
                         id: msg.id,
                         author: msg.author ? msg.author.tag : "Unknown",
-                        content: msg.content.replace("\n", " "),
+                        content: msg.content.replace(
+                            `
+`,
+                            " "
+                        ),
                         channel: chan.name,
                     })
                 }
