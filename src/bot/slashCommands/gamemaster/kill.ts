@@ -48,6 +48,8 @@ export default class Ping extends SlashCommand {
         })
 
         await this.client.logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
+        if (player.discordId) await interaction.guild?.members.resolve(player.discordId)?.roles.remove("1058507108959657996").catch(() => {})
+        if (player.discordId) await interaction.guild?.members.resolve(player.discordId)?.roles.add("1058507150336467034").catch(() => {})
 
         return interaction.editReply({
             content: "<:aukilling:762406290898288640><:aukilled:762406290952814632> 👻",

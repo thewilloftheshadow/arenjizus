@@ -34,6 +34,19 @@ export default class Ping extends SlashCommand {
 
         await this.client.logger.gameLog(`${name} has been resurrected!`)
 
+        if (player.discordId) {
+            await interaction.guild?.members
+                .resolve(player.discordId)
+                ?.roles.add("1058507108959657996")
+                .catch(() => {})
+        }
+        if (player.discordId) {
+            await interaction.guild?.members
+                .resolve(player.discordId)
+                ?.roles.remove("1058507150336467034")
+                .catch(() => {})
+        }
+
         await this.client.prisma.player.update({
             where: {
                 id: player.id,
