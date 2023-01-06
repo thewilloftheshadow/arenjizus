@@ -40,7 +40,7 @@ export default class Ping extends SlashCommand {
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
         // eslint-disable-next-line no-tabs
         const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${msg.content || "No content"}`)
-        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.csv")
+        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.tsv")
         this.client.logger.info(sortedMessages)
         return interaction.editReply({ files: [attachment] })
     }
