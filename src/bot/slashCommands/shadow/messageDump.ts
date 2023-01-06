@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { CommandInteraction } from "discord.js"
+import { CommandInteraction, MessageAttachment } from "discord.js"
 import SlashCommand from "../../../../lib/classes/SlashCommand"
 import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
@@ -36,8 +36,9 @@ export default class Ping extends SlashCommand {
             }
         }
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
-        const haste = await this.client.functions.uploadHaste(JSON.stringify(sortedMessages, null, 4))
+        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()},${msg.author},${msg.content}`)
+        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.csv")
         this.client.logger.info(sortedMessages)
-        return interaction.editReply({ content: `${haste}` })
+        return interaction.editReply({ files: [attachment] })
     }
 }
