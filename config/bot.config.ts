@@ -19,7 +19,7 @@ export default {
         ],
     } as PresenceData,
 
-    hastebin: "https://haste.narwhal.cool",
+    hastebin: "https://hastebin.walletbot.pro",
 
     colors: {
         primary: "5865F2",

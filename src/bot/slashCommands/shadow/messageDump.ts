@@ -37,6 +37,7 @@ export default class Ping extends SlashCommand {
         }
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
         const haste = await this.client.functions.uploadHaste(JSON.stringify(sortedMessages, null, 4))
+        this.client.logger.info(sortedMessages)
         return interaction.editReply({ content: `${haste}` })
     }
 }
