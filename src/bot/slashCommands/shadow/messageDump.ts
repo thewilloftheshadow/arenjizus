@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 import { CommandInteraction, MessageAttachment } from "discord.js"
 import SlashCommand from "../../../../lib/classes/SlashCommand"
@@ -28,15 +29,21 @@ export default class Ping extends SlashCommand {
 
         for await (const chan of channels.values()) {
             if (chan.isText() && !blacklisted.includes(chan.name)) {
-                const channelMessages = await chan.messages.fetch({ limit: 100000 })
-                for await (const msg of channelMessages.values()) {
-                    messages.push({
-                        time: msg.createdAt,
-                        id: msg.id,
-                        author: msg.author ? msg.author.tag : "Unknown",
-                        content: msg.content.replace(/\n/g, " "),
-                        channel: chan.name,
-                    })
+                let lastID: string | undefined
+                // eslint-disable-next-line no-constant-condition
+                while (true) {
+                    const channelMessages = await chan.messages.fetch({ limit: 100, ...(lastID && { before: lastID }) })
+                    for await (const msg of channelMessages.values()) {
+                        messages.push({
+                            time: msg.createdAt,
+                            id: msg.id,
+                            author: msg.author ? msg.author.tag : "Unknown",
+                            content: msg.content.replace(/\n/g, " "),
+                            channel: chan.name,
+                        })
+                    }
+                    if (channelMessages.size === 0) break
+                    lastID = channelMessages.last()?.id
                 }
             }
         }
