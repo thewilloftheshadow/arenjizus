@@ -18,7 +18,7 @@ export default class Ping extends SlashCommand {
     }
 
     override async run(interaction: CommandInteraction) {
-        await interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply()
         if (!interaction.guild) return
         const channels = await interaction.guild.channels.fetch()
         const messages: MessageStored[] = []
@@ -36,8 +36,9 @@ export default class Ping extends SlashCommand {
             }
         }
         const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
-        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()},${msg.author},${msg.content}`)
-        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.csv")
+        // eslint-disable-next-line no-tabs
+        const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}	${msg.author}	${msg.content}`)
+        const attachment = new MessageAttachment(Buffer.from(formatted.join("\n"), "utf-8"), "messages.tsv")
         this.client.logger.info(sortedMessages)
         return interaction.editReply({ files: [attachment] })
     }
