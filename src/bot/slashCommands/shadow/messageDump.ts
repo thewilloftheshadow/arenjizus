@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { CommandInteraction, MessageAttachment } from "discord.js"
+import { CommandInteraction, GuildChannel, MessageAttachment } from "discord.js"
 import SlashCommand from "../../../../lib/classes/SlashCommand"
 import BetterClient from "../../../../lib/extensions/BlobbyClient"
 
@@ -34,6 +34,20 @@ export default class Ping extends SlashCommand {
                 while (true) {
                     const channelMessages = await chan.messages.fetch({ limit: 100, ...(lastID && { before: lastID }) })
                     for await (const msg of channelMessages.values()) {
+                        let content = msg.content.replace(/\n/g, " ")
+                        msg.mentions.users.forEach((user) => {
+                            content = content.split(`<@${user.id}>`).join(`@${user.tag}`)
+                        })
+                        msg.mentions.roles.forEach((role) => {
+                            content = content.split(`<@&${role.id}>`).join(`@${role.name}`)
+                        })
+                        msg.mentions.channels.forEach((channel) => {
+                            const channell = channel as GuildChannel
+                            content = content.split(`<#${channel.id}>`).join(`#${channell.name}`)
+                        })
+                        if (msg.mentions.repliedUser) {
+                            content = `Replying to ${msg.mentions.repliedUser.tag}: ${content}`
+                        }
                         messages.push({
                             time: msg.createdAt,
                             id: msg.id,
