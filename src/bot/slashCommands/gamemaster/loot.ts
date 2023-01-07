@@ -32,6 +32,9 @@ export default class Ping extends SlashCommand {
             where: {
                 name: interaction.options.getString("from", true),
             },
+            include: {
+                items: true,
+            },
         })
         const to = await this.client.prisma.player.findFirst({
             where: {
@@ -44,13 +47,30 @@ export default class Ping extends SlashCommand {
         if (!to) {
             return interaction.editReply("Invalid to")
         }
-        await this.client.prisma.playerItems.updateMany({
-            where: {
-                playerName: from.name,
-            },
-            data: {
-                playerName: to.name,
-            },
+        from.items.forEach(async (item) => {
+            await this.client.prisma.playerItems.create({
+                data: {
+                    item: {
+                        connect: {
+                            name: item.itemName,
+                        },
+                    },
+                    player: {
+                        connect: {
+                            name: to.name,
+                        },
+                    },
+                    amount: item.amount,
+                },
+            })
+            await this.client.prisma.playerItems.delete({
+                where: {
+                    playerName_itemName: {
+                        playerName: from.name,
+                        itemName: item.itemName,
+                    },
+                },
+            })
         })
         await this.client.prisma.player.update({
             where: {
