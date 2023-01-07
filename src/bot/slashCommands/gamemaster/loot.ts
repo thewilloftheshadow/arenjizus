@@ -47,7 +47,7 @@ export default class Ping extends SlashCommand {
         if (!to) {
             return interaction.editReply("Invalid to")
         }
-        from.items.forEach(async (item) => {
+        for await (const item of from.items) {
             await this.client.prisma.playerItems.create({
                 data: {
                     item: {
@@ -71,7 +71,7 @@ export default class Ping extends SlashCommand {
                     },
                 },
             })
-        })
+        }
         await this.client.prisma.player.update({
             where: {
                 name: from.name,
