@@ -7,7 +7,10 @@ export default class ChannelCreate extends EventHandler {
             await channel.permissionOverwrites.create("1058507292435292250", {
                 SEND_MESSAGES: false,
                 VIEW_CHANNEL: true,
-            })
+            }) // spectator
+            await channel.permissionOverwrites.create("1061080487017332736", {
+                SEND_MESSAGES: false,
+            }) // bang
             this.client.logger.gameLog(`<#${channel.id}> was created`)
         }
     }
