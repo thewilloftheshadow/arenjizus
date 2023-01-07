@@ -48,21 +48,43 @@ export default class Ping extends SlashCommand {
             return interaction.editReply("Invalid to")
         }
         for await (const item of from.items) {
-            await this.client.prisma.playerItems.create({
-                data: {
-                    item: {
-                        connect: {
-                            name: item.itemName,
-                        },
-                    },
-                    player: {
-                        connect: {
-                            name: to.name,
-                        },
-                    },
-                    amount: item.amount,
+            const hasItem = await this.client.prisma.playerItems.findFirst({
+                where: {
+                    playerName: to.name,
+                    itemName: item.itemName,
                 },
             })
+            if (hasItem) {
+                await this.client.prisma.playerItems.update({
+                    where: {
+                        playerName_itemName: {
+                            playerName: to.name,
+                            itemName: item.itemName,
+                        },
+                    },
+                    data: {
+                        amount: {
+                            increment: item.amount,
+                        },
+                    },
+                })
+            } else {
+                await this.client.prisma.playerItems.create({
+                    data: {
+                        item: {
+                            connect: {
+                                name: item.itemName,
+                            },
+                        },
+                        player: {
+                            connect: {
+                                name: to.name,
+                            },
+                        },
+                        amount: item.amount,
+                    },
+                })
+            }
             await this.client.prisma.playerItems.delete({
                 where: {
                     playerName_itemName: {
