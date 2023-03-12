@@ -131,9 +131,7 @@ export default class Ping extends SlashCommand {
                     name: whoPlayer.name,
                 },
                 data: {
-                    money: {
-                        decrement: amount,
-                    },
+                    money: whoPlayer.money - amount,
                 },
             })
 
@@ -142,9 +140,7 @@ export default class Ping extends SlashCommand {
                     name: byPlayer.name,
                 },
                 data: {
-                    money: {
-                        increment: amount,
-                    },
+                    money: byPlayer.money + amount,
                 },
             })
 
