@@ -110,6 +110,8 @@ export default class Ping extends SlashCommand {
             } seconds`
         )
 
+        await byChannel.send(`You are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
+
         const collected = await whoChannel.awaitMessages({ filter: (m) => m.author.id === whoPlayer.discordId, time })
         if (collected.size > 0) {
             // robbery failed
