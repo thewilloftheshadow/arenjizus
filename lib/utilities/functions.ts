@@ -292,13 +292,16 @@ export default class Functions {
     public itemEmbed(
         item: Item & {
             players: PlayerItems[]
-        }
+        },
+        hideUsers = false
     ): MessageEmbed {
         const embed = new MessageEmbed().setTitle(item.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
             .setDescription("")
         if (item.description) embed.description += `${item.description.slice(0, 1500)}\n\n`
         embed.description += `Price: ${item.price}`
-        embed.addField(`${item.players.length} Players:`, item.players.map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **", true)
+        if (!hideUsers) {
+            embed.addField(`${item.players.length} Players:`, item.players.map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **", true)
+        }
         return embed
     }
 
@@ -323,11 +326,12 @@ export default class Functions {
     public roleEmbed(
         role: Role & {
             players: PlayerRoles[]
-        }
+        },
+        hideUsers = false
     ): MessageEmbed {
         const embed = new MessageEmbed().setTitle(role.name).setColor("RANDOM").setImage("https://i.imgur.com/iB0VQk2.png")
         if (role.description) embed.description = role.description.slice(0, 1500)
-        embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
+        if (!hideUsers) embed.addField(`${role.players.length} Players:`, role.players.map((x) => x.playerName).join(", ") || "** **", true)
         if (role.name.toLowerCase().includes("bezos")) embed.setImage("https://tenor.com/bgUX6.gif")
         return embed
     }

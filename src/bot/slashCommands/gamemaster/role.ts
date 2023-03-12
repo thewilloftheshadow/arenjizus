@@ -61,6 +61,12 @@ export default class Ping extends SlashCommand {
                             required: true,
                             autocomplete: true,
                         },
+                        {
+                            type: "BOOLEAN",
+                            name: "hide_users",
+                            description: "Whether to hide the users with this role",
+                            required: false
+                        }
                     ],
                 },
                 {
@@ -143,7 +149,8 @@ export default class Ping extends SlashCommand {
                     })
                 )
             }
-            return interaction.editReply({ embeds: [this.client.functions.roleEmbed(role)] })
+            const hideUsers = interaction.options.getBoolean("hide_users", true)
+            return interaction.editReply({ embeds: [this.client.functions.roleEmbed(role, hideUsers)] })
         }
         case "update": {
             let role = await this.client.prisma.role.findFirst({

@@ -79,6 +79,12 @@ export default class Ping extends SlashCommand {
                             required: true,
                             autocomplete: true,
                         },
+                        {
+                            type: "BOOLEAN",
+                            name: "hide_users",
+                            description: "Whether to hide the users with this item",
+                            required: false
+                        }
                     ],
                 },
                 {
@@ -337,7 +343,9 @@ export default class Ping extends SlashCommand {
                     })
                 )
             }
-            return interaction.editReply({ embeds: [this.client.functions.itemEmbed(item)] })
+
+            const hideUsers = interaction.options.getBoolean("hide_users", true)
+            return interaction.editReply({ embeds: [this.client.functions.itemEmbed(item, hideUsers)] })
         }
         case "create": {
             const item = await this.client.prisma.item.create({
