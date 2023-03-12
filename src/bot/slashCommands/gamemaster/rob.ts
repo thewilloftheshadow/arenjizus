@@ -128,7 +128,7 @@ export default class Ping extends SlashCommand {
             byChannel.send(`You have robbed ${who} and taken $${amount} from them!`)
             await this.client.prisma.player.update({
                 where: {
-                    name: who,
+                    name: whoPlayer.name,
                 },
                 data: {
                     money: {
@@ -139,7 +139,7 @@ export default class Ping extends SlashCommand {
 
             await this.client.prisma.player.update({
                 where: {
-                    name: by,
+                    name: byPlayer.name,
                 },
                 data: {
                     money: {
