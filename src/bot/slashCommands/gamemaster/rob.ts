@@ -13,14 +13,14 @@ export default class Ping extends SlashCommand {
                     name: "who",
                     description: "Who is being robbed?",
                     required: true,
-                    autocomplete: true
+                    autocomplete: true,
                 },
                 {
                     type: "STRING",
                     name: "by",
                     description: "Who is doing the robbing?",
                     required: true,
-                    autocomplete: true
+                    autocomplete: true,
                 },
                 {
                     type: "NUMBER",
@@ -85,7 +85,7 @@ export default class Ping extends SlashCommand {
             interaction.followUp(`Couldn't find GM channel for ${by}!`)
         }
 
-        const time = 60000 * Math.ceil(amount / 5)
+        const time = 60000 * Math.ceil(amountInput / 5)
         const timestamp = Date.now() + time
         const timeCounter = this.client.functions.generateTimestamp({
             type: "R",
@@ -95,7 +95,7 @@ export default class Ping extends SlashCommand {
             type: "T",
             timestamp,
         })
-        const send = `<a:siren:1084362013247033405> <@&${whoPlayer.discordId}>, YOU ARE BEING ROBBED! <a:siren:1084362013247033405> \nSend any message here to stop the robbery! Time is up ${timeCounter} (at ${timeString})!`
+        const send = `<a:siren:1084362013247033405> <@${whoPlayer.discordId}>, YOU ARE BEING ROBBED! <a:siren:1084362013247033405> \nSend any message here to stop the robbery! Time is up ${timeCounter} (at ${timeString})!`
         let msg
         try {
             msg = await whoChannel.send(send)
@@ -104,41 +104,49 @@ export default class Ping extends SlashCommand {
         }
         if (!msg) return
 
+        await interaction.editReply(
+            `[Robbery initiated! (Click me)](https://discord.com/channels/${interaction.guildId}/${whoChannel.id}/${msg.id}))\nTime: ${
+                time / 1000
+            } seconds`
+        )
+
         const collected = await whoChannel.awaitMessages({ filter: (m) => m.author.id === whoPlayer.discordId, time })
         if (collected.size > 0) {
             // robbery failed
             whoChannel.send(`You have stopped the robbery! ${by} failed to rob you!`)
             byChannel.send(`You have failed to rob ${who}!`)
-            // robbery success, no money
-            if (amount === 0) {
-                whoChannel.send(`You failed to stop the robbery, but you had no money for them to take!`)
-                byChannel.send(`You have robbed ${who}, however, they had no money for you to take!`)
-            } else {
-                // robbery success, money
-                whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
-                byChannel.send(`You have robbed ${who} and taken $${amount} from them!`)
-                await this.client.prisma.player.update({
-                    where: {
-                        name: who,
+            this.client.logger.gameLog(`${by} failed to rob ${who}!`)
+        } else if (amount === 0) {
+            whoChannel.send(`You failed to stop the robbery, but you had no money for them to take!`)
+            byChannel.send(`You have robbed ${who}, however, they had no money for you to take!`)
+            this.client.logger.gameLog(`${by} robbed ${who}, however, they had no money for them to take!`)
+        } else {
+            // robbery success, money
+            whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
+            byChannel.send(`You have robbed ${who} and taken $${amount} from them!`)
+            await this.client.prisma.player.update({
+                where: {
+                    name: who,
+                },
+                data: {
+                    money: {
+                        decrement: amount,
                     },
-                    data: {
-                        money: {
-                            decrement: amount,
-                        },
-                    },
-                })
+                },
+            })
 
-                await this.client.prisma.player.update({
-                    where: {
-                        name: by,
+            await this.client.prisma.player.update({
+                where: {
+                    name: by,
+                },
+                data: {
+                    money: {
+                        increment: amount,
                     },
-                    data: {
-                        money: {
-                            increment: amount,
-                        },
-                    },
-                })
-            }
+                },
+            })
+
+            this.client.logger.gameLog(`${by} robbed ${who} and took $${amount} from them!`)
         }
     }
 }
