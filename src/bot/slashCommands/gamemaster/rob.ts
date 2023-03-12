@@ -146,5 +146,14 @@ export default class Ping extends SlashCommand {
 
             this.client.logger.gameLog(`${by} robbed ${who} and took $${amount} from them!`)
         }
+
+        await this.client.prisma.player.update({
+            where: {
+                name: byPlayer.name,
+            },
+            data: {
+                robberiesLeft: byPlayer.robberiesLeft - 1,
+            }
+        })
     }
 }

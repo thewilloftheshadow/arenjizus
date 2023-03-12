@@ -284,6 +284,7 @@ export default class Ping extends SlashCommand {
                     // eslint-disable-next-line no-nested-ternary
                     const deathEmoji = player.deathStatus === "ALIVE"
                         ? "😃"
+                        // eslint-disable-next-line no-nested-ternary
                         : player.deathStatus === "FAKED"
                             ? "👻"
                             : player.deathStatus === "DEAD"
