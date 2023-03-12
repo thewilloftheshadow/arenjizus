@@ -79,7 +79,7 @@ export default class Ping extends SlashCommand {
         if (!whoChannel) {
             interaction.followUp(`Couldn't find GM channel for ${who}!`)
         }
-        const byChannelName = who.replace(/ /g, "-").toLowerCase()
+        const byChannelName = by.replace(/ /g, "-").toLowerCase()
         const byChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${byChannelName}`) as TextChannel
         if (!byChannel) {
             interaction.followUp(`Couldn't find GM channel for ${by}!`)
@@ -105,7 +105,7 @@ export default class Ping extends SlashCommand {
         if (!msg) return
 
         await interaction.editReply(
-            `[Robbery initiated! (Click me)](https://discord.com/channels/${interaction.guildId}/${whoChannel.id}/${msg.id}))\nTime: ${
+            `[Robbery initiated! (Click me)](https://discord.com/channels/${interaction.guildId}/${whoChannel.id}/${msg.id})\nTime: ${
                 time / 1000
             } seconds`
         )
