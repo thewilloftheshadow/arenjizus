@@ -37,13 +37,15 @@ export default class Ping extends SlashCommand {
         if (player.discordId) {
             await interaction.guild?.members
                 .resolve(player.discordId)
-                ?.roles.add("1058507108959657996")
+                // ?.roles.add("1058507108959657996") // RWL ROLE dead
+                ?.roles.add("986633887121829908") // MAIN ROLE dead
                 .catch(() => {})
         }
         if (player.discordId) {
             await interaction.guild?.members
                 .resolve(player.discordId)
-                ?.roles.remove("1058507150336467034")
+                // ?.roles.remove("1058507150336467034") // RWL ROLE alive
+                ?.roles.remove("954418834687811655") // MAIN ROLE alive
                 .catch(() => {})
         }
 
