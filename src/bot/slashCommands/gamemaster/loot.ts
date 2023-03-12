@@ -47,7 +47,18 @@ export default class Ping extends SlashCommand {
         if (!to) {
             return interaction.editReply("Invalid to")
         }
+
+        const itemList: { name: string; amount: number }[] = []
         for await (const item of from.items) {
+            const list = itemList.find((i) => i.name === item.itemName)
+            if (list) {
+                list.amount += item.amount
+            } else {
+                itemList.push({
+                    name: item.itemName,
+                    amount: item.amount,
+                })
+            }
             const hasItem = await this.client.prisma.playerItems.findFirst({
                 where: {
                     playerName: to.name,
@@ -113,5 +124,10 @@ export default class Ping extends SlashCommand {
             },
         })
         await interaction.editReply(`Looted ${from.name} to ${to.name}`)
+        await this.client.logger.gameLog(
+            `${from.name} looted ${to.name} and got ${from.money} money and ${from.items.length} items: ${itemList
+                .map((i) => `${i.name} x${i.amount}`)
+                .join(", ")}`
+        )
     }
 }
