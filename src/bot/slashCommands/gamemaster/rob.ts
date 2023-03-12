@@ -13,12 +13,14 @@ export default class Ping extends SlashCommand {
                     name: "who",
                     description: "Who is being robbed?",
                     required: true,
+                    autocomplete: true
                 },
                 {
                     type: "STRING",
                     name: "by",
                     description: "Who is doing the robbing?",
                     required: true,
+                    autocomplete: true
                 },
                 {
                     type: "NUMBER",
