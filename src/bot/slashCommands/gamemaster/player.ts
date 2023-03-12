@@ -207,12 +207,13 @@ export default class Ping extends SlashCommand {
             const newName = interaction.options.getString("new-name")
             const robberiesLeft = interaction.options.getInteger("robberies-left")
             this.client.logger.gameLog(
-                `Player ${player.name} was updated. ${player.money !== money ? `Money: ${player.money}` : ""} ${
-                    player.name !== newName ? `Name: ${player.name}` : ""
-                } ${robberiesLeft !== player.robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""}`
+                `Player ${player.name} was updated. ${player.money ? `Money: ${player.money}` : ""} ${
+                    player.name ? `Name: ${player.name}` : ""
+                } ${robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""}`
             )
             if (money) data.money = money
             if (newName) data.name = newName
+            if (robberiesLeft) data.robberiesLeft = robberiesLeft
             player = await this.client.prisma.player.update({
                 where: {
                     id: player.id,
@@ -269,19 +270,29 @@ export default class Ping extends SlashCommand {
             })
             const embed = new MessageEmbed().setTitle("All Player Roles").setDescription("")
             // sort players by name
-            players.sort((a, b) => {
-                if (a.name < b.name) {
-                    return -1
-                }
-                if (a.name > b.name) {
-                    return 1
-                }
-                return 0
-            }).forEach((player) => {
-                // eslint-disable-next-line no-nested-ternary
-                const deathEmoji = player.deathStatus === "ALIVE" ? "😃" : player.deathStatus === "FAKED" ? "👻" : player.deathStatus === "DEAD" ? "💀" : "??"
-                embed.description += `${deathEmoji} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")} ($${player.money})\n`
-            })
+            players
+                .sort((a, b) => {
+                    if (a.name < b.name) {
+                        return -1
+                    }
+                    if (a.name > b.name) {
+                        return 1
+                    }
+                    return 0
+                })
+                .forEach((player) => {
+                    // eslint-disable-next-line no-nested-ternary
+                    const deathEmoji = player.deathStatus === "ALIVE"
+                        ? "😃"
+                        : player.deathStatus === "FAKED"
+                            ? "👻"
+                            : player.deathStatus === "DEAD"
+                                ? "💀"
+                                : "??"
+                    embed.description += `${deathEmoji} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")} ($${
+                        player.money
+                    })\n`
+                })
             return interaction.editReply({ embeds: [embed] })
         }
         case "transfer": {
