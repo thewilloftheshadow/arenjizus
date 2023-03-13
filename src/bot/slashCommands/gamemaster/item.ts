@@ -344,7 +344,7 @@ export default class Ping extends SlashCommand {
                 )
             }
 
-            const hideUsers = interaction.options.getBoolean("hide_users", true)
+            const hideUsers = interaction.options.getBoolean("hide_users") || false
             return interaction.editReply({ embeds: [this.client.functions.itemEmbed(item, hideUsers)] })
         }
         case "create": {
