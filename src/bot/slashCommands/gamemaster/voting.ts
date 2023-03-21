@@ -80,6 +80,11 @@ export default class Ping extends SlashCommand {
                         },
                     ],
                 },
+                {
+                    type: "SUB_COMMAND",
+                    name: "resetwanted",
+                    description: "Reset wanted prices",
+                },
             ],
         })
     }
@@ -108,7 +113,9 @@ export default class Ping extends SlashCommand {
                 }
                 const x = votes[vote]
                 const worth = x.reduce((a, b) => a + b.worth, 0)
-                embed.description += `**${worth} vote${worth === 1 ? "" : "s"} for ${vote}**:\n> ${x.map((y) => `${y.from} (${y.worth})`).join(", ")}\n\n`
+                embed.description += `**${worth} vote${worth === 1 ? "" : "s"} for ${vote}**:\n> ${x
+                    .map((y) => `${y.from} (${y.worth})`)
+                    .join(", ")}\n\n`
             })
             return interaction.editReply({ embeds: [embed] })
 
@@ -212,6 +219,21 @@ export default class Ping extends SlashCommand {
                 },
             })
             return interaction.editReply(`Set daychat to ${channel}`)
+
+        case "resetwanted":
+            await this.client.prisma.keyV.upsert({
+                where: {
+                    key: "wantedPrice",
+                },
+                update: {
+                    valueInt: 100,
+                },
+                create: {
+                    key: "wantedPrice",
+                    valueInt: 100,
+                },
+            })
+            return interaction.editReply("Wanted prices have been reset")
         }
     }
 }

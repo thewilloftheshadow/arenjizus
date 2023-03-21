@@ -85,6 +85,7 @@ model PlayerItems {
 model KeyV {
     key          String   @id @unique
     value        String?
+    valueInt     Int?
     valueArray   Json?
     valueBoolean Boolean?
 }
