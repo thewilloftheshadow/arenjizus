@@ -226,11 +226,11 @@ export default class Ping extends SlashCommand {
                     key: "wantedPrice",
                 },
                 update: {
-                    valueInt: 100,
+                    valueInt: 0,
                 },
                 create: {
                     key: "wantedPrice",
-                    valueInt: 100,
+                    valueInt: 0,
                 },
             })
             return interaction.editReply("Wanted prices have been reset")
