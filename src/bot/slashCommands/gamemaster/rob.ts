@@ -110,22 +110,22 @@ export default class Ping extends SlashCommand {
             } seconds`
         )
 
-        await byChannel.send(`You are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
+        await byChannel.send(`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
 
         const collected = await whoChannel.awaitMessages({ filter: (m) => m.author.id === whoPlayer.discordId, time, max: 1 })
         if (collected.size > 0) {
             // robbery failed
             whoChannel.send(`You have stopped the robbery! ${by} failed to rob you!`)
-            byChannel.send(`You have failed to rob ${who}!`)
+            byChannel.send(`<@${byPlayer.discordId}>, you have failed to rob ${who}!`)
             this.client.logger.gameLog(`${by} failed to rob ${who}!`)
         } else if (amount === 0) {
             whoChannel.send(`You failed to stop the robbery, but you had no money for them to take!`)
-            byChannel.send(`You have robbed ${who}, however, they had no money for you to take!`)
+            byChannel.send(`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`)
             this.client.logger.gameLog(`${by} robbed ${who}, however, they had no money for them to take!`)
         } else {
             // robbery success, money
             whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
-            byChannel.send(`You have robbed ${who} and taken $${amount} from them!`)
+            byChannel.send(`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`)
             await this.client.prisma.player.update({
                 where: {
                     name: whoPlayer.name,
@@ -153,7 +153,7 @@ export default class Ping extends SlashCommand {
             },
             data: {
                 robberiesLeft: byPlayer.robberiesLeft - 1,
-            }
+            },
         })
     }
 }

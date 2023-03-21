@@ -125,7 +125,7 @@ export default class Ping extends SlashCommand {
         })
         await interaction.editReply(`Looted ${from.name} to ${to.name}`)
         await this.client.logger.gameLog(
-            `${from.name} looted ${to.name} and got ${from.money} money and ${from.items.length} items: ${itemList
+            `${to.name} looted ${from.name} and got ${from.money} money and ${from.items.length} items: ${itemList
                 .map((i) => `${i.name} x${i.amount}`)
                 .join(", ")}`
         )
