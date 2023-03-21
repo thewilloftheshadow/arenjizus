@@ -108,7 +108,20 @@ export default class Want extends SlashCommand {
             channel.setTopic(`Wanted: ${playerChosen.name} | Price to change: $${newPrice}`).catch(() => {})
         }
 
-        this.client.logger.gameLog(`${player.name} has voted for ${playerChosen.name} (worth ${player.voteWorth} votes)!`)
+        await this.client.prisma.keyV.upsert({
+            where: {
+                key: "wantedPrice",
+            },
+            update: {
+                valueInt: newPrice,
+            },
+            create: {
+                key: "wantedPrice",
+                valueInt: newPrice,
+            },
+        })
+
+        this.client.logger.gameLog(`${player.name} has declared ${playerChosen.name} as wanted for ${wantedPrice}!`)
 
         return interaction.editReply({ content: `Success!` })
     }
