@@ -58,7 +58,7 @@ export default class Ping extends SlashCommand {
         }
         const name = interaction.options.getString("name", true)
         const avatarRaw = interaction.options.getAttachment("avatar", true)
-        const doNotDelete = interaction.guild?.channels.cache.get("986317466613469204") as TextChannel
+        const doNotDelete = (await this.client.channels.fetch("1088163700726313040")) as TextChannel
         const avatarStored = await doNotDelete.send({
             content: `Ball avatar for <@${interaction.user.id}>`,
             files: [avatarRaw],
