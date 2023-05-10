@@ -4,7 +4,6 @@ import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
 
-
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("log", client, {

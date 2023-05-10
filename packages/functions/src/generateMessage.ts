@@ -15,13 +15,13 @@ export const generateErrorMessage = (embedInfo: APIEmbed, supportServer = true, 
 		embeds: [new EmbedBuilder(embedInfo).setColor(colors.error).data],
 		components: supportServer
 			? [
-					new ActionRowBuilder<ButtonBuilder>().addComponents(
-						new ButtonBuilder({
-							label: "Support Server",
-							url: "https://discord.com/invite/T6gwuyNSv3",
-							style: ButtonStyle.Link,
-						})
-					),
+				new ActionRowBuilder<ButtonBuilder>().addComponents(
+					new ButtonBuilder({
+						label: "Support Server",
+						url: "https://discord.com/invite/T6gwuyNSv3",
+						style: ButtonStyle.Link,
+					})
+				),
 			  ]
 			: [],
 		ephemeral,

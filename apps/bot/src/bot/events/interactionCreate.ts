@@ -38,13 +38,13 @@ export default class InteractionCreate extends EventHandler {
 		return interaction.isRepliable()
 			? // @ts-ignore
 			  interaction.reply(
-					generateErrorMessage(
-						{
-							title: "Invalid Interaction",
-							description: "I've never seen this type of interaction",
-						},
-						true
-					)
+				generateErrorMessage(
+					{
+						title: "Invalid Interaction",
+						description: "I've never seen this type of interaction",
+					},
+					true
+				)
 			  )
 			: logger.warn(`Interaction was not repliable`)
 	}
