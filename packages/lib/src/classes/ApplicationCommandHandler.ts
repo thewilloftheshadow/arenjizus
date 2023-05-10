@@ -32,8 +32,7 @@ export default class ApplicationCommandHandler extends _BaseHandler {
 						} else {
 							logger.thrownError(error)
 						}
-					})
-				)
+					}))
 			)
 		}, 5000)
 	}

@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, TextChannel } from "discord.js"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database from "@internal/database"
+import { getAllPlayers } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -22,7 +22,7 @@ export default class Ping extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.reply(`Sending...`)
 		if (!interaction.guild) return
-		const players = await database.player.findMany()
+		const players = await getAllPlayers()
 
 		players.forEach((x) => {
 			const user = x.discordId

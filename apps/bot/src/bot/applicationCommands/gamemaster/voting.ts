@@ -1,10 +1,10 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable default-case */
-import { ChannelType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChannelType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { getPlayer, setVote, setVoteWorth } from "@internal/database"
+import database, { getAllPlayers, getPlayer, setVote, setVoteWorth } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -91,9 +91,22 @@ export default class Ping extends ApplicationCommand {
 		})
 	}
 
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "player": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+		}
+	}
+
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
-		const players = await database.player.findMany()
+		const players = await getAllPlayers()
 
 		switch (interaction.options.getSubcommand()) {
 			case "show":

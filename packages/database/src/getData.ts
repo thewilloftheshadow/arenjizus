@@ -18,6 +18,12 @@ export const getPlayer = async (name: string) => {
 	})
 }
 
+export const getAllPlayers = async () => {
+	return await database.player.findMany({
+		include: { roles: true, items: true },
+	})
+}
+
 export const getItem = async (name: string) => {
 	return await database.item.findFirst({
 		where: {
@@ -52,6 +58,22 @@ export const getRole = async (name: string) => {
 		where: {
 			name,
 		},
+		include: {
+			players: true,
+		},
+	})
+}
+
+export const getAllItems = async () => {
+	return await database.item.findMany({
+		include: {
+			players: true,
+		},
+	})
+}
+
+export const getAllRoles = async () => {
+	return await database.role.findMany({
 		include: {
 			players: true,
 		},

@@ -2,8 +2,8 @@ import { ApplicationCommandOptionType, ChatInputCommandInteraction, TextChannel 
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { BetterClient } from "@internal/lib"
-import database from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
+import database, { getDiscordPlayer, getPlayer, removeMoney } from "@internal/database"
 
 export default class Want extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -36,11 +36,7 @@ export default class Want extends ApplicationCommand {
 				})
 			)
 		}
-		const player = await database.player.findFirst({
-			where: {
-				discordId: interaction.user.id,
-			},
-		})
+		const player = await getDiscordPlayer(interaction.user.id)
 		if (!player) {
 			return interaction.editReply(
 				generateErrorMessage(
@@ -61,11 +57,7 @@ export default class Want extends ApplicationCommand {
 		})
 		const wantedPrice = currentPriceData?.valueInt || 0
 
-		const playerChosen = await database.player.findFirst({
-			where: {
-				name: interaction.options.getString("name", true),
-			},
-		})
+		const playerChosen = await getPlayer(interaction.options.getString("name", true))
 		if (!playerChosen) {
 			return interaction.editReply(
 				generateErrorMessage({
@@ -84,14 +76,7 @@ export default class Want extends ApplicationCommand {
 			)
 		}
 
-		await database.player.update({
-			where: {
-				name: player.name,
-			},
-			data: {
-				money: player.money - wantedPrice,
-			},
-		})
+		await removeMoney(player.name, wantedPrice)
 
 		const newPrice = wantedPrice + 5
 

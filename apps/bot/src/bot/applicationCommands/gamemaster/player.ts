@@ -1,11 +1,11 @@
 /* eslint-disable no-case-declarations */
 import { Prisma } from "@prisma/client"
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { Death, addMoney, getPlayer, playerEmbed, removeMoney } from "@internal/database"
+import database, { Death, addMoney, getAllPlayers, getPlayer, playerEmbed, removeMoney } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -144,6 +144,19 @@ export default class Ping extends ApplicationCommand {
 		})
 	}
 
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "name" || "from" || "to": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+		}
+	}
+
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
 		const type = interaction.options.getSubcommand(false)
@@ -252,11 +265,7 @@ export default class Ping extends ApplicationCommand {
 				return interaction.editReply({ content: "Player successfully deleted." })
 			}
 			case "list": {
-				const players = await database.player.findMany({
-					include: {
-						roles: true,
-					},
-				})
+				const players = await getAllPlayers()
 				const embed = new EmbedBuilder().setTitle("All Player Roles").setDescription("")
 				// sort players by name
 				players
