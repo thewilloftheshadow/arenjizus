@@ -2,8 +2,7 @@ import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database from "@internal/database"
-
+import { getAllItems, getAllPlayers, getAllRoles } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -21,9 +20,9 @@ export default class Ping extends ApplicationCommand {
 
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
-		const rolesData = await database.role.findMany()
-		const playersData = await database.player.findMany({})
-		const itemsData = await database.item.findMany()
+		const rolesData = await getAllRoles()
+		const playersData = await getAllPlayers()
+		const itemsData = await getAllItems()
 
 		const roles = rolesData.map((role) => role.name)
 		const items = itemsData.map((item) => item.name)

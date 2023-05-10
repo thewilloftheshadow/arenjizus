@@ -1,9 +1,20 @@
-import { ChatInputCommandInteraction } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { deleteItem, getItem, getPlayer, getPlayerItem, givePlayerItem, itemEmbed, removeMoney, removePlayerItem } from "@internal/database"
+import database, {
+	deleteItem,
+	getAllItems,
+	getAllPlayers,
+	getItem,
+	getPlayer,
+	getPlayerItem,
+	givePlayerItem,
+	itemEmbed,
+	removeMoney,
+	removePlayerItem,
+} from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -194,6 +205,27 @@ export default class Ping extends ApplicationCommand {
 				},
 			],
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "item" || "name": {
+				const allItems = await getAllItems()
+				if (option.value) {
+					const items = allItems.filter((item: { name: string }) => item.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(items.map((item: { name: string }) => ({ name: item.name, value: item.name })))
+				}
+				return interaction.respond(allItems.map((item: { name: string }) => ({ name: item.name, value: item.name })))
+			}
+			case "player" || "from" || "to": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+		}
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {

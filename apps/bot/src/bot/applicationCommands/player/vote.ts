@@ -1,8 +1,14 @@
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, TextBasedChannel } from "discord.js"
+import {
+	ApplicationCommandOptionType,
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	TextBasedChannel,
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { BetterClient } from "@internal/lib"
-import database from "@internal/database"
+import database, { getAllPlayers } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Vote extends ApplicationCommand {
@@ -19,6 +25,19 @@ export default class Vote extends ApplicationCommand {
 				},
 			],
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "name": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+		}
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {

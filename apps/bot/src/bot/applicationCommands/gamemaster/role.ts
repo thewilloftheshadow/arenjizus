@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { getPlayer, getPlayerRole, getRole, givePlayerRole, roleEmbed } from "@internal/database"
+import database, { getAllPlayers, getAllRoles, getPlayer, getPlayerRole, getRole, givePlayerRole, roleEmbed } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -128,6 +128,27 @@ export default class Ping extends ApplicationCommand {
 				},
 			],
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "player": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+			case "name" || "role": {
+				const allRoles = await getAllRoles()
+				if (option.value) {
+					const roles = allRoles.filter((role: { name: string }) => role.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(roles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
+				}
+				return interaction.respond(allRoles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
+			}
+		}
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {

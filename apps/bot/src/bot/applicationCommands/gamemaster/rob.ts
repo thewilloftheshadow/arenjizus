@@ -1,10 +1,10 @@
 import { Death } from "@prisma/client"
-import { ChatInputCommandInteraction, TextChannel } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, TextChannel } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { getPlayer } from "@internal/database"
+import database, { addMoney, getAllPlayers, getPlayer, removeMoney } from "@internal/database"
 import { generateTimestamp } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -34,6 +34,19 @@ export default class Ping extends ApplicationCommand {
 				},
 			],
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		switch (option.name) {
+			case "by" || "who": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+			}
+		}
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
@@ -122,23 +135,8 @@ export default class Ping extends ApplicationCommand {
 			// robbery success, money
 			whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
 			byChannel.send(`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`)
-			await database.player.update({
-				where: {
-					name: whoPlayer.name,
-				},
-				data: {
-					money: whoPlayer.money - amount,
-				},
-			})
-
-			await database.player.update({
-				where: {
-					name: byPlayer.name,
-				},
-				data: {
-					money: byPlayer.money + amount,
-				},
-			})
+			removeMoney(whoPlayer.name, amount)
+			addMoney(byPlayer.name, amount)
 
 			logger.gameLog(`${by} robbed ${who} and took $${amount} from them!`)
 		}
