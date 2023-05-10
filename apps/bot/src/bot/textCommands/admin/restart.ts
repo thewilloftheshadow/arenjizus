@@ -34,7 +34,7 @@ export default class Restart extends TextCommand {
 		} else {
 			this.client.shard
 				.broadcastEval((toRestart) => {
-					;`if (this.client.shard.ids[0] === ${toRestart}) process.exit()`
+					`if (this.client.shard.ids[0] === ${toRestart}) process.exit()`
 				})
 				.then(() => msg.edit(`Shard ${toRestart} has been restarted.`))
 				.catch((err) => msg.edit(`An error occurred while restarting shard ${toRestart}: ${err}`))

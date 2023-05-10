@@ -66,7 +66,7 @@ export default class Eval extends TextCommand {
 		// if (message.id === user.id) {
 		//     logger.info("Eval has been executed")
 		// }
-		let code = codeInput.replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
+		let code = codeInput.replace(/[“”]/g, "\"").replace(/[‘’]/g, "'")
 		const stopwatch = new StopWatch()
 		let success
 		let syncTime

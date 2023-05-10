@@ -30,8 +30,7 @@ export default class ModalSubmitHandler {
 					// eslint-disable-next-line new-cap
 					const modal: ModalSubmit = new modalFile.default(this.client)
 					return this.client.modals.set(modal.name, modal)
-				})
-			)
+				}))
 		} catch (e) {
 			logger.warn(`Failed to load files for modalSubmits handler`)
 		}
