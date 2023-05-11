@@ -8,7 +8,7 @@ import {
 	ChatInputCommandInteraction,
 } from "discord.js"
 import { ApplicationCommand, BetterClient } from "@internal/lib"
-import database, { getAbility, getDiscordPlayer } from "@internal/database"
+import database, { getAbility, getAllPlayers, getDiscordPlayer, getPlayer } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { serverIds } from "@internal/config"
 
@@ -24,6 +24,13 @@ export default class Ping extends ApplicationCommand {
 					required: true,
 					autocomplete: true,
 				},
+				{
+					type: ApplicationCommandOptionType.String,
+					name: "target",
+					description: "The target of the ability",
+					required: false,
+					autocomplete: true,
+				},
 			],
 		})
 	}
@@ -32,15 +39,22 @@ export default class Ping extends ApplicationCommand {
 		switch (option.name) {
 			case "ability": {
 				const allAbilities = await database.playerAbilities.findMany({
-					where: { player: { discordId: interaction.user.id }, usesLeft: {gt: 0} },
+					where: { player: { discordId: interaction.user.id }, usesLeft: { gt: 0 } },
 					select: { abilityName: true },
 				})
-				console
 				if (option.value) {
 					const abilities = allAbilities.filter((ability) => ability.abilityName.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(abilities.map((ability) => ({ name: ability.abilityName, value: ability.abilityName })))
 				}
 				return interaction.respond(allAbilities.map((ability) => ({ name: ability.abilityName, value: ability.abilityName })))
+			}
+			case "target": {
+				const allPlayers = await getAllPlayers()
+				if (option.value) {
+					const players = allPlayers.filter((player) => player.name.toLowerCase().includes(option.value.toLowerCase()))
+					return interaction.respond(players.map((player) => ({ name: player.name, value: player.name })))
+				}
+				return interaction.respond(allPlayers.map((player) => ({ name: player.name, value: player.name })))
 			}
 		}
 	}
@@ -92,13 +106,17 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		const channel = await interaction.guild?.channels.cache.find((c) => c.name.toLowerCase() === `gm-${player.name}`.toLowerCase())
+		const channel = await interaction.guild?.channels.cache.find(
+			(c) => c.name.toLowerCase() === `gm-${player.name.toLowerCase().replace(/ /g, "-")}`
+		)
 		if (!channel || !channel.isTextBased()) {
 			return interaction.editReply(
 				generateErrorMessage(
 					{
 						title: "Channel not found",
-						description: `I was unable to find your player channel (\`#gm-${player.name}\`). Please contact the gamemasters to resolve this issue.`,
+						description: `I was unable to find your player channel (\`#gm-${player.name
+							.toLowerCase()
+							.replace(/ /g, "-")}\`). Please contact the gamemasters to resolve this issue.`,
 					},
 					false,
 					true
@@ -106,8 +124,25 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
+		const target = interaction.options.getString("target", false)
+		if (target) {
+			const targetPlayer = await getPlayer(target)
+			if (!targetPlayer) {
+				return interaction.editReply(
+					generateErrorMessage(
+						{
+							title: "Player not found",
+							description: `I was unable to find a player with the name \`${target}\`. Please check your spelling and try again.`,
+						},
+						false,
+						true
+					)
+				)
+			}
+		}
+
 		await channel.send({
-			content: `<@&${serverIds.roles.gamemaster}>, ${player.name} wants to use ${ability.name}!`,
+			content: `<@&${serverIds.roles.gamemaster}>, ${player.name} wants to use ${ability.name}${target ? ` on ${target}` : ""}!`,
 			components: [
 				new ActionRowBuilder<ButtonBuilder>().addComponents([
 					new ButtonBuilder().setCustomId(`use:${playerAbility.id}`).setLabel("Approve").setStyle(ButtonStyle.Success),

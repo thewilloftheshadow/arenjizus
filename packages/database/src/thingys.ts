@@ -1,5 +1,18 @@
 import { Result } from "@sapphire/result"
-import database, { Death, getAbility, getPlayer } from "../index.js"
+import database, {
+	Ability,
+	AbilityProperty,
+	Death,
+	convertNumberToProperties,
+	getAbility,
+	getItem,
+	getPlayer,
+	getPlayerAbility,
+	getRole,
+	grantAbility,
+} from "../index.js"
+import { Client } from "discord.js"
+import { logger } from "@internal/logger"
 
 export const addMoney = async (name: string, amount: number) => {
 	const player = await getPlayer(name)
@@ -43,7 +56,9 @@ export const setPlayerMoney = async (name: string, amount: number) => {
 export const givePlayerItem = async (playerName: string, itemName: string, amount: number) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
-	return await database.playerItems.upsert({
+	const item = await getItem(itemName)
+	if (!item) return
+	const done = await database.playerItems.upsert({
 		where: {
 			playerName_itemName: {
 				playerName,
@@ -61,12 +76,40 @@ export const givePlayerItem = async (playerName: string, itemName: string, amoun
 			},
 		},
 	})
+	if (item.linkedAbilities.length > 0) {
+		for (const abilityLink of item.linkedAbilities) {
+			if (!abilityLink.giveWithItem) continue
+			const ability = await getAbility(abilityLink.abilityName)
+			if (!ability) continue
+			await database.playerAbilities.upsert({
+				where: {
+					playerName_abilityName: {
+						playerName,
+						abilityName: ability?.name,
+					},
+				},
+				create: {
+					playerName,
+					abilityName: ability?.name,
+					usesLeft: ability?.uses,
+				},
+				update: {
+					usesLeft: {
+						increment: ability.uses,
+					},
+				},
+			})
+		}
+	}
+	return done
 }
 
 export const removePlayerItem = async (playerName: string, itemName: string, amount: number) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
-	return await database.playerItems.upsert({
+	const item = await getItem(itemName)
+	if (!item) return
+	const done = await database.playerItems.upsert({
 		where: {
 			playerName_itemName: {
 				playerName,
@@ -84,12 +127,15 @@ export const removePlayerItem = async (playerName: string, itemName: string, amo
 			},
 		},
 	})
+	return done
 }
 
 export const givePlayerRole = async (playerName: string, roleName: string) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
-	return await database.playerRoles.upsert({
+	const role = await getRole(roleName)
+	if (!role) return
+	const done = await database.playerRoles.upsert({
 		where: {
 			playerName_roleName: {
 				playerName,
@@ -102,6 +148,31 @@ export const givePlayerRole = async (playerName: string, roleName: string) => {
 		},
 		update: {},
 	})
+	if (role.linkedAbilities.length > 0) {
+		for (const abilityLink of role.linkedAbilities) {
+			const ability = await getAbility(abilityLink.abilityName)
+			if (!ability) continue
+			await database.playerAbilities.upsert({
+				where: {
+					playerName_abilityName: {
+						playerName,
+						abilityName: ability?.name,
+					},
+				},
+				create: {
+					playerName,
+					abilityName: ability?.name,
+					usesLeft: ability?.uses,
+				},
+				update: {
+					usesLeft: {
+						increment: ability.uses,
+					},
+				},
+			})
+		}
+	}
+	return done
 }
 
 export const removePlayerRole = async (playerName: string, roleName: string) => {
@@ -205,4 +276,84 @@ export const deleteAbility = async (name: string) => {
 			name,
 		},
 	})
+}
+
+export const useAbility = async (playerName: string, abilityName: string) => {
+	const ability = await getAbility(abilityName)
+	if (!ability) return
+	const playerLink = await getPlayerAbility(playerName, abilityName)
+	if (!playerLink) return
+	if (playerLink.usesLeft - 1 <= 0) {
+		await database.playerAbilities.delete({
+			where: {
+				playerName_abilityName: {
+					playerName,
+					abilityName,
+				},
+			},
+		})
+		return
+	} else {
+		await database.playerAbilities.update({
+			where: {
+				playerName_abilityName: {
+					playerName,
+					abilityName,
+				},
+			},
+			data: {
+				usesLeft: {
+					decrement: 1,
+				},
+			},
+		})
+	}
+	if (ability.linkedItems.length > 0) {
+		for (const itemLink of ability.linkedItems) {
+			if (!itemLink.subtractItemOnUse) continue
+			const item = await getItem(itemLink.itemName)
+			if (!item) continue
+			await database.playerItems.update({
+				where: {
+					playerName_itemName: {
+						playerName,
+						itemName: item.name,
+					},
+				},
+				data: {
+					amount: {
+						decrement: 1,
+					},
+				},
+			})
+		}
+	}
+}
+
+export const runAbilityProperties = async (ability: Ability, targetName: string, client: Client) => {
+	const properties = convertNumberToProperties(ability.properties)
+	const target = await getPlayer(targetName)
+	const result: string[] = []
+	for (const property of properties) {
+		if (property === AbilityProperty.giveToTarget) {
+			if (!target) return ["Target not found"]
+			const done = await grantAbility(targetName, ability.name)
+			if (done.isErr()) result.push(done.unwrapErr())
+			else result.push(`Gave ${targetName} ${ability.name}`)
+		} else if (property === AbilityProperty.killTarget) {
+			if (!target) return ["Target not found"]
+			await toggleDeath(targetName, Death.DEAD)
+			result.push(`Killed ${targetName}`)
+		} else if (property === AbilityProperty.resurrectTarget) {
+			if (!target) return ["Target not found"]
+			await toggleDeath(targetName, Death.ALIVE)
+			result.push(`Resurrected ${targetName}`)
+		} else if (property === AbilityProperty.lockDayChat) {
+			result.push(`Day chat now needs to be locked`)
+		} else if (property === AbilityProperty.muteSelfInDayChat) {
+			result.push(`The player now needs to be muted in day chat`)
+		}
+	}
+	logger.null(target, client)
+	return result
 }

@@ -1,5 +1,5 @@
 import { serverIds } from "@internal/config"
-import database, { useAbility } from "@internal/database"
+import database, { runAbilityProperties, useAbility } from "@internal/database"
 import { Button, BetterClient } from "@internal/lib"
 import { logger } from "@internal/logger"
 import { ButtonInteraction } from "discord.js"
@@ -23,14 +23,15 @@ export default class Buttony extends Button {
 				},
 				include: {
 					player: true,
+					ability: true,
 				},
 			})
 		)[0]
 		if (!playerAbility) return interaction.editReply("Ability not found.")
 
-		const used = await useAbility(playerAbility.playerName, playerAbility.abilityName)
-		if (used.isErr()) return interaction.editReply(used.unwrapErr())
-		await interaction.editReply(`Done`)
+		await useAbility(playerAbility.playerName, playerAbility.abilityName)
+		const done = await runAbilityProperties(playerAbility.ability, "", this.client)
+		await interaction.editReply(`Done\n${done ? done.join("\n") : ""}`)
 		await logger.gameLog(`${playerAbility.playerName} used ${playerAbility.abilityName}.`)
 		await interaction.followUp({
 			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`,

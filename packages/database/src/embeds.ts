@@ -9,7 +9,8 @@ import {
 	Ability,
 	PlayerAbilities,
 	AbilityRoleLink,
-	getPropertyDescriptions,
+	getPropertyDetails,
+	AbilityItemLink,
 } from "../index.js"
 import { EmbedBuilder } from "discord.js"
 import { titleCase } from "@internal/functions"
@@ -17,6 +18,7 @@ import { titleCase } from "@internal/functions"
 export const itemEmbed = (
 	item: Item & {
 		players: PlayerItems[]
+		linkedAbilities: AbilityItemLink[]
 	},
 	hideUsers = false
 ): EmbedBuilder => {
@@ -66,6 +68,7 @@ export const playerEmbed = (
 export const roleEmbed = (
 	role: Role & {
 		players: PlayerRoles[]
+		linkedAbilities: AbilityRoleLink[]
 	},
 	hideUsers = false
 ): EmbedBuilder => {
@@ -96,7 +99,10 @@ export const abilityEmbed = (
 	embed.addFields([
 		{
 			name: `Properties:`,
-			value: getPropertyDescriptions(ability.properties).join("\n") || "** **",
+			value:
+				getPropertyDetails(ability.properties)
+					.map((x) => `${x.name} - ${x.description}`)
+					.join("\n") || "** **",
 		},
 	])
 	if (!hideUsers)

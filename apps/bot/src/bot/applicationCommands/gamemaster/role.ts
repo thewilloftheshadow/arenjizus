@@ -189,6 +189,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					include: {
 						players: true,
+						linkedAbilities: true,
 					},
 				})
 				logger.gameLog(`Role ${role.name} was updated.`)
@@ -202,6 +203,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					include: {
 						players: true,
+						linkedAbilities: true,
 					},
 				})
 				logger.gameLog(`Role ${role.name} was created.`)

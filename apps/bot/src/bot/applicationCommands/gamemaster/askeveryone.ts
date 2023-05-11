@@ -28,7 +28,7 @@ export default class Ping extends ApplicationCommand {
 			const user = x.discordId
 			if (!user) return
 			const name = x.name.replace(/ /g, "-").toLowerCase()
-			const theirChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${name}`)
+			const theirChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${name.toLowerCase().replace(/ /g, "-")}`)
 			if (!theirChannel) {
 				interaction.followUp(`Couldn't find channel for ${x.name} (${user})!`)
 			} else {

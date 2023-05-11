@@ -31,6 +31,7 @@ export const getItem = async (name: string) => {
 		},
 		include: {
 			players: true,
+			linkedAbilities: true,
 		},
 	})
 }
@@ -60,6 +61,7 @@ export const getRole = async (name: string) => {
 		},
 		include: {
 			players: true,
+			linkedAbilities: true,
 		},
 	})
 }
@@ -68,6 +70,7 @@ export const getAllItems = async () => {
 	return await database.item.findMany({
 		include: {
 			players: true,
+			linkedAbilities: true,
 		},
 	})
 }
@@ -88,6 +91,7 @@ export const getAbility = async (name: string) => {
 		include: {
 			playersWithAbility: true,
 			linkedRoles: true,
+			linkedItems: true,
 		},
 	})
 }
@@ -102,6 +106,15 @@ export const getAllAbilities = async () => {
 		include: {
 			playersWithAbility: true,
 			linkedRoles: true,
+		},
+	})
+}
+
+export const getPlayerAbility = async (playerName: string, abilityName: string) => {
+	return await database.playerAbilities.findFirst({
+		where: {
+			playerName,
+			abilityName,
 		},
 	})
 }

@@ -84,12 +84,12 @@ export default class Ping extends ApplicationCommand {
 		const amount = amountInput > whoPlayer.money ? whoPlayer.money : amountInput
 
 		const whoChannelName = who.replace(/ /g, "-").toLowerCase()
-		const whoChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${whoChannelName}`) as TextChannel
+		const whoChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${whoChannelName.toLowerCase().replace(/ /g, "-")}`) as TextChannel
 		if (!whoChannel) {
 			interaction.followUp(`Couldn't find GM channel for ${who}!`)
 		}
 		const byChannelName = by.replace(/ /g, "-").toLowerCase()
-		const byChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${byChannelName}`) as TextChannel
+		const byChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${byChannelName.toLowerCase().replace(/ /g, "-")}`) as TextChannel
 		if (!byChannel) {
 			interaction.followUp(`Couldn't find GM channel for ${by}!`)
 		}

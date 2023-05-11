@@ -48,7 +48,7 @@ model Role {
     name          String            @unique
     description   String            @db.LongText
     players       PlayerRoles[]
-    linkedActions AbilityRoleLink[]
+    linkedAbilities AbilityRoleLink[]
 }
 
 model PlayerRoles {
@@ -70,7 +70,7 @@ model Item {
     description String        @db.LongText
     players     PlayerItems[]
 
-    linkedActions AbilityItemLink[]
+    linkedAbilities AbilityItemLink[]
 }
 
 model PlayerItems {
@@ -121,15 +121,15 @@ model AbilityRoleLink {
 model AbilityItemLink {
     ability     Ability @relation(fields: [abilityName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     abilityName String
-    item        Item    @relation(fields: [itemId], references: [name], onDelete: NoAction, onUpdate: NoAction)
-    itemId      String
+    item        Item    @relation(fields: [itemName], references: [name], onDelete: NoAction, onUpdate: NoAction)
+    itemName    String
 
-    giveWithItem      Boolean
-    subtractItemOnUse Boolean
+    giveWithItem      Boolean @default(false)
+    subtractItemOnUse Boolean @default(false)
 
-    @@id([abilityName, itemId])
+    @@id([abilityName, itemName])
     @@index([abilityName])
-    @@index([itemId])
+    @@index([itemName])
 }
 
 model PlayerAbilities {

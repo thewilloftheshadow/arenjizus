@@ -1,34 +1,6 @@
 import { Result } from "@sapphire/result"
 import database, { Ability, getAbility, getPlayer } from "../index.js"
 
-export const useAbility = async (playerName: string, abilityName: string) => {
-	const player = await getPlayer(playerName)
-	if (!player) return Result.err("Player not found")
-	const ability = await getAbility(abilityName)
-	if (!ability) return Result.err("Ability not found")
-	const link = await database.playerAbilities.findFirst({
-		where: {
-			playerName,
-			abilityName,
-		},
-	})
-	if (!link) return Result.err("Player does not have this ability")
-	if (link.usesLeft <= 0) return Result.err("Player has no uses left")
-	await database.playerAbilities.update({
-		where: {
-			playerName_abilityName: {
-				playerName,
-				abilityName,
-			},
-		},
-		data: {
-			usesLeft: {
-				decrement: 1,
-			},
-		},
-	})
-	return Result.ok(link)
-}
 
 export const grantAbility = async (playerName: string, abilityName: string) => {
 	const player = await getPlayer(playerName)
@@ -135,19 +107,18 @@ export const resetAbilityUses = async (playerName: string, abilityName: string) 
 
 export enum AbilityProperty {
 	"resetWithDay" = 1 << 0,
-	"hasTarget" = 1 << 1,
+	"lockDayChat" = 1 << 1,
 	"killTarget" = 1 << 2,
 	"resurrectTarget" = 1 << 3,
 	"giveToTarget" = 1 << 4,
 	"muteSelfInDayChat" = 1 << 5,
-	"lockDayChat" = 1 << 6,
 }
 
-export const getPropertyDescriptions = (properties: number | AbilityProperty[]) => {
+export const getPropertyDetails = (properties: number | AbilityProperty[]) => {
 	if (typeof properties === "number") properties = convertNumberToProperties(properties)
-	const result = [] as string[]
+	const result = [] as descriptionsType[]
 	for (const property of properties) {
-		result.push(propertyDescriptions[property])
+		result.push(propertyDetails[property])
 	}
 	return result
 }
@@ -169,7 +140,7 @@ export const convertNumberToProperties = (permissions: number) => {
 	return result
 }
 
-export const setPropertiesForAbility = async (abilityName: string, properties: AbilityProperty[]) => {
+export const setPropertiesForAbility = async (abilityName: string, properties: AbilityProperty[] | number) => {
 	const ability = getAbility(abilityName)
 	if (!ability) return Result.err("Ability not found")
 	await database.ability.update({
@@ -177,7 +148,7 @@ export const setPropertiesForAbility = async (abilityName: string, properties: A
 			name: abilityName,
 		},
 		data: {
-			properties: convertPropertiesToNumber(properties),
+			properties: typeof properties === "number" ? properties : convertPropertiesToNumber(properties),
 		},
 	})
 }
@@ -186,32 +157,35 @@ export const hasProperty = (ability: Ability, property: AbilityProperty) => {
 	return (ability.properties & property) === property
 }
 
-const propertyDescriptions = {
-	[AbilityProperty.resetWithDay]: "Reset the use count of this ability when day starts",
-	[AbilityProperty.hasTarget]: "This ability has a target",
-	[AbilityProperty.killTarget]: "This ability kills its target",
-	[AbilityProperty.resurrectTarget]: "This ability resurrects its target",
-	[AbilityProperty.giveToTarget]: "This ability gives its target an item",
-	[AbilityProperty.muteSelfInDayChat]: "This ability mutes the user in day chat",
-	[AbilityProperty.lockDayChat]: "This ability locks the day chat",
+const propertyDetails: { [key: number]: descriptionsType } = {
+	[AbilityProperty.resetWithDay]: {
+		name: "Reset with Day",
+		description: "This ability's use count resets when day starts",
+		value: AbilityProperty.resetWithDay,
+	},
+	[AbilityProperty.killTarget]: { name: "Kills Target", description: "This ability kills its target", value: AbilityProperty.killTarget },
+	[AbilityProperty.resurrectTarget]: {
+		name: "Resurrects Target",
+		description: "This ability resurrects its target",
+		value: AbilityProperty.resurrectTarget,
+	},
+	[AbilityProperty.giveToTarget]: {
+		name: "Give to Target",
+		description: "This ability gives its target 1 use of the ability",
+		value: AbilityProperty.giveToTarget,
+	},
+	[AbilityProperty.muteSelfInDayChat]: {
+		name: "Mute Self in Day Chat",
+		description: "This ability mutes the user in day chat",
+		value: AbilityProperty.muteSelfInDayChat,
+	},
+	[AbilityProperty.lockDayChat]: { name: "Locks Day Chat", description: "This ability locks the day chat", value: AbilityProperty.lockDayChat },
 } as const
 
-export type descriptionsType = {
-	-readonly [key in keyof typeof propertyDescriptions]: (typeof propertyDescriptions)[key]
-}
+export type descriptionsType = { name: string; description: string; value: number }
 
-export const getPropertyDescription = (permissions: number): descriptionsType => {
-	const result = {} as descriptionsType
-	for (const [key, _] of Object.entries(propertyDescriptions)) {
-		const num = parseInt(key)
-		// @ts-ignore I'm not sure why this errors but its working properly
-		if (permissions & num) result[num] = permissionDescriptions[num]
-	}
-	return result
-}
-
-const allAbilities = Object.keys(AbilityProperty)
+const allProperties = Object.keys(AbilityProperty)
 	.map((k) => AbilityProperty[k as keyof typeof AbilityProperty])
 	.reduce((a, b) => a | b)
 
-export { allAbilities }
+export { allProperties }

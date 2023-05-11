@@ -293,6 +293,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					include: {
 						players: true,
+						linkedAbilities: true,
 					},
 				})
 				logger.gameLog(`Item ${item.name} was created.`)
@@ -305,6 +306,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					include: {
 						players: true,
+						linkedAbilities: true,
 					},
 				})
 				if (!item) {
@@ -325,6 +327,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					include: {
 						players: true,
+						linkedAbilities: true,
 					},
 				})
 				logger.gameLog(
