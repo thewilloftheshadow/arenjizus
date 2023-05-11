@@ -1,11 +1,11 @@
-import database from "../index.js"
+import database, { AbilityProperty, hasProperty } from "../index.js"
 
 export const getDiscordPlayer = async (discordId: string) => {
 	return await database.player.findFirst({
 		where: {
 			discordId,
 		},
-		include: { roles: true, items: true, ballData: true },
+		include: { roles: true, items: true, ballData: true, abilities: true },
 	})
 }
 
@@ -14,7 +14,7 @@ export const getPlayer = async (name: string) => {
 		where: {
 			name,
 		},
-		include: { roles: true, items: true },
+		include: { roles: true, items: true, ballData: true, abilities: true },
 	})
 }
 
@@ -76,6 +76,32 @@ export const getAllRoles = async () => {
 	return await database.role.findMany({
 		include: {
 			players: true,
+		},
+	})
+}
+
+export const getAbility = async (name: string) => {
+	return await database.ability.findFirst({
+		where: {
+			name,
+		},
+		include: {
+			playersWithAbility: true,
+			linkedRoles: true,
+		},
+	})
+}
+
+export const getAbilitiesWithProperty = async (property: AbilityProperty) => {
+	const abilities = await database.ability.findMany()
+	return abilities.filter((ability) => hasProperty(ability, property))
+}
+
+export const getAllAbilities = async () => {
+	return await database.ability.findMany({
+		include: {
+			playersWithAbility: true,
+			linkedRoles: true,
 		},
 	})
 }

@@ -13,6 +13,7 @@ export const serverIds = {
 		player: "1105539807444217869",
 		kidnapped: "1105539807444217867",
 		spectator: "1105539807444217868",
+		gamemaster: "1105539807444217873",
 	},
 }
 

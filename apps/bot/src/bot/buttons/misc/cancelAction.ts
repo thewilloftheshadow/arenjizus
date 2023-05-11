@@ -1,7 +1,7 @@
 import { Button, BetterClient } from "@internal/lib"
 import { ButtonInteraction } from "discord.js"
 
-export default class EditEmbed extends Button {
+export default class Buttony extends Button {
 	constructor(client: BetterClient) {
 		super("cancelAction", client, {
 			authorOnly: true,

@@ -19,6 +19,7 @@
 		"node": ">=18.0.0"
 	},
 	"dependencies": {
+		"@sapphire/result": "^2.6.3",
 		"@types/common-tags": "^1.8.1",
 		"common-tags": "^1.8.2",
 		"cross-env": "^7.0.3",

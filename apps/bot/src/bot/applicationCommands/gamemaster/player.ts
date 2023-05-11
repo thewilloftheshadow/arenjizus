@@ -223,8 +223,11 @@ export default class Ping extends ApplicationCommand {
 					include: {
 						items: true,
 						roles: true,
+						ballData: true,
+						abilities: true,
 					},
 				})
+				if (!player) throw new Error("Player not found")
 				return interaction.editReply({ content: "Player successfully updated:", embeds: [playerEmbed(player)] })
 			}
 			case "delete": {

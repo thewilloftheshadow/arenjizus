@@ -1,5 +1,16 @@
 import { embedSpacer } from "@internal/config"
-import { Item, PlayerItems, Player, PlayerRoles, Role, PlayerBallData } from "../index.js"
+import {
+	Item,
+	PlayerItems,
+	Player,
+	PlayerRoles,
+	Role,
+	PlayerBallData,
+	Ability,
+	PlayerAbilities,
+	AbilityRoleLink,
+	getPropertyDescriptions,
+} from "../index.js"
 import { EmbedBuilder } from "discord.js"
 import { titleCase } from "@internal/functions"
 
@@ -63,5 +74,37 @@ export const roleEmbed = (
 	if (!hideUsers)
 		embed.addFields({ name: `${role.players.length} Players:`, value: role.players.map((x) => x.playerName).join(", ") || "** **", inline: true })
 	if (role.name.toLowerCase().includes("bezos")) embed.setImage("https://tenor.com/bgUX6.gif")
+	return embed
+}
+
+export const abilityEmbed = (
+	ability: Ability & {
+		playersWithAbility: PlayerAbilities[]
+		linkedRoles: AbilityRoleLink[]
+	},
+	hideUsers = false
+): EmbedBuilder => {
+	const embed = new EmbedBuilder().setTitle(ability.name).setColor("Random").setImage(embedSpacer)
+	if (ability.description) embed.data.description = ability.description.slice(0, 1500)
+	if (ability.linkedRoles.length > 0)
+		embed.addFields([
+			{
+				name: `Linked Roles:`,
+				value: ability.linkedRoles.map((x) => x.roleName).join(", ") || "** **",
+			},
+		])
+	embed.addFields([
+		{
+			name: `Properties:`,
+			value: getPropertyDescriptions(ability.properties).join("\n") || "** **",
+		},
+	])
+	if (!hideUsers)
+		embed.addFields([
+			{
+				name: `${ability.playersWithAbility.length} Players:`,
+				value: ability.playersWithAbility.map((x) => x.playerName).join(", ") || "** **",
+			},
+		])
 	return embed
 }

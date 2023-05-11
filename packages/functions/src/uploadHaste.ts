@@ -5,13 +5,13 @@
  * @param url - A non-standard url to upload to
  * @returns The URL to the uploaded content.
  */
-export const uploadHaste = async (content: string, type = "md", url = "https://hastebin.com"): Promise<string | null> => {
+export const uploadHaste = async (content: string, type = "md", url = "https://haste.jtjs.org"): Promise<string | null> => {
 	const postUrl = `${url}/documents`
 	const options: RequestInit = {
 		method: "POST",
 		body: content,
 		headers: {
-			"User-Agent": `Buape/Kiai`,
+			"User-Agent": `Shadow/Arenjizus`,
 		},
 	}
 	const res = await fetch(postUrl, options)

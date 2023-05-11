@@ -16,15 +16,16 @@ enum Death {
 }
 
 model Player {
-    id            String          @id @unique @default(cuid())
+    id            String            @id @unique @default(cuid())
     discordId     String?
-    name          String          @unique
-    money         Int             @default(10)
-    deathStatus   Death           @default(ALIVE)
-    robberiesLeft Int             @default(3)
+    name          String            @unique
+    money         Int               @default(10)
+    deathStatus   Death             @default(ALIVE)
+    robberiesLeft Int               @default(3)
     roles         PlayerRoles[]
     items         PlayerItems[]
     ballData      PlayerBallData?
+    abilities     PlayerAbilities[]
 
     votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
     votedForName String?
@@ -43,10 +44,11 @@ model PlayerBallData {
 }
 
 model Role {
-    id          String        @id @unique @default(cuid())
-    name        String        @unique
-    description String        @db.LongText
-    players     PlayerRoles[]
+    id            String            @id @unique @default(cuid())
+    name          String            @unique
+    description   String            @db.LongText
+    players       PlayerRoles[]
+    linkedActions AbilityRoleLink[]
 }
 
 model PlayerRoles {
@@ -67,6 +69,8 @@ model Item {
     price       Int
     description String        @db.LongText
     players     PlayerItems[]
+
+    linkedActions AbilityItemLink[]
 }
 
 model PlayerItems {
@@ -88,4 +92,56 @@ model KeyV {
     valueInt     Int?
     valueArray   Json?
     valueBoolean Boolean?
+}
+
+model Ability {
+    id          String @id @unique @default(cuid())
+    name        String @unique
+    description String @db.LongText
+
+    uses       Int @default(1)
+    properties Int @default(0)
+
+    linkedRoles        AbilityRoleLink[]
+    linkedItems        AbilityItemLink[]
+    playersWithAbility PlayerAbilities[]
+}
+
+model AbilityRoleLink {
+    ability     Ability @relation(fields: [abilityName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+    abilityName String
+    role        Role    @relation(fields: [roleName], references: [name], onDelete: NoAction, onUpdate: NoAction)
+    roleName    String
+
+    @@id([abilityName, roleName])
+    @@index([abilityName])
+    @@index([roleName])
+}
+
+model AbilityItemLink {
+    ability     Ability @relation(fields: [abilityName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+    abilityName String
+    item        Item    @relation(fields: [itemId], references: [name], onDelete: NoAction, onUpdate: NoAction)
+    itemId      String
+
+    giveWithItem      Boolean
+    subtractItemOnUse Boolean
+
+    @@id([abilityName, itemId])
+    @@index([abilityName])
+    @@index([itemId])
+}
+
+model PlayerAbilities {
+    id         String @id @unique @default(cuid())
+    player     Player @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+    playerName String
+
+    ability     Ability @relation(fields: [abilityName], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    abilityName String
+
+    usesLeft Int
+
+    @@unique([playerName, abilityName])
+    @@index([abilityName])
 }

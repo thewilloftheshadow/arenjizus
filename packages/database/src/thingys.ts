@@ -1,4 +1,5 @@
-import database, { Death, getPlayer } from "../index.js"
+import { Result } from "@sapphire/result"
+import database, { Death, getAbility, getPlayer } from "../index.js"
 
 export const addMoney = async (name: string, amount: number) => {
 	const player = await getPlayer(name)
@@ -179,4 +180,29 @@ export const setVote = async (name: string, votedFor: string | null) => {
 			},
 		})
 	}
+}
+
+export const createAbility = async (name: string, description: string, uses: number) => {
+	const exists = await getAbility(name)
+	if (exists) return Result.err("Ability already exists")
+	const result = await database.ability
+		.create({
+			data: {
+				name,
+				description,
+				uses,
+			},
+		})
+		.catch(() => {
+			return Result.err("Failed to create ability")
+		})
+	return Result.ok(result)
+}
+
+export const deleteAbility = async (name: string) => {
+	await database.ability.delete({
+		where: {
+			name,
+		},
+	})
 }
