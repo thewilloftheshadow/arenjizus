@@ -44,7 +44,7 @@ export default class Logger {
 	}
 
 	public thrownError(error: Error, properties: { [key: string]: any } = {}): void {
-		console.error(error)
+		// console.error(error)
 		this.winston.error(`${error.message} ${error.stack}`)
 		this.null(properties)
 	}

@@ -146,14 +146,15 @@ export default class Ping extends ApplicationCommand {
 
 	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
 		switch (option.name) {
-			case "name" || "from" || "to": {
+			case "name":
+			case "from":
+			case "to":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
 				}
 				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
-			}
 		}
 	}
 
@@ -188,6 +189,7 @@ export default class Ping extends ApplicationCommand {
 					include: {
 						roles: true,
 						items: true,
+						abilities: true,
 					},
 				})
 				logger.gameLog(`Player ${player.name} was created.`)
@@ -269,8 +271,14 @@ export default class Ping extends ApplicationCommand {
 			}
 			case "list": {
 				const players = await getAllPlayers()
-				const embed = new EmbedBuilder().setTitle("All Player Roles").setDescription("")
-				// sort players by name
+				const embed = new EmbedBuilder()
+					.setTitle("All Player Roles")
+					.setDescription("\n")
+					.setFooter({
+						text: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+							players.filter((x) => x.deathStatus === Death.DEAD).length
+						} dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`,
+					})
 				players
 					.sort((a, b) => {
 						if (a.name < b.name) {

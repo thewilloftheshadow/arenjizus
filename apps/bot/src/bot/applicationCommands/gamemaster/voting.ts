@@ -119,7 +119,7 @@ export default class Ping extends ApplicationCommand {
 						votes[vote] = [{ from: player.name, worth: player.voteWorth }]
 					}
 				})
-				const embed = new EmbedBuilder().setTitle("Current Votes").setColor("Random").setTimestamp().setDescription("")
+				const embed = new EmbedBuilder().setTitle("Current Votes").setColor("Random").setTimestamp().setDescription("\n")
 				Object.keys(votes).forEach((vote) => {
 					if (vote === "No Vote") {
 						embed.data.description += `No votes:\n> ${votes[vote].map((y) => y.from).join(", ")}\n\n`

@@ -22,7 +22,7 @@ export const itemEmbed = (
 	},
 	hideUsers = false
 ): EmbedBuilder => {
-	const embed = new EmbedBuilder().setTitle(item.name).setColor("Random").setImage(embedSpacer).setDescription("")
+	const embed = new EmbedBuilder().setTitle(item.name).setColor("Random").setImage(embedSpacer).setDescription("\n")
 	if (item.description) embed.data.description += `${item.description.slice(0, 1500)}\n\n`
 	embed.data.description += `Price: ${item.price}`
 	if (!hideUsers) {
@@ -42,6 +42,7 @@ export const playerEmbed = (
 		ballData?: PlayerBallData | null
 		votedFor?: Player | null
 		playersVotedFor?: Player[]
+		abilities?: PlayerAbilities[]
 	}
 ): EmbedBuilder => {
 	const embed = new EmbedBuilder().setTitle(player.name).setColor("Random").setImage(embedSpacer)
@@ -62,13 +63,20 @@ export const playerEmbed = (
 			inline: true,
 		})
 	}
+	if (player.abilities) {
+		embed.addFields({
+			name: `${player.abilities.length} Abilities:`,
+			value: `${player.abilities.map((x) => `${x.abilityName} - ${x.usesLeft}`).join("\n")}` || "** **",
+			inline: true,
+		})
+	}
 	return embed
 }
 
 export const roleEmbed = (
 	role: Role & {
 		players: PlayerRoles[]
-		linkedAbilities: AbilityRoleLink[]
+		linkedAbilities?: AbilityRoleLink[]
 	},
 	hideUsers = false
 ): EmbedBuilder => {

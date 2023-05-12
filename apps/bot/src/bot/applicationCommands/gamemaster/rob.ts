@@ -38,14 +38,14 @@ export default class Ping extends ApplicationCommand {
 
 	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
 		switch (option.name) {
-			case "by" || "who": {
+			case "by":
+			case "who":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
 				}
 				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
-			}
 		}
 	}
 
@@ -84,12 +84,16 @@ export default class Ping extends ApplicationCommand {
 		const amount = amountInput > whoPlayer.money ? whoPlayer.money : amountInput
 
 		const whoChannelName = who.replace(/ /g, "-").toLowerCase()
-		const whoChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${whoChannelName.toLowerCase().replace(/ /g, "-")}`) as TextChannel
+		const whoChannel = interaction.guild?.channels.cache.find(
+			(c) => c.name === `gm-${whoChannelName.toLowerCase().replace(/ /g, "-")}`
+		) as TextChannel
 		if (!whoChannel) {
 			interaction.followUp(`Couldn't find GM channel for ${who}!`)
 		}
 		const byChannelName = by.replace(/ /g, "-").toLowerCase()
-		const byChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${byChannelName.toLowerCase().replace(/ /g, "-")}`) as TextChannel
+		const byChannel = interaction.guild?.channels.cache.find(
+			(c) => c.name === `gm-${byChannelName.toLowerCase().replace(/ /g, "-")}`
+		) as TextChannel
 		if (!byChannel) {
 			interaction.followUp(`Couldn't find GM channel for ${by}!`)
 		}

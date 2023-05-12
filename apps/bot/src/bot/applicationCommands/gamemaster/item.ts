@@ -208,23 +208,29 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+		console.log(option)
 		switch (option.name) {
-			case "item" || "name": {
+			case "item":
+			case "name":
+				console.log(option.name)
+
 				const allItems = await getAllItems()
+				console.log(allItems)
 				if (option.value) {
 					const items = allItems.filter((item: { name: string }) => item.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(items.map((item: { name: string }) => ({ name: item.name, value: item.name })))
 				}
 				return interaction.respond(allItems.map((item: { name: string }) => ({ name: item.name, value: item.name })))
-			}
-			case "player" || "from" || "to": {
+
+			case "player":
+			case "from":
+			case "to":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
 				}
 				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
-			}
 		}
 	}
 

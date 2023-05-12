@@ -276,14 +276,15 @@ export default class Ping extends ApplicationCommand {
 				}
 				return interaction.respond(allRoles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
 			}
-			case "give_item" || "subtract_item" || "item": {
+			case "give_item":
+			case "subtract_item":
+			case "item":
 				const allItems = await getAllItems()
 				if (option.value) {
 					const items = allItems.filter((item: { name: string }) => item.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(items.map((item: { name: string }) => ({ name: item.name, value: item.name })))
 				}
 				return interaction.respond(allItems.map((item: { name: string }) => ({ name: item.name, value: item.name })))
-			}
 		}
 	}
 

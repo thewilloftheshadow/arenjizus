@@ -140,14 +140,14 @@ export default class Ping extends ApplicationCommand {
 				}
 				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
 			}
-			case "name" || "role": {
+			case "name":
+			case "role":
 				const allRoles = await getAllRoles()
 				if (option.value) {
 					const roles = allRoles.filter((role: { name: string }) => role.name.toLowerCase().includes(option.value.toLowerCase()))
 					return interaction.respond(roles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
 				}
 				return interaction.respond(allRoles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
-			}
 		}
 	}
 
