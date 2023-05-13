@@ -16,17 +16,15 @@ export default class Buttony extends Button {
 		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return interaction.editReply("You are not a gamemaster.")
 
 		const id = interaction.customId.split(":")[1]
-		const playerAbility = (
-			await database.playerAbilities.findMany({
-				where: {
-					id,
-				},
-				include: {
-					player: true,
-					ability: true,
-				},
-			})
-		)[0]
+		const playerAbility = await database.playerAbilities.findFirst({
+			where: {
+				id,
+			},
+			include: {
+				player: true,
+				ability: true,
+			},
+		})
 		if (!playerAbility) return interaction.editReply("Ability not found.")
 
 		await useAbility(playerAbility.playerName, playerAbility.abilityName)
