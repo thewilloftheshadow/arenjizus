@@ -43,20 +43,35 @@ export default class Ping extends ApplicationCommand {
 		}
 		interaction.editReply({
 			embeds: [
-				new EmbedBuilder().setTitle("Roles").setColor("Random").setDescription(roles.join("\n")),
-				new EmbedBuilder().setTitle("Players").setColor("Random").setDescription(players.join("\n")),
-				new EmbedBuilder().setTitle("Votes").setColor("Random").setDescription(votes.join("\n")),
-				new EmbedBuilder().setTitle("Items").setColor("Random").setDescription(items.join("\n")),
-				new EmbedBuilder().setTitle("Abilities").setColor("Random").setDescription(abilities.join("\n")),
+				new EmbedBuilder()
+					.setTitle("Roles")
+					.setColor("Random")
+					.setDescription(roles.join("\n") || "**"),
+				new EmbedBuilder()
+					.setTitle("Players")
+					.setColor("Random")
+					.setDescription(players.join("\n") || "**"),
+				new EmbedBuilder()
+					.setTitle("Votes")
+					.setColor("Random")
+					.setDescription(votes.join("\n") || "**"),
+				new EmbedBuilder()
+					.setTitle("Items")
+					.setColor("Random")
+					.setDescription(items.join("\n") || "**"),
+				new EmbedBuilder()
+					.setTitle("Abilities")
+					.setColor("Random")
+					.setDescription(abilities.join("\n") || "**"),
 			],
 		})
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const x = await interaction.channel!.fetch() as TextChannel
+		const x = (await interaction.channel!.fetch()) as TextChannel
 
 		interaction.guild?.channels.create({
 			name: "test",
-			type: ChannelType.GuildText
+			type: ChannelType.GuildText,
 		})
 
 		x.permissionOverwrites.create("12345", {
