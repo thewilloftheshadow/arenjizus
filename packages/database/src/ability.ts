@@ -112,6 +112,7 @@ export enum AbilityProperty {
 	"resurrectTarget" = 1 << 3,
 	"giveToTarget" = 1 << 4,
 	"muteSelfInDayChat" = 1 << 5,
+	"resetWithPhase" = 1 << 6,
 }
 
 export const getPropertyDetails = (properties: number | AbilityProperty[]) => {
@@ -161,6 +162,11 @@ const propertyDetails: { [key: number]: descriptionsType } = {
 	[AbilityProperty.resetWithDay]: {
 		name: "Reset with Day",
 		description: "This ability's use count resets when day starts",
+		value: AbilityProperty.resetWithDay,
+	},
+	[AbilityProperty.resetWithPhase]: {
+		name: "Reset with Phase Change",
+		description: "This ability's use count resets when day or night starts",
 		value: AbilityProperty.resetWithDay,
 	},
 	[AbilityProperty.killTarget]: { name: "Kills Target", description: "This ability kills its target", value: AbilityProperty.killTarget },
