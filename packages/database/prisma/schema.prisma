@@ -44,10 +44,10 @@ model PlayerBallData {
 }
 
 model Role {
-    id            String            @id @unique @default(cuid())
-    name          String            @unique
-    description   String            @db.LongText
-    players       PlayerRoles[]
+    id              String            @id @unique @default(cuid())
+    name            String            @unique
+    description     String            @db.LongText
+    players         PlayerRoles[]
     linkedAbilities AbilityRoleLink[]
 }
 
@@ -133,11 +133,11 @@ model AbilityItemLink {
 }
 
 model PlayerAbilities {
-    id         String @id @unique @default(cuid())
+    id         String  @id @unique @default(cuid())
     player     Player @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     playerName String
 
-    ability     Ability @relation(fields: [abilityName], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    ability     Ability @relation(fields: [abilityName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     abilityName String
 
     usesLeft Int
