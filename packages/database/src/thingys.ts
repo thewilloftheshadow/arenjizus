@@ -11,7 +11,7 @@ import database, {
 	getRole,
 	grantAbility,
 } from "../index.js"
-import { Client } from "discord.js"
+import { Client, TextBasedChannel } from "discord.js"
 import { logger } from "@internal/logger"
 
 export const addMoney = async (name: string, amount: number) => {
@@ -349,7 +349,26 @@ export const runAbilityProperties = async (ability: Ability, targetName: string,
 			await toggleDeath(targetName, Death.ALIVE)
 			result.push(`Resurrected ${targetName}`)
 		} else if (property === AbilityProperty.lockDayChat) {
-			result.push(`Day chat now needs to be locked`)
+			const dayChat = await database.keyV.findFirst({
+				where: {
+					key: "dayChat",
+				},
+			})
+			if (!dayChat?.value) {
+				result.push("Day chat not found")
+				continue
+			}
+			const channel = client.channels.resolve(dayChat.value) as TextBasedChannel
+			if (!channel) {
+				result.push("Day chat not found")
+				continue
+			}
+			const m = await channel.send("🔒 An emergency meeting has been called! The chat is now locked! 🔒").catch(() => {})
+			if (!m) {
+				result.push("Failed to send message")
+				continue
+			}
+			result.push(`Day chat has been locked`)
 		} else if (property === AbilityProperty.muteSelfInDayChat) {
 			result.push(`The player now needs to be muted in day chat`)
 		}
