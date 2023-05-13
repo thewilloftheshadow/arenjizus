@@ -1,6 +1,7 @@
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js"
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, EmbedBuilder } from "discord.js"
 import { GeneratedMessage } from "../index.js"
 import { colors } from "@internal/config"
+import { logger } from "@internal/logger"
 
 /**
  * Generate a full error message with a simple helper function.
@@ -11,19 +12,9 @@ import { colors } from "@internal/config"
  * @returns The generated error message.
  */
 export const generateErrorMessage = (embedInfo: APIEmbed, supportServer = true, ephemeral = true): GeneratedMessage => {
+	logger.null(supportServer)
 	return {
 		embeds: [new EmbedBuilder(embedInfo).setColor(colors.error).data],
-		components: supportServer
-			? [
-				new ActionRowBuilder<ButtonBuilder>().addComponents(
-					new ButtonBuilder({
-						label: "Support Server",
-						url: "https://discord.com/invite/T6gwuyNSv3",
-						style: ButtonStyle.Link,
-					})
-				),
-			  ]
-			: [],
 		ephemeral,
 	}
 }
