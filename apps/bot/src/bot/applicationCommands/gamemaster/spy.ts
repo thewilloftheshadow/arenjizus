@@ -34,7 +34,7 @@ export default class Ping extends ApplicationCommand {
 		if (!this.client.user || !interaction.channel) return
 		const thisChannel = interaction.channel as TextChannel
 		const channel = interaction.options.getChannel("channel", true) as TextChannel
-		const amount = interaction.options.getNumber("amount", false) || 5
+		const amount = interaction.options.getInteger("amount", false) || 5
 
 		if (amount > 50) return interaction.editReply("You can only send 20 messages at a time")
 
