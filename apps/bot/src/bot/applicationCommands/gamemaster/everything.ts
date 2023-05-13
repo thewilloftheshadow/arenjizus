@@ -1,4 +1,4 @@
-import { ChannelType, ChatInputCommandInteraction, EmbedBuilder, TextChannel } from "discord.js"
+import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
@@ -64,19 +64,6 @@ export default class Ping extends ApplicationCommand {
 					.setColor("Random")
 					.setDescription(abilities.join("\n") || "**"),
 			],
-		})
-
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const x = (await interaction.channel!.fetch()) as TextChannel
-
-		interaction.guild?.channels.create({
-			name: "test",
-			type: ChannelType.GuildText,
-		})
-
-		x.permissionOverwrites.create("12345", {
-			ViewChannel: true,
-			SendMessages: true,
 		})
 	}
 }
