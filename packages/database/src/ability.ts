@@ -1,7 +1,6 @@
 import { Result } from "@sapphire/result"
 import database, { Ability, getAbility, getPlayer } from "../index.js"
 
-
 export const grantAbility = async (playerName: string, abilityName: string) => {
 	const player = await getPlayer(playerName)
 	if (!player) return Result.err("Player not found")
@@ -75,7 +74,7 @@ export const resetAllAbilityUses = async (ability: Ability) => {
 			})
 			.catch((e) => {
 				console.error(e)
-				return Result.err("Failed to reset ability uses")
+				return Result.err(`Failed to reset ability uses for ${link.playerName} with ${link.abilityName}`)
 			})
 	}
 	return Result.ok(links)
@@ -113,6 +112,7 @@ export enum AbilityProperty {
 	"giveToTarget" = 1 << 4,
 	"muteSelfInDayChat" = 1 << 5,
 	"resetWithPhase" = 1 << 6,
+	"resetWithNight" = 1 << 7,
 }
 
 export const getPropertyDetails = (properties: number | AbilityProperty[]) => {
@@ -167,6 +167,11 @@ const propertyDetails: { [key: number]: descriptionsType } = {
 	[AbilityProperty.resetWithPhase]: {
 		name: "Reset with Phase Change",
 		description: "This ability's use count resets when day or night starts",
+		value: AbilityProperty.resetWithPhase,
+	},
+	[AbilityProperty.resetWithNight]: {
+		name: "Reset with Night",
+		description: "This ability's use count resets when night starts",
 		value: AbilityProperty.resetWithPhase,
 	},
 	[AbilityProperty.killTarget]: { name: "Kills Target", description: "This ability kills its target", value: AbilityProperty.killTarget },

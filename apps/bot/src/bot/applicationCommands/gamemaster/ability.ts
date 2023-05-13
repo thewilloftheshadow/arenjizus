@@ -132,8 +132,31 @@ export default class Ping extends ApplicationCommand {
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
-					name: "reset_daily_uses",
-					description: "Reset the daily uses of all abilities",
+					name: "reset_uses",
+					description: "Reset the timed uses of all abilities",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "type",
+							description: "The type of ability to reset",
+							required: true,
+							choices: [
+								{
+									name: "Day abilities",
+									value: "day",
+								},
+								{
+									name: "Night abilities",
+
+									value: "night",
+								},
+								{
+									name: "Day + night abilities",
+									value: "both",
+								},
+							],
+						},
+					],
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -345,11 +368,17 @@ export default class Ping extends ApplicationCommand {
 				if (done.isErr()) return interaction.editReply(done.unwrapErr())
 				return interaction.editReply(`Revoked ability ${abilityName} from player ${playerName}`)
 			}
-			case "reset_daily_uses": {
-				const abilities = await getAbilitiesWithProperty(AbilityProperty.resetWithDay)
+			case "reset_uses": {
+				const type = interaction.options.getString("type", true) as "day" | "night" | "both"
+				const abilities = await getAbilitiesWithProperty(
+					type === "day" ? AbilityProperty.resetWithDay : type === "night" ? AbilityProperty.resetWithNight : AbilityProperty.resetWithPhase
+				)
+				const errors: string[] = []
 				for (const ability of abilities) {
-					resetAllAbilityUses(ability)
+					const done = await resetAllAbilityUses(ability)
+					if (done.isErr()) errors.push(done.unwrapErr())
 				}
+				if (errors.length > 0) return interaction.editReply(errors.join("\n"))
 				return interaction.editReply(`Reset daily uses for ${abilities.length} abilities`)
 			}
 			case "view": {
@@ -388,6 +417,7 @@ export default class Ping extends ApplicationCommand {
 					filter: (i) => i.user.id === interaction.user.id,
 				})
 				if (!result) return interaction.followUp("Timed out")
+				await result.deferUpdate()
 
 				const properties = result.values.map((value) => parseInt(value)).reduce((a, b) => a | b)
 				await setPropertiesForAbility(abilityName, properties)
