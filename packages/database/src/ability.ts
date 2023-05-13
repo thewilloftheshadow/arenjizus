@@ -167,7 +167,7 @@ const propertyDetails: { [key: number]: descriptionsType } = {
 	[AbilityProperty.resetWithPhase]: {
 		name: "Reset with Phase Change",
 		description: "This ability's use count resets when day or night starts",
-		value: AbilityProperty.resetWithDay,
+		value: AbilityProperty.resetWithPhase,
 	},
 	[AbilityProperty.killTarget]: { name: "Kills Target", description: "This ability kills its target", value: AbilityProperty.killTarget },
 	[AbilityProperty.resurrectTarget]: {
