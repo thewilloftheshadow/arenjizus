@@ -295,7 +295,7 @@ export default class Ping extends ApplicationCommand {
 					data: {
 						name,
 						description: interaction.options.getString("description") || "",
-						price: interaction.options.getNumber("price", true),
+						price: interaction.options.getInteger("price", true),
 					},
 					include: {
 						players: true,
@@ -329,7 +329,7 @@ export default class Ping extends ApplicationCommand {
 					},
 					data: {
 						description: interaction.options.getString("description") || "",
-						price: interaction.options.getNumber("price", true),
+						price: interaction.options.getInteger("price", true),
 					},
 					include: {
 						players: true,
@@ -339,7 +339,7 @@ export default class Ping extends ApplicationCommand {
 				logger.gameLog(
 					`Item ${item.name} was updated, description: ${
 						interaction.options.getString("description") || ""
-					}, price: ${interaction.options.getNumber("price", true)}.`
+					}, price: ${interaction.options.getInteger("price", true)}.`
 				)
 				return interaction.editReply({ content: "Item successfully updated:", embeds: [itemEmbed(item)] })
 			}

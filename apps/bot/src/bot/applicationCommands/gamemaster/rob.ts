@@ -55,7 +55,7 @@ export default class Ping extends ApplicationCommand {
 
 		const who = interaction.options.getString("who", true)
 		const by = interaction.options.getString("by", true)
-		const amountInput = interaction.options.getNumber("amount", true)
+		const amountInput = interaction.options.getInteger("amount", true)
 
 		const whoPlayer = await getPlayer(who)
 		const byPlayer = await getPlayer(by)
