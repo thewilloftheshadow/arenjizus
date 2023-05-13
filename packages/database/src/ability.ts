@@ -81,7 +81,7 @@ export const resetAllAbilityUses = async (ability: Ability) => {
 	return Result.ok(links)
 }
 
-export const resetAbilityUses = async (playerName: string, abilityName: string) => {
+export const resetAbilityUses = async (playerName: string, abilityName: string, override?: number) => {
 	const player = await getPlayer(playerName)
 	if (!player) return Result.err("Player not found")
 	const ability = await getAbility(abilityName)
@@ -95,7 +95,7 @@ export const resetAbilityUses = async (playerName: string, abilityName: string) 
 				},
 			},
 			data: {
-				usesLeft: ability.uses,
+				usesLeft: override || ability.uses,
 			},
 		})
 		.catch((e) => {

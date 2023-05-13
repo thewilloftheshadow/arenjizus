@@ -22,9 +22,11 @@ import database, {
 	getAllPlayers,
 	getAllRoles,
 	getItem,
+	getPlayer,
 	getPropertyDetails,
 	getRole,
 	grantAbility,
+	resetAbilityUses,
 	resetAllAbilityUses,
 	setPropertiesForAbility,
 } from "@internal/database"
@@ -55,6 +57,33 @@ export default class Ping extends ApplicationCommand {
 							type: ApplicationCommandOptionType.Integer,
 							name: "uses",
 							description: "The number of uses the ability has (before being recharged by GMs)",
+							required: true,
+						},
+					],
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "set_uses",
+					description: "Set the number of uses an ability has for a player",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "player",
+							description: "The name of the player",
+							required: true,
+							autocomplete: true,
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "ability",
+							description: "The name of the ability",
+							required: true,
+							autocomplete: true,
+						},
+						{
+							type: ApplicationCommandOptionType.Integer,
+							name: "uses",
+							description: "The number of uses the player has",
 							required: true,
 						},
 					],
@@ -476,6 +505,18 @@ export default class Ping extends ApplicationCommand {
 					})
 					return interaction.editReply(`Removed ${done.count} links`)
 				}
+			}
+
+			case "set_uses": {
+				const abilityName = interaction.options.getString("ability", true)
+				const ability = await getAbility(abilityName)
+				if (!ability) return interaction.editReply(`No ability with name ${abilityName}`)
+				const playerName = interaction.options.getString("player", true)
+				const player = await getPlayer(playerName)
+				if (!player) return interaction.editReply(`No player with name ${playerName}`)
+				const uses = interaction.options.getInteger("uses", true)
+				await resetAbilityUses(abilityName, playerName, uses)
+				return interaction.editReply(`Set ${playerName}'s ${abilityName} uses to ${uses}`)
 			}
 		}
 	}
