@@ -210,9 +210,9 @@ export default class Ping extends ApplicationCommand {
 				const newName = interaction.options.getString("new-name")
 				const robberiesLeft = interaction.options.getInteger("robberies-left")
 				logger.gameLog(
-					`Player ${player.name} was updated. ${player.money ? `Money: ${player.money}` : ""} ${
-						player.name ? `Name: ${player.name}` : ""
-					} ${robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""}`
+					`Player ${player.name} was updated. ${money ? `Money: ${money}` : ""} ${newName ? `Name: ${newName}` : ""} ${
+						robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""
+					}`
 				)
 				if (money) data.money = money
 				if (newName) data.name = newName
