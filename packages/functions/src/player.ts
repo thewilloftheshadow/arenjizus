@@ -1,20 +1,8 @@
 import { serverIds } from "@internal/config"
-import { ChannelType, Client, TextChannel } from "discord.js"
+import { TextChannel } from "discord.js"
+import { Client } from "discord.js"
 
 export const getPlayerChannel = async (name: string, client: Client) => {
-	name = name.toLowerCase().replace(/ /g, "-")
-
-	const guild = await client.guilds.fetch(serverIds.guild)
-
-	if (!guild) return null
-
-	await guild.channels.fetch()
-
-	const channel = guild.channels.cache.find((channel) => {
-		channel.name.toLowerCase() === `gm-${name}` && channel.type === ChannelType.GuildText
-	})
-
-	if (!channel) return null
-
-	return channel as TextChannel
+	const guild = client.guilds.cache.get(serverIds.guild)
+	return guild?.channels.cache.find((c) => c.name === `gm-${name.toLowerCase().replace(/ /g, "-")}`) as TextChannel | null
 }
