@@ -3,7 +3,7 @@ import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { getAllPlayers, getAllRoles, getPlayer, getPlayerRole, getRole, givePlayerRole, roleEmbed } from "@internal/database"
+import database, { getAllPlayers, getAllRoles, getPlayer, getPlayerRole, getRole, givePlayerRole, removePlayerRole, roleEmbed } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -286,7 +286,7 @@ export default class Ping extends ApplicationCommand {
 						})
 					)
 				}
-				await getPlayerRole(player.name, role.name)
+				await removePlayerRole(player.name, role.name)
 				logger.gameLog(`Player ${player.name} was unassigned from role ${role.name}.`)
 				return interaction.editReply({ content: "Player successfully unassigned from role." })
 			}
