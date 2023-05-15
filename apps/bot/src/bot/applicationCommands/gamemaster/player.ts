@@ -6,7 +6,7 @@ import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
 import database, { Death, addMoney, getAllPlayers, getPlayer, playerEmbed, removeMoney } from "@internal/database"
-import { generateErrorMessage } from "@internal/functions"
+import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -339,7 +339,16 @@ export default class Ping extends ApplicationCommand {
 				removeMoney(fromPlayer.name, amount)
 				addMoney(toPlayer.name, amount)
 				logger.gameLog(`Player ${from} transferred ${amount} to ${to}.`)
-				return interaction.editReply({ content: `${amount} has been successfully transferred.` })
+				await interaction.editReply({ content: `${amount} has been successfully transferred.` })
+				try {
+					const toPlayerChannel = await getPlayerChannel(toPlayer.name, this.client)
+					if (toPlayerChannel) {
+						toPlayerChannel.send(`You have received ${amount} from ${fromPlayer.name}.`)
+					}
+				} catch (e) {
+					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
+				}
+				return
 			}
 			case "link": {
 				const user = interaction.options.getUser("user", true)

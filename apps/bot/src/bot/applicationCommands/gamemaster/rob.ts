@@ -1,11 +1,11 @@
 import { Death } from "@prisma/client"
-import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, TextChannel } from "discord.js"
+import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
 import database, { addMoney, getAllPlayers, getPlayer, removeMoney } from "@internal/database"
-import { generateTimestamp } from "@internal/functions"
+import { generateTimestamp, getPlayerChannel } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -84,18 +84,14 @@ export default class Ping extends ApplicationCommand {
 		const amount = amountInput > whoPlayer.money ? whoPlayer.money : amountInput
 
 		const whoChannelName = who.replace(/ /g, "-").toLowerCase()
-		const whoChannel = interaction.guild?.channels.cache.find(
-			(c) => c.name === `gm-${whoChannelName.toLowerCase().replace(/ /g, "-")}`
-		) as TextChannel
+		const whoChannel = await getPlayerChannel(whoChannelName, this.client)
 		if (!whoChannel) {
-			interaction.followUp(`Couldn't find GM channel for ${who}!`)
+			return interaction.followUp(`Couldn't find GM channel for ${who}!`)
 		}
 		const byChannelName = by.replace(/ /g, "-").toLowerCase()
-		const byChannel = interaction.guild?.channels.cache.find(
-			(c) => c.name === `gm-${byChannelName.toLowerCase().replace(/ /g, "-")}`
-		) as TextChannel
+		const byChannel = await getPlayerChannel(byChannelName, this.client)
 		if (!byChannel) {
-			interaction.followUp(`Couldn't find GM channel for ${by}!`)
+			return interaction.followUp(`Couldn't find GM channel for ${by}!`)
 		}
 
 		const time = 60000 * Math.ceil(amountInput / 5)
@@ -123,22 +119,22 @@ export default class Ping extends ApplicationCommand {
 			} seconds`
 		)
 
-		await byChannel.send(`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
+		const byMessage = await byChannel.send(`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
 
 		const collected = await whoChannel.awaitMessages({ filter: (m) => m.author.id === whoPlayer.discordId, time, max: 1 })
 		if (collected.size > 0) {
 			// robbery failed
 			whoChannel.send(`You have stopped the robbery! ${by} failed to rob you!`)
-			byChannel.send(`<@${byPlayer.discordId}>, you have failed to rob ${who}!`)
+			byMessage.reply(`<@${byPlayer.discordId}>, you have failed to rob ${who}!`)
 			logger.gameLog(`${by} failed to rob ${who}!`)
 		} else if (amount === 0) {
 			whoChannel.send(`You failed to stop the robbery, but you had no money for them to take!`)
-			byChannel.send(`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`)
+			byMessage.reply(`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`)
 			logger.gameLog(`${by} robbed ${who}, however, they had no money for them to take!`)
 		} else {
 			// robbery success, money
 			whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
-			byChannel.send(`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`)
+			byMessage.reply(`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`)
 			removeMoney(whoPlayer.name, amount)
 			addMoney(byPlayer.name, amount)
 

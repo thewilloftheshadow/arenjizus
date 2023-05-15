@@ -8,6 +8,7 @@ export * from "./src/randomInt.js"
 export * from "./src/titleCase.js"
 export * from "./src/uploadHaste.js"
 export * from "./src/shuffle.js"
+export * from "./src/player.js"
 
 import { APIEmbed, ActionRowBuilder, ButtonBuilder } from "discord.js"
 

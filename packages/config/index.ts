@@ -15,6 +15,7 @@ export const serverIds = {
 		spectator: "1105539807444217868",
 		gamemaster: "1105539807444217873",
 	},
+	guild: "1105539807444217866",
 }
 
 export const colors = {
