@@ -11,7 +11,7 @@ export const getPlayerChannel = async (name: string, client: Client) => {
 	await guild.channels.fetch()
 
 	const channel = guild.channels.cache.find((channel) => {
-		name === channel.name.toLowerCase() && channel.type === ChannelType.GuildText
+		channel.name.toLowerCase() === `gm-${name}` && channel.type === ChannelType.GuildText
 	})
 
 	if (!channel) return null
