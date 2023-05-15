@@ -3,7 +3,7 @@ import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@internal/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@internal/lib"
-import database, { getAllPlayers, getAllRoles, getPlayer, getPlayerRole, getRole, givePlayerRole, removePlayerRole, roleEmbed } from "@internal/database"
+import database, { getAllPlayers, getAllRoles, getPlayer, getRole, givePlayerRole, removePlayerRole, roleEmbed } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
