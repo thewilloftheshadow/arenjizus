@@ -27,8 +27,12 @@ export const itemEmbed = (
 	embed.data.description += `Price: ${item.price}`
 	if (!hideUsers) {
 		embed.addFields({
-			name: `${item.players.length} Players:`,
-			value: item.players.filter(x => x.amount > 0).map((x) => `${x.playerName} (${x.amount})`).join(", ") || "** **",
+			name: `${item.players.filter((x) => x.amount > 0).length} Players:`,
+			value:
+				item.players
+					.filter((x) => x.amount > 0)
+					.map((x) => `${x.playerName} (${x.amount})`)
+					.join(", ") || "** **",
 			inline: true,
 		})
 	}
@@ -58,7 +62,7 @@ export const playerEmbed = (
 		})
 	if (player.items) {
 		embed.addFields({
-			name: `${player.items.length} Items:`,
+			name: `${player.items.filter((x) => x.amount > 0).length} Items:`,
 			value:
 				`${player.items
 					.filter((x) => x.amount > 0)
@@ -69,7 +73,7 @@ export const playerEmbed = (
 	}
 	if (player.abilities) {
 		embed.addFields({
-			name: `${player.abilities.length} Abilities:`,
+			name: `${player.abilities.filter((x) => x.usesLeft > 0).length} Abilities:`,
 			value:
 				`${player.abilities
 					.filter((x) => x.usesLeft > 0)
@@ -124,7 +128,7 @@ export const abilityEmbed = (
 	if (!hideUsers)
 		embed.addFields([
 			{
-				name: `${ability.playersWithAbility.length} Players:`,
+				name: `${ability.playersWithAbility.filter((x) => x.usesLeft > 0).length} Players:`,
 				value:
 					ability.playersWithAbility
 						.filter((x) => x.usesLeft > 0)
