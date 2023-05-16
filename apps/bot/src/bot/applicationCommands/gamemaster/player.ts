@@ -317,12 +317,11 @@ export default class Ping extends ApplicationCommand {
 					})
 
 				if (publicVersion) {
-					interaction.editReply({ embeds: [embed] })
+					return interaction.editReply({ embeds: [embed] })
 				} else {
-					interaction.editReply("Sent")
-					interaction.followUp({ embeds: [embed], ephemeral: true })
+					await interaction.editReply("Sent")
+					return interaction.followUp({ embeds: [embed], ephemeral: true })
 				}
-				return
 			}
 			case "transfer": {
 				const from = interaction.options.getString("from", true)
