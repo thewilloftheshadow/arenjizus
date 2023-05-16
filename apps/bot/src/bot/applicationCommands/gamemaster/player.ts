@@ -286,11 +286,11 @@ export default class Ping extends ApplicationCommand {
 					.setFooter({
 						text: publicVersion
 							? `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
-								players.filter((x) => x.deathStatus === Death.DEAD).length
-							  } dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`
-							: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
 								players.filter((x) => x.deathStatus !== Death.ALIVE).length
-							  } dead`,
+							  } dead`
+							: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+								players.filter((x) => x.deathStatus === Death.DEAD).length
+							  } dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`,
 					})
 				players
 					.sort((a, b) => {
