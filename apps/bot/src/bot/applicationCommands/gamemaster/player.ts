@@ -278,7 +278,7 @@ export default class Ping extends ApplicationCommand {
 				return interaction.editReply({ content: "Player successfully deleted." })
 			}
 			case "list": {
-				const publicVersion = interaction.options.getBoolean("public") || false
+				const publicVersion = interaction.options.getBoolean("public-version") || false
 				const players = await getAllPlayers()
 				const embed = new EmbedBuilder()
 					.setTitle("All Players")
