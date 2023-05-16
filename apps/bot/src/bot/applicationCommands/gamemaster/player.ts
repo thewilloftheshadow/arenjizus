@@ -92,6 +92,14 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.Subcommand,
 					name: "list",
 					description: "List all players with their roles",
+					options: [
+						{
+							type: ApplicationCommandOptionType.Boolean,
+							name: "public-version",
+							description: "Whether to show the public version of the list",
+							required: false,
+						},
+					],
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -270,14 +278,19 @@ export default class Ping extends ApplicationCommand {
 				return interaction.editReply({ content: "Player successfully deleted." })
 			}
 			case "list": {
+				const publicVersion = interaction.options.getBoolean("public")
 				const players = await getAllPlayers()
 				const embed = new EmbedBuilder()
-					.setTitle("All Player Roles")
+					.setTitle("All Players")
 					.setDescription("\n")
 					.setFooter({
-						text: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
-							players.filter((x) => x.deathStatus === Death.DEAD).length
-						} dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`,
+						text: publicVersion
+							? `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+								players.filter((x) => x.deathStatus === Death.DEAD).length
+							  } dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`
+							: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+								players.filter((x) => x.deathStatus !== Death.ALIVE).length
+							  } dead`,
 					})
 				players
 					.sort((a, b) => {
@@ -290,21 +303,26 @@ export default class Ping extends ApplicationCommand {
 						return 0
 					})
 					.forEach((player) => {
-						// eslint-disable-next-line no-nested-ternary
 						const deathEmoji =
 							player.deathStatus === Death.ALIVE
 								? "😃"
-								: // eslint-disable-next-line no-nested-ternary
-								player.deathStatus === "FAKED"
-									? "👻"
-									: player.deathStatus === "DEAD"
-										? "💀"
+								: player.deathStatus === Death.DEAD || (player.deathStatus === Death.FAKED && publicVersion === true)
+									? "💀"
+									: player.deathStatus === Death.FAKED && publicVersion === false
+										? "👻"
 										: "??"
-						embed.data.description += `${deathEmoji} ${player.name} - ${player.roles.map((role) => role.roleName).join(", ")} ($${
-							player.money
-						})\n`
+						embed.data.description += `${deathEmoji} ${player.name}${
+							publicVersion ? "\n" : ` - ${player.roles.map((role) => role.roleName).join(", ")} ($${player.money})\n`
+						}`
 					})
-				return interaction.editReply({ embeds: [embed] })
+
+				if (publicVersion) {
+					interaction.editReply({ embeds: [embed] })
+				} else {
+					interaction.editReply("Sent")
+					interaction.followUp({ embeds: [embed], ephemeral: true })
+				}
+				return
 			}
 			case "transfer": {
 				const from = interaction.options.getString("from", true)
