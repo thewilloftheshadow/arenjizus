@@ -1,5 +1,5 @@
 import { serverIds } from "@internal/config"
-import { Button, BetterClient } from "@internal/lib"
+import { Button, BetterClient } from "@buape/lib"
 import { ButtonInteraction } from "discord.js"
 
 export default class Buttony extends Button {
@@ -14,7 +14,7 @@ export default class Buttony extends Button {
 		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return interaction.editReply("You are not a gamemaster.")
 
 		await interaction.message.edit({
-			components: []
+			components: [],
 		})
 
 		interaction.followUp({

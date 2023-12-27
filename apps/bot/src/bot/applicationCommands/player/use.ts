@@ -7,7 +7,7 @@ import {
 	ButtonStyle,
 	ChatInputCommandInteraction,
 } from "discord.js"
-import { ApplicationCommand, BetterClient } from "@internal/lib"
+import { ApplicationCommand, BetterClient } from "@buape/lib"
 import database, { getAbility, getAllPlayers, getDiscordPlayer, getPlayer } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { serverIds } from "@internal/config"

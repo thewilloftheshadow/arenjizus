@@ -1,5 +1,5 @@
 // import { serverIds } from "@internal/config"
-// import { TextCommand, BetterClient } from "@internal/lib"
+// import { TextCommand, BetterClient } from "@buape/lib"
 // import { Message } from "discord.js"
 
 // export default class Cmd extends TextCommand {

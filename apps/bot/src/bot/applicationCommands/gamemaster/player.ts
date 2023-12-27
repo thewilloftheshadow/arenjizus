@@ -2,9 +2,9 @@
 import { Prisma } from "@prisma/client"
 import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import database, { Death, addMoney, getAllPlayers, getPlayer, playerEmbed, removeMoney } from "@internal/database"
 import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
 
@@ -286,10 +286,10 @@ export default class Ping extends ApplicationCommand {
 					.setFooter({
 						text: publicVersion
 							? `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
-								players.filter((x) => x.deathStatus !== Death.ALIVE).length
+									players.filter((x) => x.deathStatus !== Death.ALIVE).length
 							  } dead`
 							: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
-								players.filter((x) => x.deathStatus === Death.DEAD).length
+									players.filter((x) => x.deathStatus === Death.DEAD).length
 							  } dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`,
 					})
 				players
@@ -307,10 +307,10 @@ export default class Ping extends ApplicationCommand {
 							player.deathStatus === Death.ALIVE
 								? "😃"
 								: player.deathStatus === Death.DEAD || (player.deathStatus === Death.FAKED && publicVersion === true)
-									? "💀"
-									: player.deathStatus === Death.FAKED && publicVersion === false
-										? "👻"
-										: "??"
+								? "💀"
+								: player.deathStatus === Death.FAKED && publicVersion === false
+								? "👻"
+								: "??"
 						embed.data.description += `${deathEmoji} ${player.name}${
 							publicVersion ? "\n" : ` - ${player.roles.map((role) => role.roleName).join(", ")} ($${player.money})\n`
 						}`

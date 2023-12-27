@@ -1,11 +1,11 @@
 import { generateTimestamp } from "@internal/functions"
-import { TextCommand, BetterClient } from "@internal/lib"
+import { TextCommand, BetterClient } from "@buape/lib"
 import { Message } from "discord.js"
 
 export default class Restart extends TextCommand {
 	constructor(client: BetterClient) {
 		super("restart", client, {
-			adminOnly: true,
+			restriction: "gamemaster",
 		})
 	}
 
@@ -34,7 +34,8 @@ export default class Restart extends TextCommand {
 		} else {
 			this.client.shard
 				.broadcastEval((toRestart) => {
-					`if (this.client.shard.ids[0] === ${toRestart}) process.exit()`
+					// eslint-disable-next-line @typescript-eslint/no-extra-semi
+					;`if (this.client.shard.ids[0] === ${toRestart}) process.exit()`
 				})
 				.then(() => msg.edit(`Shard ${toRestart} has been restarted.`))
 				.catch((err) => msg.edit(`An error occurred while restarting shard ${toRestart}: ${err}`))

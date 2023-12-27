@@ -1,7 +1,7 @@
 import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, TextChannel } from "discord.js"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import { getAllPlayers } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
@@ -45,7 +45,7 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.reply({content: `Sending...`, ephemeral: true})
+		await interaction.reply({ content: `Sending...`, ephemeral: true })
 		if (!interaction.guild) return
 		const players = await getAllPlayers()
 

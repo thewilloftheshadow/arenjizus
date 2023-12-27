@@ -1,8 +1,8 @@
 import { ChannelType, ChatInputCommandInteraction, TextChannel } from "discord.js"
 import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 
 // eslint-disable-next-line no-promise-executor-return
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

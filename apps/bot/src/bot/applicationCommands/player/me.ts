@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction } from "discord.js"
-import { ApplicationCommand, BetterClient } from "@internal/lib"
+import { ApplicationCommand, BetterClient } from "@buape/lib"
 import { getDiscordPlayer, playerEmbed } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 

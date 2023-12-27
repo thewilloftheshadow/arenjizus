@@ -1,18 +1,18 @@
 import database, { Death } from "@internal/database"
-import { TextCommand, BetterClient } from "@internal/lib"
+import { TextCommand, BetterClient } from "@buape/lib"
 import { Message, TextChannel } from "discord.js"
 
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {
 		super("reset", client, {
-			adminOnly: true,
+			restriction: "gamemaster",
 		})
 	}
 
 	override async run(message: Message) {
 		if (!message.channel.isTextBased()) return message.reply("This command can only be used in text channels.")
 		const channel = message.channel as TextChannel
-		if (channel.name !== "reset") return message.reply("This command can only be used in a channel called \"reset\" for safety reasons.")
+		if (channel.name !== "reset") return message.reply("This command can only be used in a channel called 'reset' for safety reasons.")
 		database.player.updateMany({
 			data: {
 				deathStatus: Death.ALIVE,

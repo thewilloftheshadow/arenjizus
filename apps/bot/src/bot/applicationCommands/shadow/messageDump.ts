@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import { ApplicationCommand, BetterClient } from "@internal/lib"
+import { ApplicationCommand, BetterClient } from "@buape/lib"
 import { ChatInputCommandInteraction, GuildChannel, AttachmentBuilder } from "discord.js"
 
 type MessageStored = {

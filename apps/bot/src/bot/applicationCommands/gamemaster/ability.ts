@@ -7,9 +7,9 @@ import {
 	ComponentType,
 	StringSelectMenuBuilder,
 } from "discord.js"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import database, {
 	AbilityProperty,
 	abilityEmbed,
@@ -315,7 +315,8 @@ export default class Ping extends ApplicationCommand {
 				const allAbilities = await getAllAbilities()
 				if (option.value) {
 					const abilities = allAbilities.filter((ability: { name: string }) =>
-						ability.name.toLowerCase().includes(option.value.toLowerCase()))
+						ability.name.toLowerCase().includes(option.value.toLowerCase())
+					)
 					return interaction.respond(abilities.map((ability: { name: string }) => ({ name: ability.name, value: ability.name })))
 				}
 				return interaction.respond(allAbilities.map((ability: { name: string }) => ({ name: ability.name, value: ability.name })))

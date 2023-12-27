@@ -1,11 +1,11 @@
 import { parseUser } from "@internal/functions"
-import { TextCommand, BetterClient } from "@internal/lib"
+import { TextCommand, BetterClient } from "@buape/lib"
 import { Message } from "discord.js"
 
 export default class Sudo extends TextCommand {
 	constructor(client: BetterClient) {
 		super("sudo", client, {
-			adminOnly: true,
+			
 		})
 	}
 

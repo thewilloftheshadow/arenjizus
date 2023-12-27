@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import { getAllAbilities, getAllItems, getAllPlayers, getAllRoles } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
@@ -31,7 +31,8 @@ export default class Ping extends ApplicationCommand {
 		const votes = playersData.map((player) =>
 			player.votedForName
 				? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"} for ${player.votedForName}`
-				: `${player.name} - No vote`)
+				: `${player.name} - No vote`
+		)
 		const abilities = abilityData.map((ability) => ability.name)
 
 		const doText = interaction.options.getBoolean("text-only", false) || false

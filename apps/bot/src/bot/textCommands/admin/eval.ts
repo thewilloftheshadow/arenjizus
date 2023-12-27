@@ -1,19 +1,19 @@
 /* eslint-disable no-unused-vars */
 import * as config from "@internal/config"
-import { TextCommand, BetterClient, StopWatch, Type } from "@internal/lib"
+import { TextCommand, BetterClient, Type } from "@buape/lib"
 import { logger, DebugType } from "@internal/logger"
 import { Message, EmbedBuilder } from "discord.js"
 import { inspect } from "util"
 import db from "@internal/database"
 import * as database from "@internal/database"
-import * as lib from "@internal/lib"
+import * as lib from "@buape/lib"
 import * as functions from "@internal/functions"
 const bot = { db, database, config, lib, functions, logger: { logger, DebugType } }
 
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {
 		super("eval", client, {
-			adminOnly: true,
+			restriction: "gamemaster",
 		})
 
 		logger.null(bot)
@@ -23,7 +23,7 @@ export default class Eval extends TextCommand {
 		logger.info(`${message.author.tag} ran eval in ${message.guild?.name} ${message.guild?.id}, ${args.join(" ")}`)
 		logger.null(`${DebugType.GENERAL}`)
 
-		const { success, result, time, type } = await this.eval(message, args.join(" "))
+		const { success, result, type } = await this.eval(message, args.join(" "))
 		if (message.content.includes("--silent")) return null
 
 		if (result.length > 4087) {
@@ -35,7 +35,7 @@ export default class Eval extends TextCommand {
 						fields: [
 							{
 								name: "Type",
-								value: `\`\`\`ts\n${type}\`\`\`\n${time}`,
+								value: `\`\`\`ts\n${type}\`\`\``,
 							},
 						],
 						color: success ? config.colors.success : config.colors.error,
@@ -52,7 +52,7 @@ export default class Eval extends TextCommand {
 					fields: [
 						{
 							name: "Type",
-							value: `\`\`\`ts\n${type}\`\`\`\n${time}`,
+							value: `\`\`\`ts\n${type}\`\`\``,
 						},
 					],
 					color: success ? config.colors.success : config.colors.error,
@@ -66,43 +66,31 @@ export default class Eval extends TextCommand {
 		// if (message.id === user.id) {
 		//     logger.info("Eval has been executed")
 		// }
-		let code = codeInput.replace(/[“”]/g, "\"").replace(/[‘’]/g, "'")
-		const stopwatch = new StopWatch()
+		let code = codeInput.replace(/[“”]/g, `"`).replace(/[‘’]/g, "'")
 		let success
-		let syncTime
-		let asyncTime
 		let result
-		let thenable = false
 		let type
 		try {
 			if (message.content.includes("--async")) code = `(async () => {\n${code}\n})();`
 			// eslint-disable-next-line no-eval
 			result = eval(code)
-			syncTime = stopwatch.toString()
 			type = new Type(result)
 			if (this.isThenable(result)) {
-				thenable = true
-				stopwatch.restart()
 				result = await result
-				asyncTime = stopwatch.toString()
 				type.addValue(result)
 			}
 			success = true
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
-			if (!syncTime) syncTime = stopwatch.toString()
 			if (!type) type = new Type(error)
-			if (thenable && !asyncTime) asyncTime = stopwatch.toString()
 			if (error && error.stack) this.client.emit("error", error.stack)
 			result = error
 			success = false
 		}
 
-		stopwatch.stop()
 		return {
 			success,
 			type,
-			time: this.formatTime(syncTime, asyncTime),
 			result: this.parseContent(inspect(result)),
 		}
 	}
@@ -114,10 +102,6 @@ export default class Eval extends TextCommand {
 	 */
 	private parseContent(content: string): string {
 		return content.replace(this.client.token || "", "[ T O K E N ]")
-	}
-
-	private formatTime(syncTime: string, asyncTime?: string) {
-		return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

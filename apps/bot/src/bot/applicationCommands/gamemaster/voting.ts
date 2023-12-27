@@ -1,9 +1,9 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable default-case */
 import { AutocompleteFocusedOption, AutocompleteInteraction, ChannelType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import database, { getAllPlayers, getPlayer, setVote, setVoteWorth } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
@@ -133,13 +133,13 @@ export default class Ping extends ApplicationCommand {
 				})
 				return interaction.editReply({ embeds: [embed] })
 
-				// const votes = players.map((player) =>
-				//     (player.votedForName
-				//         ? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"} for ${player.votedForName}`
-				//         : `${player.name} - No vote`))
-				// const embed = new EmbedBuilder().setTitle("Current Votes").setColor("RANDOM").setTimestamp()
-				//     .setDescription(votes.join("\n"))
-				// return interaction.editReply({ embeds: [embed] })
+			// const votes = players.map((player) =>
+			//     (player.votedForName
+			//         ? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"} for ${player.votedForName}`
+			//         : `${player.name} - No vote`))
+			// const embed = new EmbedBuilder().setTitle("Current Votes").setColor("RANDOM").setTimestamp()
+			//     .setDescription(votes.join("\n"))
+			// return interaction.editReply({ embeds: [embed] })
 
 			case "close":
 				await database.keyV.upsert({

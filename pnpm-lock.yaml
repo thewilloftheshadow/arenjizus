@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -47,6 +51,9 @@ importers:
 
   apps/bot:
     dependencies:
+      '@buape/lib':
+        specifier: ^1.0.11
+        version: 1.0.11
       '@internal/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -56,9 +63,6 @@ importers:
       '@internal/functions':
         specifier: workspace:*
         version: link:../../packages/functions
-      '@internal/lib':
-        specifier: workspace:*
-        version: link:../../packages/lib
       '@internal/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -232,6 +236,27 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
+    dev: false
+
+  /@buape/functions@1.0.2:
+    resolution: {integrity: sha512-HiZOZYUu49Enr1m/Z9ABQIanUSeezkW+S0fOKURO6SNVDTpu7ZYvihofeE9syDFxm6UC97K9lwelgyneHtKFGw==}
+    engines: {node: '>=16.17.1'}
+    dependencies:
+      discord.js: 14.11.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /@buape/lib@1.0.11:
+    resolution: {integrity: sha512-TSabvU0mxVS10FrMlOKHHsXJV5Pkexz1s/7hs4EkChdILRuEtyJ+oHAcJKvAk/W04l/ykhB1Zsv2oGL2OgGHLA==}
+    engines: {node: '>=16.17.1'}
+    dependencies:
+      '@buape/functions': 1.0.2
+      discord.js: 14.11.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /@colors/colors@1.5.0:

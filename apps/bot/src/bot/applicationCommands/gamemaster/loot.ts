@@ -2,9 +2,9 @@
 /* eslint-disable no-restricted-syntax */
 import { ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@internal/lib"
+import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@internal/lib"
+import { BetterClient } from "@buape/lib"
 import { getPlayer, givePlayerItem, removePlayerItem, setPlayerMoney } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
