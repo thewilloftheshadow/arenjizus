@@ -122,3 +122,6 @@ export const getPlayerAbility = async (
 	})
 }
 
+export const getAllLocations = async () => {
+	return await database.location.findMany()
+}

@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction } from "discord.js"
 import { ApplicationCommand, BetterClient } from "@buape/lib"
 import { getDiscordPlayer, playerEmbed } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
+import { ChatInputCommandInteraction } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

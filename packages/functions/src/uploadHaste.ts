@@ -22,8 +22,8 @@ export const uploadHaste = async (
 
 	if (!res.ok) {
 		throw new Error(`Failed to upload haste`)
-		return null
 	}
+	// biome-ignore lint/suspicious/noExplicitAny: any
 	const data: any = await res.json()
 	return `${url}/${data.key}.${type || "md"}`
 }

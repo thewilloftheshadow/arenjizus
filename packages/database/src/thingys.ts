@@ -1,4 +1,6 @@
+import { logger } from "@internal/logger"
 import { Result } from "@sapphire/result"
+import { Client, TextBasedChannel } from "discord.js"
 import database, {
 	Ability,
 	AbilityProperty,
@@ -11,8 +13,6 @@ import database, {
 	getRole,
 	grantAbility
 } from "../index.js"
-import { Client, TextBasedChannel } from "discord.js"
-import { logger } from "@internal/logger"
 
 export const addMoney = async (name: string, amount: number) => {
 	const player = await getPlayer(name)
@@ -308,21 +308,21 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 			}
 		})
 		return
-	} else {
-		await database.playerAbilities.update({
-			where: {
-				playerName_abilityName: {
-					playerName,
-					abilityName
-				}
-			},
-			data: {
-				usesLeft: {
-					decrement: 1
-				}
-			}
-		})
 	}
+	await database.playerAbilities.update({
+		where: {
+			playerName_abilityName: {
+				playerName,
+				abilityName
+			}
+		},
+		data: {
+			usesLeft: {
+				decrement: 1
+			}
+		}
+	})
+
 	if (ability.linkedItems.length > 0) {
 		for (const itemLink of ability.linkedItems) {
 			if (!itemLink.subtractItemOnUse) continue

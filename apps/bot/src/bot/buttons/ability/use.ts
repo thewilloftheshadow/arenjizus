@@ -1,6 +1,6 @@
+import { BetterClient, Button } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database, { runAbilityProperties, useAbility } from "@internal/database"
-import { Button, BetterClient } from "@buape/lib"
 import { logger } from "@internal/logger"
 import { ButtonInteraction } from "discord.js"
 

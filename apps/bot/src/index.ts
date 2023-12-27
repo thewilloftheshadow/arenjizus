@@ -1,6 +1,6 @@
-import { ShardingManager } from "discord.js"
 import { botName } from "@internal/config"
 import { logger } from "@internal/logger"
+import { ShardingManager } from "discord.js"
 
 const manager = new ShardingManager("./dist/src/bot/index.js", {
 	token: process.env.DISCORD_TOKEN

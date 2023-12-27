@@ -1,11 +1,4 @@
-import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChatInputCommandInteraction
-} from "discord.js"
-import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import database, {
 	deleteItem,
@@ -20,6 +13,13 @@ import database, {
 	removePlayerItem
 } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
+import { logger } from "@internal/logger"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction
+} from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -215,13 +215,13 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
-		console.log(option)
+		const allItems = await getAllItems()
+		const allPlayers = await getAllPlayers()
 		switch (option.name) {
 			case "item":
 			case "name":
 				console.log(option.name)
 
-				const allItems = await getAllItems()
 				console.log(allItems)
 				if (option.value) {
 					const items = allItems.filter((item: { name: string }) =>
@@ -244,7 +244,6 @@ export default class Ping extends ApplicationCommand {
 			case "player":
 			case "from":
 			case "to":
-				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())

@@ -1,21 +1,22 @@
+import { ApplicationCommand } from "@buape/lib"
+import { BetterClient } from "@buape/lib"
+import { serverIds } from "@internal/config"
+import database, {
+	addMoney,
+	getAllPlayers,
+	getDiscordPlayer,
+	getPlayer,
+	removeMoney
+} from "@internal/database"
+import { generateTimestamp, getPlayerChannel } from "@internal/functions"
+import { logger } from "@internal/logger"
 import { Death } from "@prisma/client"
 import {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction
 } from "discord.js"
-import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@buape/lib"
-import database, {
-	addMoney,
-	getAllPlayers,
-	getPlayer,
-	removeMoney
-} from "@internal/database"
-import { generateTimestamp, getPlayerChannel } from "@internal/functions"
-import { serverIds } from "@internal/config"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -44,10 +45,10 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
+		const allPlayers = await getAllPlayers()
 		switch (option.name) {
 			case "by":
 			case "who":
-				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
@@ -76,22 +77,21 @@ export default class Ping extends ApplicationCommand {
 		if (!this.client.user || !interaction.channel) return
 
 		const who = interaction.options.getString("who", true)
-		const by = interaction.options.getString("by", true)
 		const amountInput = interaction.options.getInteger("amount", true)
 
 		const whoPlayer = await getPlayer(who)
-		const byPlayer = await getPlayer(by)
+		const byPlayer = await getDiscordPlayer(interaction.user.id)
 		if (!whoPlayer) {
 			return interaction.editReply(`Player ${who} does not exist.`)
 		}
 		if (!byPlayer) {
-			return interaction.editReply(`Player ${by} does not exist.`)
+			return interaction.editReply(`You are not a player!`)
 		}
 		if (whoPlayer.name === byPlayer.name) {
 			return interaction.editReply(`You cannot rob yourself.`)
 		}
 		if (byPlayer.deathStatus === Death.DEAD) {
-			return interaction.editReply(`Player ${by} is dead.`)
+			return interaction.editReply(`You are dead.`)
 		}
 		if (whoPlayer.deathStatus === Death.DEAD) {
 			return interaction.editReply(
@@ -101,11 +101,6 @@ export default class Ping extends ApplicationCommand {
 		if (!whoPlayer.discordId) {
 			return interaction.editReply(
 				`Player ${who} does not have a Discord account linked.`
-			)
-		}
-		if (!byPlayer.discordId) {
-			return interaction.editReply(
-				`Player ${by} does not have a Discord account linked.`
 			)
 		}
 
@@ -131,7 +126,7 @@ export default class Ping extends ApplicationCommand {
 		let msg
 		try {
 			msg = await whoChannel.send(send)
-		} catch (e) {
+		} catch (_e) {
 			return interaction.editReply(`Failed to send message to ${whoChannel}.`)
 		}
 		if (!msg) return
@@ -147,11 +142,13 @@ export default class Ping extends ApplicationCommand {
 		})
 		if (collected.size > 0) {
 			// robbery failed
-			whoChannel.send(`You have stopped the robbery! ${by} failed to rob you!`)
+			whoChannel.send(
+				`You have stopped the robbery! ${byPlayer.name} failed to rob you!`
+			)
 			interaction.followUp(
 				`<@${byPlayer.discordId}>, you have failed to rob ${who}!`
 			)
-			logger.gameLog(`${by} failed to rob ${who}!`)
+			logger.gameLog(`${byPlayer.name} failed to rob ${who}!`)
 		} else if (amount === 0) {
 			whoChannel.send(
 				`You failed to stop the robbery, but you had no money for them to take!`
@@ -160,7 +157,7 @@ export default class Ping extends ApplicationCommand {
 				`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`
 			)
 			logger.gameLog(
-				`${by} robbed ${who}, however, they had no money for them to take!`
+				`${byPlayer.name} robbed ${who}, however, they had no money for them to take!`
 			)
 		} else {
 			// robbery success, money
@@ -173,7 +170,9 @@ export default class Ping extends ApplicationCommand {
 			removeMoney(whoPlayer.name, amount)
 			addMoney(byPlayer.name, amount)
 
-			logger.gameLog(`${by} robbed ${who} and took $${amount} from them!`)
+			logger.gameLog(
+				`${byPlayer.name} robbed ${who} and took $${amount} from them!`
+			)
 		}
 
 		await database.player.update({

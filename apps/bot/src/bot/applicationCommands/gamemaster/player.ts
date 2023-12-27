@@ -1,13 +1,4 @@
-import { Prisma } from "@prisma/client"
-import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChatInputCommandInteraction,
-	EmbedBuilder
-} from "discord.js"
-import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import database, {
 	Death,
@@ -18,6 +9,15 @@ import database, {
 	removeMoney
 } from "@internal/database"
 import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
+import { logger } from "@internal/logger"
+import { Prisma } from "@prisma/client"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	EmbedBuilder
+} from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -158,6 +158,26 @@ export default class Ping extends ApplicationCommand {
 							required: true
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "note",
+					description: "Add a note on a player",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "name",
+							description: "The name of the player",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "note",
+							description: "The note to add",
+							required: true
+						}
+					]
 				}
 			]
 		})
@@ -167,11 +187,11 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
+		const allPlayers = await getAllPlayers()
 		switch (option.name) {
 			case "name":
 			case "from":
 			case "to":
-				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
@@ -335,6 +355,7 @@ export default class Ping extends ApplicationCommand {
 									players.filter((x) => x.deathStatus === Death.FAKED).length
 							  } faked`
 					})
+				// biome-ignore lint/complexity/noForEach: no
 				players
 					.sort((a, b) => {
 						if (a.name < b.name) {
@@ -368,10 +389,9 @@ export default class Ping extends ApplicationCommand {
 
 				if (publicVersion) {
 					return interaction.editReply({ embeds: [embed] })
-				} else {
-					await interaction.editReply("Sent")
-					return interaction.followUp({ embeds: [embed], ephemeral: true })
 				}
+				await interaction.editReply("Sent")
+				return interaction.followUp({ embeds: [embed], ephemeral: true })
 			}
 			case "transfer": {
 				const from = interaction.options.getString("from", true)
@@ -419,7 +439,7 @@ export default class Ping extends ApplicationCommand {
 							`You have received ${amount} from ${fromPlayer.name}.`
 						)
 					}
-				} catch (e) {
+				} catch (_e) {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
 				}
 				return
@@ -468,6 +488,36 @@ export default class Ping extends ApplicationCommand {
 				})
 				return interaction.editReply({
 					content: `Player has been linked to <@${user.id}>`
+				})
+			}
+			case "note": {
+				const note = interaction.options.getString("note", true)
+				const player = await database.player.findFirst({
+					where: {
+						name
+					}
+				})
+				if (!player) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Player not found",
+							description: `The player ${name} was not found in the database.`
+						})
+					)
+				}
+				await database.playerNotes.create({
+					data: {
+						player: {
+							connect: {
+								id: player.id
+							}
+						},
+						note,
+						author: interaction.user.username
+					}
+				})
+				return interaction.editReply({
+					content: `Note has been added to ${player.name}`
 				})
 			}
 			default:

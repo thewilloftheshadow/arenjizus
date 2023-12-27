@@ -1,14 +1,4 @@
-import {
-	ActionRowBuilder,
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	CacheType,
-	ChatInputCommandInteraction,
-	ComponentType,
-	StringSelectMenuBuilder
-} from "discord.js"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import database, {
 	AbilityProperty,
@@ -30,6 +20,16 @@ import database, {
 	resetAllAbilityUses,
 	setPropertiesForAbility
 } from "@internal/database"
+import {
+	ActionRowBuilder,
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	CacheType,
+	ChatInputCommandInteraction,
+	ComponentType,
+	StringSelectMenuBuilder
+} from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -308,6 +308,7 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction<CacheType>,
 		option: AutocompleteFocusedOption
 	): Promise<void> {
+		const allItems = await getAllItems()
 		switch (option.name) {
 			case "player": {
 				const allPlayers = await getAllPlayers()
@@ -372,7 +373,6 @@ export default class Ping extends ApplicationCommand {
 			case "give_item":
 			case "subtract_item":
 			case "item":
-				const allItems = await getAllItems()
 				if (option.value) {
 					const items = allItems.filter((item: { name: string }) =>
 						item.name.toLowerCase().includes(option.value.toLowerCase())
@@ -530,27 +530,25 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						`The ${abilityName} ability will now be given with the ${roleName} role`
 					)
-				} else {
-					const abilityName = interaction.options.getString("ability", true)
-					const roleName = interaction.options.getString("role", true)
-					const ability = await getAbility(abilityName)
-					if (!ability)
-						return interaction.editReply(`No ability with name ${abilityName}`)
-					const role = await getRole(roleName)
-					if (!role)
-						return interaction.editReply(`No role with name ${roleName}`)
-					await database.abilityRoleLink.delete({
-						where: {
-							abilityName_roleName: {
-								abilityName: abilityName,
-								roleName: roleName
-							}
-						}
-					})
-					return interaction.editReply(
-						`The ${abilityName} ability will no longer be given with the ${roleName} role`
-					)
 				}
+				const abilityName = interaction.options.getString("ability", true)
+				const roleName = interaction.options.getString("role", true)
+				const ability = await getAbility(abilityName)
+				if (!ability)
+					return interaction.editReply(`No ability with name ${abilityName}`)
+				const role = await getRole(roleName)
+				if (!role) return interaction.editReply(`No role with name ${roleName}`)
+				await database.abilityRoleLink.delete({
+					where: {
+						abilityName_roleName: {
+							abilityName: abilityName,
+							roleName: roleName
+						}
+					}
+				})
+				return interaction.editReply(
+					`The ${abilityName} ability will no longer be given with the ${roleName} role`
+				)
 			}
 
 			case "item": {
@@ -619,23 +617,21 @@ export default class Ping extends ApplicationCommand {
 								: "No changes."
 						}`
 					)
-				} else {
-					const abilityName = interaction.options.getString("ability", true)
-					const ability = await getAbility(abilityName)
-					if (!ability)
-						return interaction.editReply(`No ability with name ${abilityName}`)
-					const itemName = interaction.options.getString("item", true)
-					const item = await getItem(itemName)
-					if (!item)
-						return interaction.editReply(`No item with name ${itemName}`)
-					const done = await database.abilityItemLink.deleteMany({
-						where: {
-							abilityName,
-							itemName
-						}
-					})
-					return interaction.editReply(`Removed ${done.count} links`)
 				}
+				const abilityName = interaction.options.getString("ability", true)
+				const ability = await getAbility(abilityName)
+				if (!ability)
+					return interaction.editReply(`No ability with name ${abilityName}`)
+				const itemName = interaction.options.getString("item", true)
+				const item = await getItem(itemName)
+				if (!item) return interaction.editReply(`No item with name ${itemName}`)
+				const done = await database.abilityItemLink.deleteMany({
+					where: {
+						abilityName,
+						itemName
+					}
+				})
+				return interaction.editReply(`Removed ${done.count} links`)
 			}
 
 			case "set_uses": {

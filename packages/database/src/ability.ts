@@ -125,10 +125,12 @@ export enum AbilityProperty {
 }
 
 export const getPropertyDetails = (properties: number | AbilityProperty[]) => {
-	if (typeof properties === "number")
-		properties = convertNumberToProperties(properties)
+	const props =
+		typeof properties === "number"
+			? convertNumberToProperties(properties)
+			: properties
 	const result = [] as descriptionsType[]
-	for (const property of properties) {
+	for (const property of props) {
 		result.push(propertyDetails[property])
 	}
 	return result

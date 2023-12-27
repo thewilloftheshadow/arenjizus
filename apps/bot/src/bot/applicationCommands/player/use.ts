@@ -1,3 +1,12 @@
+import { ApplicationCommand, BetterClient } from "@buape/lib"
+import { serverIds } from "@internal/config"
+import database, {
+	getAbility,
+	getAllPlayers,
+	getDiscordPlayer,
+	getPlayer
+} from "@internal/database"
+import { generateErrorMessage } from "@internal/functions"
 import {
 	ActionRowBuilder,
 	ApplicationCommandOptionType,
@@ -7,15 +16,6 @@ import {
 	ButtonStyle,
 	ChatInputCommandInteraction
 } from "discord.js"
-import { ApplicationCommand, BetterClient } from "@buape/lib"
-import database, {
-	getAbility,
-	getAllPlayers,
-	getDiscordPlayer,
-	getPlayer
-} from "@internal/database"
-import { generateErrorMessage } from "@internal/functions"
-import { serverIds } from "@internal/config"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

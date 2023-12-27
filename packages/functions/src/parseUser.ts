@@ -16,9 +16,9 @@ export const parseUser = async (
 			) ||
 			(await client.users.fetch(user))
 		)
+		// biome-ignore lint/suspicious/noExplicitAny: woo
 	} catch (error: any) {
 		if (error.code === 50035) return null
 		throw new Error(error)
 	}
-	return null
 }

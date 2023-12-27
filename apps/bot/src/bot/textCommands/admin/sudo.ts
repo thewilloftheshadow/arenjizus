@@ -1,5 +1,5 @@
+import { BetterClient, TextCommand } from "@buape/lib"
 import { parseUser } from "@internal/functions"
-import { TextCommand, BetterClient } from "@buape/lib"
 import { Message } from "discord.js"
 
 export default class Sudo extends TextCommand {

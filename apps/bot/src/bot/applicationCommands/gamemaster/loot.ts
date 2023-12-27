@@ -1,7 +1,4 @@
-import { ChatInputCommandInteraction } from "discord.js"
-import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import {
 	getPlayer,
@@ -9,6 +6,9 @@ import {
 	removePlayerItem,
 	setPlayerMoney
 } from "@internal/database"
+import { logger } from "@internal/logger"
+import { ChatInputCommandInteraction } from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

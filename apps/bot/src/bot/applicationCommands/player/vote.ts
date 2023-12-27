@@ -1,3 +1,8 @@
+import { ApplicationCommand } from "@buape/lib"
+import { BetterClient } from "@buape/lib"
+import database, { getAllPlayers } from "@internal/database"
+import { generateErrorMessage } from "@internal/functions"
+import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
 	AutocompleteFocusedOption,
@@ -5,11 +10,6 @@ import {
 	ChatInputCommandInteraction,
 	TextBasedChannel
 } from "discord.js"
-import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
-import database, { getAllPlayers } from "@internal/database"
-import { generateErrorMessage } from "@internal/functions"
 
 export default class Vote extends ApplicationCommand {
 	constructor(client: BetterClient) {

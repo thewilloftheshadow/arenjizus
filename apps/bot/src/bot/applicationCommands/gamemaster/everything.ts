@@ -1,14 +1,15 @@
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import {
 	getAllAbilities,
 	getAllItems,
+	getAllLocations,
 	getAllPlayers,
 	getAllRoles
 } from "@internal/database"
 import { Paginator } from "@internal/functions"
+import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -30,7 +31,7 @@ export default class Ping extends ApplicationCommand {
 		const playersData = await getAllPlayers()
 		const itemsData = await getAllItems()
 		const abilityData = await getAllAbilities()
-		const locationData = await getAllAbilities()
+		const locationData = await getAllLocations()
 
 		const roles = rolesData.map((role) => role.name)
 		const items = itemsData.map((item) => item.name)
@@ -104,6 +105,15 @@ export default class Ping extends ApplicationCommand {
 							.setTitle("Abilities")
 							.setColor("Random")
 							.setDescription(abilities.join("\n") || "**")
+							.toJSON()
+					]
+				},
+				{
+					embeds: [
+						new EmbedBuilder()
+							.setTitle("Locations")
+							.setColor("Random")
+							.setDescription(locationData.join("\n") || "**")
 							.toJSON()
 					]
 				}

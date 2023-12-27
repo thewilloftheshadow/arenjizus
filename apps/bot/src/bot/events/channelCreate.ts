@@ -1,5 +1,5 @@
-import { serverIds } from "@internal/config"
 import { EventHandler } from "@buape/lib"
+import { serverIds } from "@internal/config"
 import { logger } from "@internal/logger"
 import { GuildChannel } from "discord.js"
 

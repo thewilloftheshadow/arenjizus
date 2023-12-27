@@ -1,19 +1,20 @@
 import { embedSpacer } from "@internal/config"
+import { generateTimestamp, titleCase } from "@internal/functions"
+import { EmbedBuilder } from "discord.js"
 import {
+	Ability,
+	AbilityItemLink,
+	AbilityRoleLink,
 	Item,
-	PlayerItems,
 	Player,
+	PlayerAbilities,
+	PlayerBallData,
+	PlayerItems,
+	PlayerNotes,
 	PlayerRoles,
 	Role,
-	PlayerBallData,
-	Ability,
-	PlayerAbilities,
-	AbilityRoleLink,
-	getPropertyDetails,
-	AbilityItemLink
+	getPropertyDetails
 } from "../index.js"
-import { EmbedBuilder } from "discord.js"
-import { titleCase } from "@internal/functions"
 
 export const itemEmbed = (
 	item: Item & {
@@ -52,7 +53,9 @@ export const playerEmbed = (
 		votedFor?: Player | null
 		playersVotedFor?: Player[]
 		abilities?: PlayerAbilities[]
-	}
+		notes?: PlayerNotes[]
+	},
+	gamemaster = false
 ): EmbedBuilder => {
 	const embed = new EmbedBuilder()
 		.setTitle(player.name)
@@ -91,6 +94,22 @@ export const playerEmbed = (
 					.join("\n")}` || "** **",
 			inline: true
 		})
+	}
+	if (player.notes && gamemaster) {
+		embed.addFields([
+			{
+				name: `Notes:`,
+				value:
+					player.notes
+						.map(
+							(x) =>
+								`${generateTimestamp({ timestamp: x.createdAt, type: "f" })} ${
+									x.note
+								}`
+						)
+						.join("\n") || "** **"
+			}
+		])
 	}
 	return embed
 }

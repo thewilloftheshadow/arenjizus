@@ -10,7 +10,7 @@
 		"clean": "rimraf dist turbo-*.log --glob"
 	},
 	"dependencies": {
-		"@buape/lib": "^1.0.11",
+		"@buape/lib": "^1.1.0",
 		"@internal/config": "workspace:*",
 		"@internal/database": "workspace:*",
 		"@internal/functions": "workspace:*",

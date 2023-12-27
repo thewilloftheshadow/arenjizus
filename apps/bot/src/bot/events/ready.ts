@@ -1,7 +1,7 @@
-import { getFiles } from "@internal/functions"
-import { BetterClient, EventHandler } from "@buape/lib"
-import { logger } from "@internal/logger"
 import { join } from "path"
+import { BetterClient, EventHandler } from "@buape/lib"
+import { getFiles } from "@internal/functions"
+import { logger } from "@internal/logger"
 
 export default class Ready extends EventHandler {
 	override async run() {
@@ -37,7 +37,7 @@ async function loadAndStartCrons(client: BetterClient) {
 			logger.info(`[CRON] Started CRON "${job}"`)
 		}
 		logger.info(`[CRON] Started ${jobs.length} CRONs.`)
-	} catch (error) {
+	} catch (_error) {
 		logger.warn("[CRON] Failed to load CRONs.")
 	}
 }

@@ -1,11 +1,11 @@
+import { EventHandler } from "@buape/lib"
+import { generateErrorMessage } from "@internal/functions"
+import { logger } from "@internal/logger"
 import {
 	ChatInputCommandInteraction,
 	Interaction,
 	InteractionType
 } from "discord.js"
-import { EventHandler } from "@buape/lib"
-import { logger } from "@internal/logger"
-import { generateErrorMessage } from "@internal/functions"
 
 export default class InteractionCreate extends EventHandler {
 	override async run(interaction: Interaction) {
@@ -20,20 +20,22 @@ export default class InteractionCreate extends EventHandler {
 
 		if (interaction.type === InteractionType.ModalSubmit) {
 			return this.client.modalSubmitHandler.handleModal(interaction)
-		} else if (interaction.type === InteractionType.ApplicationCommand) {
+		}
+		if (interaction.type === InteractionType.ApplicationCommand) {
 			return this.client.applicationCommandHandler.handleComponent(
 				interaction as ChatInputCommandInteraction
 			)
-		} else if (interaction.type === InteractionType.MessageComponent) {
+		}
+		if (interaction.type === InteractionType.MessageComponent) {
 			if (interaction.isButton()) {
 				return this.client.buttonHandler.handleComponent(interaction)
 			}
 			if (interaction.isAnySelectMenu()) {
 				return this.client.dropdownHandler.handleComponent(interaction)
 			}
-		} else if (
-			interaction.type === InteractionType.ApplicationCommandAutocomplete
-		) {
+		}
+		if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
+			return this.client.autocompleteHandler.handleAutocomplete(interaction)
 		}
 
 		logger.thrownError(

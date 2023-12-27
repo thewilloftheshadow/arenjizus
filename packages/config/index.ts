@@ -1,7 +1,7 @@
 import {
 	GatewayIntentBits,
-	PermissionsBitField,
-	PermissionFlagsBits
+	PermissionFlagsBits,
+	PermissionsBitField
 } from "discord.js"
 
 export const prefix = "!"

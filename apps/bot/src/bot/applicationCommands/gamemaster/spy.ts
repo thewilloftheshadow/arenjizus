@@ -1,12 +1,12 @@
+import { ApplicationCommand } from "@buape/lib"
+import { BetterClient } from "@buape/lib"
+import { logger } from "@internal/logger"
 import {
 	ChannelType,
 	ChatInputCommandInteraction,
 	TextChannel
 } from "discord.js"
-import { logger } from "@internal/logger"
-import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@buape/lib"
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 

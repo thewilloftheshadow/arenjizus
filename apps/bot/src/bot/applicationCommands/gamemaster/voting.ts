@@ -1,12 +1,4 @@
-import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChannelType,
-	ChatInputCommandInteraction,
-	EmbedBuilder
-} from "discord.js"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import database, {
 	getAllPlayers,
@@ -14,6 +6,14 @@ import database, {
 	setVote,
 	setVoteWorth
 } from "@internal/database"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChannelType,
+	ChatInputCommandInteraction,
+	EmbedBuilder
+} from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

@@ -1,13 +1,13 @@
+import { ApplicationCommand } from "@buape/lib"
+import { BetterClient } from "@buape/lib"
+import { getAllPlayers } from "@internal/database"
 import {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction,
 	TextChannel
 } from "discord.js"
-import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
-import { BetterClient } from "@buape/lib"
-import { getAllPlayers } from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -41,9 +41,9 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
+		const allPlayers = await getAllPlayers()
 		switch (option.name) {
 			case "only-user":
-				const allPlayers = await getAllPlayers()
 				if (option.value) {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
@@ -72,7 +72,7 @@ export default class Ping extends ApplicationCommand {
 		let ping = interaction.options.getBoolean("ping", false)
 		if (ping === null) ping = true
 
-		players.forEach(async (x) => {
+		for (const x of players) {
 			if (
 				interaction.options.getString("only-user") &&
 				interaction.options.getString("only-user") !== x.name
@@ -106,6 +106,6 @@ export default class Ping extends ApplicationCommand {
 					allowedMentions: { users: [user] }
 				})
 			}
-		})
+		}
 	}
 }

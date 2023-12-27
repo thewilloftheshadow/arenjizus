@@ -1,11 +1,11 @@
+import { ApplicationCommand } from "@buape/lib"
+import { BetterClient } from "@buape/lib"
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
 	ChatInputCommandInteraction
 } from "discord.js"
-import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
 
 export default class Vote extends ApplicationCommand {
 	constructor(client: BetterClient) {

@@ -1,11 +1,4 @@
-import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChatInputCommandInteraction
-} from "discord.js"
-import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
-import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 import database, {
 	getAllPlayers,
@@ -17,6 +10,13 @@ import database, {
 	roleEmbed
 } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
+import { logger } from "@internal/logger"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction
+} from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -146,6 +146,7 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
+		const allRoles = await getAllRoles()
 		switch (option.name) {
 			case "player": {
 				const allPlayers = await getAllPlayers()
@@ -169,7 +170,6 @@ export default class Ping extends ApplicationCommand {
 			}
 			case "name":
 			case "role":
-				const allRoles = await getAllRoles()
 				if (option.value) {
 					const roles = allRoles.filter((role: { name: string }) =>
 						role.name.toLowerCase().includes(option.value.toLowerCase())

@@ -1,12 +1,12 @@
-import * as config from "@internal/config"
-import { TextCommand, BetterClient, Type } from "@buape/lib"
-import { logger, DebugType } from "@internal/logger"
-import { Message, EmbedBuilder } from "discord.js"
 import { inspect } from "util"
+import { BetterClient, TextCommand, Type } from "@buape/lib"
+import * as lib from "@buape/lib"
+import * as config from "@internal/config"
 import db from "@internal/database"
 import * as database from "@internal/database"
-import * as lib from "@buape/lib"
 import * as functions from "@internal/functions"
+import { DebugType, logger } from "@internal/logger"
+import { EmbedBuilder, Message } from "discord.js"
 const bot = {
 	db,
 	database,
@@ -96,9 +96,10 @@ export default class Eval extends TextCommand {
 				type.addValue(result)
 			}
 			success = true
+			// biome-ignore lint/suspicious/noExplicitAny: any
 		} catch (error: any) {
 			if (!type) type = new Type(error)
-			if (error && error.stack) this.client.emit("error", error.stack)
+			if (error?.stack) this.client.emit("error", error.stack)
 			result = error
 			success = false
 		}
@@ -119,6 +120,7 @@ export default class Eval extends TextCommand {
 		return content.replace(this.client.token || "", "[ T O K E N ]")
 	}
 
+	// biome-ignore lint/suspicious/noExplicitAny: any
 	private isThenable(input: any): boolean {
 		if (!input) return false
 		return (

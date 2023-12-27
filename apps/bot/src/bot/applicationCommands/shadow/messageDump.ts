@@ -1,8 +1,8 @@
 import { ApplicationCommand, BetterClient } from "@buape/lib"
 import {
+	AttachmentBuilder,
 	ChatInputCommandInteraction,
-	GuildChannel,
-	AttachmentBuilder
+	GuildChannel
 } from "discord.js"
 
 type MessageStored = {
@@ -46,18 +46,18 @@ export default class Ping extends ApplicationCommand {
 					})
 					for await (const msg of channelMessages.values()) {
 						let content = msg.content.replace(/\n/g, " ")
-						msg.mentions.users.forEach((user) => {
+						for (const user of msg.mentions.users.values()) {
 							content = content.split(`<@${user.id}>`).join(`@${user.tag}`)
-						})
-						msg.mentions.roles.forEach((role) => {
+						}
+						for (const role of msg.mentions.roles.values()) {
 							content = content.split(`<@&${role.id}>`).join(`@${role.name}`)
-						})
-						msg.mentions.channels.forEach((channel) => {
+						}
+						for (const channel of msg.mentions.channels.values()) {
 							const channell = channel as GuildChannel
 							content = content
 								.split(`<#${channel.id}>`)
 								.join(`#${channell.name}`)
-						})
+						}
 						if (msg.mentions.repliedUser) {
 							content = `Replying to ${msg.mentions.repliedUser.tag}: ${content}`
 						}

@@ -15,7 +15,8 @@ const client = new BetterClient({
 			player: [config.serverIds.roles.player],
 			spectator: [config.serverIds.roles.spectator]
 		}
-	}
+	},
+	prefix: config.prefix
 })
 
 client.login().catch((error) => {

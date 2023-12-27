@@ -1,12 +1,12 @@
+import { colors } from "@internal/config"
+import { logger } from "@internal/logger"
 import {
-	ActionRowBuilder,
 	APIEmbed,
+	ActionRowBuilder,
 	ButtonBuilder,
 	EmbedBuilder
 } from "discord.js"
 import { GeneratedMessage } from "../index.js"
-import { colors } from "@internal/config"
-import { logger } from "@internal/logger"
 
 /**
  * Generate a full error message with a simple helper function.

@@ -1,5 +1,5 @@
+import { BetterClient, TextCommand } from "@buape/lib"
 import database from "@internal/database"
-import { TextCommand, BetterClient } from "@buape/lib"
 import { Message, TextChannel } from "discord.js"
 
 export default class Eval extends TextCommand {
