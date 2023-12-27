@@ -1,56 +1,78 @@
 import { Death } from "@prisma/client"
-import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
-import database, { addMoney, getAllPlayers, getPlayer, removeMoney } from "@internal/database"
+import database, {
+	addMoney,
+	getAllPlayers,
+	getPlayer,
+	removeMoney
+} from "@internal/database"
 import { generateTimestamp, getPlayerChannel } from "@internal/functions"
+import { serverIds } from "@internal/config"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("rob", client, {
 			description: `Initiate a robbery`,
+			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
 					name: "who",
-					description: "Who is being robbed?",
+					description: "Who do you want to rob?",
 					required: true,
-					autocomplete: true,
-				},
-				{
-					type: ApplicationCommandOptionType.String,
-					name: "by",
-					description: "Who is doing the robbing?",
-					required: true,
-					autocomplete: true,
+					autocomplete: true
 				},
 				{
 					type: ApplicationCommandOptionType.Integer,
 					name: "amount",
-					description: "How much is being stolen?",
-					required: true,
-				},
-			],
+					description: "How much do you want to attempt to steal?",
+					required: true
+				}
+			]
 		})
 	}
 
-	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+	override async autocomplete(
+		interaction: AutocompleteInteraction,
+		option: AutocompleteFocusedOption
+	) {
 		switch (option.name) {
 			case "by":
 			case "who":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
-					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+					const players = allPlayers.filter((player: { name: string }) =>
+						player.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						players.map((player: { name: string }) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
 				}
-				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				return interaction.respond(
+					allPlayers.map((player: { name: string }) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
 		}
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply({ ephemeral: true })
+		await interaction.reply({
+			content: `Robbery has begun...`,
+			ephemeral: true
+		})
 		if (!this.client.user || !interaction.channel) return
 
 		const who = interaction.options.getString("who", true)
@@ -72,13 +94,19 @@ export default class Ping extends ApplicationCommand {
 			return interaction.editReply(`Player ${by} is dead.`)
 		}
 		if (whoPlayer.deathStatus === Death.DEAD) {
-			return interaction.editReply(`Player ${who} is dead. Are you trying to use </loot:1061026940045242448>?`)
+			return interaction.editReply(
+				`Player ${who} is dead. Are you trying to use </loot:1061026940045242448>?`
+			)
 		}
 		if (!whoPlayer.discordId) {
-			return interaction.editReply(`Player ${who} does not have a Discord account linked.`)
+			return interaction.editReply(
+				`Player ${who} does not have a Discord account linked.`
+			)
 		}
 		if (!byPlayer.discordId) {
-			return interaction.editReply(`Player ${by} does not have a Discord account linked.`)
+			return interaction.editReply(
+				`Player ${by} does not have a Discord account linked.`
+			)
 		}
 
 		const amount = amountInput > whoPlayer.money ? whoPlayer.money : amountInput
@@ -88,21 +116,16 @@ export default class Ping extends ApplicationCommand {
 		if (!whoChannel) {
 			return interaction.followUp(`Couldn't find GM channel for ${who}!`)
 		}
-		const byChannelName = by.replace(/ /g, "-").toLowerCase()
-		const byChannel = await getPlayerChannel(byChannelName, this.client)
-		if (!byChannel) {
-			return interaction.followUp(`Couldn't find GM channel for ${by}!`)
-		}
 
 		const time = 60000 * Math.ceil(amountInput / 5)
 		const timestamp = Date.now() + time
 		const timeCounter = generateTimestamp({
 			type: "R",
-			timestamp,
+			timestamp
 		})
 		const timeString = generateTimestamp({
 			type: "T",
-			timestamp,
+			timestamp
 		})
 		const send = `<a:siren:1084362013247033405> <@${whoPlayer.discordId}>, YOU ARE BEING ROBBED! <a:siren:1084362013247033405> \nSend any message here to stop the robbery! Time is up ${timeCounter} (at ${timeString})!`
 		let msg
@@ -113,28 +136,40 @@ export default class Ping extends ApplicationCommand {
 		}
 		if (!msg) return
 
-		await interaction.editReply(
-			`[Robbery initiated! (Click me)](https://discord.com/channels/${interaction.guildId}/${whoChannel.id}/${msg.id})\nTime: ${
-				time / 1000
-			} seconds`
+		await interaction.followUp(
+			`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})! || <@&${serverIds.roles.gamemaster}>}`
 		)
 
-		const byMessage = await byChannel.send(`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})!`)
-
-		const collected = await whoChannel.awaitMessages({ filter: (m) => m.author.id === whoPlayer.discordId, time, max: 1 })
+		const collected = await whoChannel.awaitMessages({
+			filter: (m) => m.author.id === whoPlayer.discordId,
+			time,
+			max: 1
+		})
 		if (collected.size > 0) {
 			// robbery failed
 			whoChannel.send(`You have stopped the robbery! ${by} failed to rob you!`)
-			byMessage.reply(`<@${byPlayer.discordId}>, you have failed to rob ${who}!`)
+			interaction.followUp(
+				`<@${byPlayer.discordId}>, you have failed to rob ${who}!`
+			)
 			logger.gameLog(`${by} failed to rob ${who}!`)
 		} else if (amount === 0) {
-			whoChannel.send(`You failed to stop the robbery, but you had no money for them to take!`)
-			byMessage.reply(`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`)
-			logger.gameLog(`${by} robbed ${who}, however, they had no money for them to take!`)
+			whoChannel.send(
+				`You failed to stop the robbery, but you had no money for them to take!`
+			)
+			interaction.followUp(
+				`<@${byPlayer.discordId}>, you have robbed ${who}, however, they had no money for you to take!`
+			)
+			logger.gameLog(
+				`${by} robbed ${who}, however, they had no money for them to take!`
+			)
 		} else {
 			// robbery success, money
-			whoChannel.send(`You failed to stop the robbery, and they took $${amount} from you!`)
-			byMessage.reply(`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`)
+			whoChannel.send(
+				`You failed to stop the robbery, and they took $${amount} from you!`
+			)
+			interaction.followUp(
+				`<@${byPlayer.discordId}>, you have robbed ${who} and taken $${amount} from them!`
+			)
 			removeMoney(whoPlayer.name, amount)
 			addMoney(byPlayer.name, amount)
 
@@ -143,11 +178,11 @@ export default class Ping extends ApplicationCommand {
 
 		await database.player.update({
 			where: {
-				name: byPlayer.name,
+				name: byPlayer.name
 			},
 			data: {
-				robberiesLeft: byPlayer.robberiesLeft - 1,
-			},
+				robberiesLeft: byPlayer.robberiesLeft - 1
+			}
 		})
 	}
 }

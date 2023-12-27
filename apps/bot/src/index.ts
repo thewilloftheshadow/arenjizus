@@ -3,13 +3,13 @@ import { botName } from "@internal/config"
 import { logger } from "@internal/logger"
 
 const manager = new ShardingManager("./dist/src/bot/index.js", {
-	token: process.env.DISCORD_TOKEN,
+	token: process.env.DISCORD_TOKEN
 })
 
 logger.info(`Starting ${botName}`)
 
 manager.spawn({
-	timeout: -1,
+	timeout: -1
 })
 
 manager.on("shardCreate", (shard) => {

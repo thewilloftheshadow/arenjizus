@@ -3,7 +3,7 @@ import {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction,
-	TextBasedChannel,
+	TextBasedChannel
 } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
@@ -21,21 +21,36 @@ export default class Vote extends ApplicationCommand {
 					name: "name",
 					description: "The player you want to vote for",
 					required: true,
-					autocomplete: true,
-				},
-			],
+					autocomplete: true
+				}
+			]
 		})
 	}
 
-	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+	override async autocomplete(
+		interaction: AutocompleteInteraction,
+		option: AutocompleteFocusedOption
+	) {
 		switch (option.name) {
 			case "name": {
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
-					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+					const players = allPlayers.filter((player: { name: string }) =>
+						player.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						players.map((player: { name: string }) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
 				}
-				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				return interaction.respond(
+					allPlayers.map((player: { name: string }) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
 			}
 		}
 	}
@@ -44,28 +59,29 @@ export default class Vote extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 		const enabled = await database.keyV.findFirst({
 			where: {
-				key: "voteEnabled",
-			},
+				key: "voteEnabled"
+			}
 		})
 		if (!enabled?.valueBoolean) {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Voting is disabled",
-					description: "It is not currently time to vote.",
+					description: "It is not currently time to vote."
 				})
 			)
 		}
 		const player = await database.player.findFirst({
 			where: {
-				discordId: interaction.user.id,
-			},
+				discordId: interaction.user.id
+			}
 		})
 		if (!player) {
 			return interaction.editReply(
 				generateErrorMessage(
 					{
 						title: "Player not linked",
-						description: "The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so.",
+						description:
+							"The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so."
 					},
 					false,
 					true
@@ -74,42 +90,48 @@ export default class Vote extends ApplicationCommand {
 		}
 		const playerChosen = await database.player.findFirst({
 			where: {
-				name: interaction.options.getString("name", true),
-			},
+				name: interaction.options.getString("name", true)
+			}
 		})
 		if (!playerChosen) {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Player not found",
-					description: "The player you specified could not be found.",
+					description: "The player you specified could not be found."
 				})
 			)
 		}
 		await database.player.update({
 			where: {
-				name: player.name,
+				name: player.name
 			},
 			data: {
 				votedFor: {
 					connect: {
-						name: playerChosen.name,
-					},
-				},
-			},
+						name: playerChosen.name
+					}
+				}
+			}
 		})
 
 		const dayChat = await database.keyV.findFirst({
 			where: {
-				key: "dayChat",
-			},
+				key: "dayChat"
+			}
 		})
 		if (dayChat?.value) {
-			const channel = this.client.channels.resolve(dayChat.value) as TextBasedChannel
-			const m = await channel.send(`${player.name} has voted for ${playerChosen.name}!`).catch(() => {})
+			const channel = this.client.channels.resolve(
+				dayChat.value
+			) as TextBasedChannel
+			const m = await channel
+				.send(`${player.name} has voted for ${playerChosen.name}!`)
+				.catch(() => {})
 			m?.pin().catch(() => {})
 		}
 
-		logger.gameLog(`${player.name} has voted for ${playerChosen.name} (worth ${player.voteWorth} votes)!`)
+		logger.gameLog(
+			`${player.name} has voted for ${playerChosen.name} (worth ${player.voteWorth} votes)!`
+		)
 
 		return interaction.editReply({ content: `Success!` })
 	}

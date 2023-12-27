@@ -9,6 +9,7 @@ export * from "./src/titleCase.js"
 export * from "./src/uploadHaste.js"
 export * from "./src/shuffle.js"
 export * from "./src/player.js"
+export * from "./src/paginator.js"
 
 import { APIEmbed, ActionRowBuilder, ButtonBuilder } from "discord.js"
 

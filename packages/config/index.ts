@@ -1,4 +1,8 @@
-import { GatewayIntentBits, PermissionsBitField, PermissionFlagsBits } from "discord.js"
+import {
+	GatewayIntentBits,
+	PermissionsBitField,
+	PermissionFlagsBits
+} from "discord.js"
 
 export const prefix = "!"
 
@@ -13,9 +17,9 @@ export const serverIds = {
 		player: "1105539807444217869",
 		kidnapped: "1105539807444217867",
 		spectator: "1105539807444217868",
-		gamemaster: "1105539807444217873",
+		gamemaster: "1105539807444217873"
 	},
-	guild: "1105539807444217866",
+	guild: "1105539807444217866"
 }
 
 export const colors = {
@@ -23,7 +27,7 @@ export const colors = {
 	success: 0x57f287,
 	warning: 0xfee75c,
 	error: 0xed4245,
-	invisible: 0x2f3136,
+	invisible: 0x2f3136
 }
 
 export const intents = [
@@ -32,13 +36,13 @@ export const intents = [
 	GatewayIntentBits.GuildWebhooks,
 	GatewayIntentBits.MessageContent,
 	GatewayIntentBits.GuildMembers,
-	GatewayIntentBits.GuildMessageReactions,
+	GatewayIntentBits.GuildMessageReactions
 ]
 
 export const requiredPermissions = new PermissionsBitField([
 	PermissionFlagsBits.EmbedLinks,
 	PermissionFlagsBits.SendMessages,
-	PermissionFlagsBits.UseExternalEmojis,
+	PermissionFlagsBits.UseExternalEmojis
 ])
 
 export const embedSpacer = "https://cdn.animeinterlink.com/r/embed_spacer.png"

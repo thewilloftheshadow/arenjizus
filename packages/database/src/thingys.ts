@@ -9,7 +9,7 @@ import database, {
 	getPlayer,
 	getPlayerAbility,
 	getRole,
-	grantAbility,
+	grantAbility
 } from "../index.js"
 import { Client, TextBasedChannel } from "discord.js"
 import { logger } from "@internal/logger"
@@ -19,11 +19,11 @@ export const addMoney = async (name: string, amount: number) => {
 	if (!player) return
 	await database.player.update({
 		where: {
-			name,
+			name
 		},
 		data: {
-			money: player.money + amount,
-		},
+			money: player.money + amount
+		}
 	})
 }
 
@@ -32,11 +32,11 @@ export const removeMoney = async (name: string, amount: number) => {
 	if (!player) return
 	await database.player.update({
 		where: {
-			name,
+			name
 		},
 		data: {
-			money: player.money - amount,
-		},
+			money: player.money - amount
+		}
 	})
 }
 
@@ -45,15 +45,19 @@ export const setPlayerMoney = async (name: string, amount: number) => {
 	if (!player) return
 	await database.player.update({
 		where: {
-			name,
+			name
 		},
 		data: {
-			money: amount,
-		},
+			money: amount
+		}
 	})
 }
 
-export const givePlayerItem = async (playerName: string, itemName: string, amount: number) => {
+export const givePlayerItem = async (
+	playerName: string,
+	itemName: string,
+	amount: number
+) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
 	const item = await getItem(itemName)
@@ -62,19 +66,19 @@ export const givePlayerItem = async (playerName: string, itemName: string, amoun
 		where: {
 			playerName_itemName: {
 				playerName,
-				itemName,
-			},
+				itemName
+			}
 		},
 		create: {
 			playerName,
 			itemName,
-			amount,
+			amount
 		},
 		update: {
 			amount: {
-				increment: amount,
-			},
-		},
+				increment: amount
+			}
+		}
 	})
 	if (item.linkedAbilities.length > 0) {
 		for (const abilityLink of item.linkedAbilities) {
@@ -85,26 +89,30 @@ export const givePlayerItem = async (playerName: string, itemName: string, amoun
 				where: {
 					playerName_abilityName: {
 						playerName,
-						abilityName: ability?.name,
-					},
+						abilityName: ability?.name
+					}
 				},
 				create: {
 					playerName,
 					abilityName: ability?.name,
-					usesLeft: ability?.uses,
+					usesLeft: ability?.uses
 				},
 				update: {
 					usesLeft: {
-						increment: ability.uses,
-					},
-				},
+						increment: ability.uses
+					}
+				}
 			})
 		}
 	}
 	return done
 }
 
-export const removePlayerItem = async (playerName: string, itemName: string, amount: number) => {
+export const removePlayerItem = async (
+	playerName: string,
+	itemName: string,
+	amount: number
+) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
 	const item = await getItem(itemName)
@@ -113,19 +121,19 @@ export const removePlayerItem = async (playerName: string, itemName: string, amo
 		where: {
 			playerName_itemName: {
 				playerName,
-				itemName,
-			},
+				itemName
+			}
 		},
 		create: {
 			playerName,
 			itemName,
-			amount,
+			amount
 		},
 		update: {
 			amount: {
-				decrement: amount,
-			},
-		},
+				decrement: amount
+			}
+		}
 	})
 	return done
 }
@@ -139,14 +147,14 @@ export const givePlayerRole = async (playerName: string, roleName: string) => {
 		where: {
 			playerName_roleName: {
 				playerName,
-				roleName,
-			},
+				roleName
+			}
 		},
 		create: {
 			playerName,
-			roleName,
+			roleName
 		},
-		update: {},
+		update: {}
 	})
 	if (role.linkedAbilities.length > 0) {
 		for (const abilityLink of role.linkedAbilities) {
@@ -156,48 +164,51 @@ export const givePlayerRole = async (playerName: string, roleName: string) => {
 				where: {
 					playerName_abilityName: {
 						playerName,
-						abilityName: ability?.name,
-					},
+						abilityName: ability?.name
+					}
 				},
 				create: {
 					playerName,
 					abilityName: ability?.name,
-					usesLeft: ability?.uses,
+					usesLeft: ability?.uses
 				},
 				update: {
 					usesLeft: {
-						increment: ability.uses,
-					},
-				},
+						increment: ability.uses
+					}
+				}
 			})
 		}
 	}
 	return done
 }
 
-export const removePlayerRole = async (playerName: string, roleName: string) => {
+export const removePlayerRole = async (
+	playerName: string,
+	roleName: string
+) => {
 	const player = await getPlayer(playerName)
 	if (!player) return
 	return await database.playerRoles.delete({
 		where: {
 			playerName_roleName: {
 				playerName,
-				roleName,
-			},
-		},
+				roleName
+			}
+		}
 	})
 }
 
 export const deleteItem = async (name: string) => {
 	await database.playerItems.deleteMany({
 		where: {
-			itemName: name,
-		},
+			itemName: name
+		}
 	})
 	await database.item.delete({
 		where: {
-			name,
-		},
+			name
+		}
 	})
 }
 
@@ -206,11 +217,11 @@ export const toggleDeath = async (name: string, status: Death) => {
 	if (!player) return
 	await database.player.update({
 		where: {
-			name,
+			name
 		},
 		data: {
-			deathStatus: status,
-		},
+			deathStatus: status
+		}
 	})
 }
 
@@ -219,11 +230,11 @@ export const setVoteWorth = async (name: string, amount: number) => {
 	if (!player) return
 	await database.player.update({
 		where: {
-			name,
+			name
 		},
 		data: {
-			voteWorth: amount,
-		},
+			voteWorth: amount
+		}
 	})
 }
 
@@ -233,27 +244,31 @@ export const setVote = async (name: string, votedFor: string | null) => {
 	if (votedFor === null) {
 		await database.player.update({
 			where: {
-				name,
+				name
 			},
 			data: {
-				votedForName: null,
-			},
+				votedForName: null
+			}
 		})
 	} else {
 		const votedForPlayer = await getPlayer(votedFor)
 		if (!votedForPlayer) return
 		await database.player.update({
 			where: {
-				name,
+				name
 			},
 			data: {
-				votedForName: votedForPlayer.name,
-			},
+				votedForName: votedForPlayer.name
+			}
 		})
 	}
 }
 
-export const createAbility = async (name: string, description: string, uses: number) => {
+export const createAbility = async (
+	name: string,
+	description: string,
+	uses: number
+) => {
 	const exists = await getAbility(name)
 	if (exists) return Result.err("Ability already exists")
 	const result = await database.ability
@@ -261,8 +276,8 @@ export const createAbility = async (name: string, description: string, uses: num
 			data: {
 				name,
 				description,
-				uses,
-			},
+				uses
+			}
 		})
 		.catch(() => {
 			return Result.err("Failed to create ability")
@@ -273,8 +288,8 @@ export const createAbility = async (name: string, description: string, uses: num
 export const deleteAbility = async (name: string) => {
 	await database.ability.delete({
 		where: {
-			name,
-		},
+			name
+		}
 	})
 }
 
@@ -288,9 +303,9 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 			where: {
 				playerName_abilityName: {
 					playerName,
-					abilityName,
-				},
-			},
+					abilityName
+				}
+			}
 		})
 		return
 	} else {
@@ -298,14 +313,14 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 			where: {
 				playerName_abilityName: {
 					playerName,
-					abilityName,
-				},
+					abilityName
+				}
 			},
 			data: {
 				usesLeft: {
-					decrement: 1,
-				},
-			},
+					decrement: 1
+				}
+			}
 		})
 	}
 	if (ability.linkedItems.length > 0) {
@@ -317,20 +332,24 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 				where: {
 					playerName_itemName: {
 						playerName,
-						itemName: item.name,
-					},
+						itemName: item.name
+					}
 				},
 				data: {
 					amount: {
-						decrement: 1,
-					},
-				},
+						decrement: 1
+					}
+				}
 			})
 		}
 	}
 }
 
-export const runAbilityProperties = async (ability: Ability, targetName: string, client: Client) => {
+export const runAbilityProperties = async (
+	ability: Ability,
+	targetName: string,
+	client: Client
+) => {
 	const properties = convertNumberToProperties(ability.properties)
 	const target = await getPlayer(targetName)
 	const result: string[] = []
@@ -351,8 +370,8 @@ export const runAbilityProperties = async (ability: Ability, targetName: string,
 		} else if (property === AbilityProperty.lockDayChat) {
 			const dayChat = await database.keyV.findFirst({
 				where: {
-					key: "dayChat",
-				},
+					key: "dayChat"
+				}
 			})
 			if (!dayChat?.value) {
 				result.push("Day chat not found")
@@ -363,7 +382,11 @@ export const runAbilityProperties = async (ability: Ability, targetName: string,
 				result.push("Day chat not found")
 				continue
 			}
-			const m = await channel.send("🔒 An emergency meeting has been called! The chat is now locked! 🔒").catch(() => {})
+			const m = await channel
+				.send(
+					"🔒 An emergency meeting has been called! The chat is now locked! 🔒"
+				)
+				.catch(() => {})
 			if (!m) {
 				result.push("Failed to send message")
 				continue

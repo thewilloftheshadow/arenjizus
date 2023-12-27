@@ -1,9 +1,17 @@
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, TextChannel } from "discord.js"
+import {
+	ApplicationCommandOptionType,
+	ChatInputCommandInteraction,
+	TextChannel
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
 import { generateErrorMessage } from "@internal/functions"
-import database, { getDiscordPlayer, getPlayer, removeMoney } from "@internal/database"
+import database, {
+	getDiscordPlayer,
+	getPlayer,
+	removeMoney
+} from "@internal/database"
 
 export default class Want extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -15,9 +23,9 @@ export default class Want extends ApplicationCommand {
 					name: "name",
 					description: "The player you want to mark as wanted",
 					required: true,
-					autocomplete: true,
-				},
-			],
+					autocomplete: true
+				}
+			]
 		})
 	}
 
@@ -25,14 +33,14 @@ export default class Want extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 		const enabled = await database.keyV.findFirst({
 			where: {
-				key: "voteEnabled",
-			},
+				key: "voteEnabled"
+			}
 		})
 		if (!enabled?.valueBoolean) {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Disabled",
-					description: "It is not currently time to mark players as wanted.",
+					description: "It is not currently time to mark players as wanted."
 				})
 			)
 		}
@@ -42,7 +50,8 @@ export default class Want extends ApplicationCommand {
 				generateErrorMessage(
 					{
 						title: "Player not linked",
-						description: "The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so.",
+						description:
+							"The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so."
 					},
 					false,
 					true
@@ -52,17 +61,19 @@ export default class Want extends ApplicationCommand {
 
 		const currentPriceData = await database.keyV.findFirst({
 			where: {
-				key: "wantedPrice",
-			},
+				key: "wantedPrice"
+			}
 		})
 		const wantedPrice = currentPriceData?.valueInt || 0
 
-		const playerChosen = await getPlayer(interaction.options.getString("name", true))
+		const playerChosen = await getPlayer(
+			interaction.options.getString("name", true)
+		)
 		if (!playerChosen) {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Player not found",
-					description: "The player you specified could not be found.",
+					description: "The player you specified could not be found."
 				})
 			)
 		}
@@ -71,7 +82,7 @@ export default class Want extends ApplicationCommand {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Not enough money",
-					description: `You do not have enough money to mark ${playerChosen.name} as wanted. You need $${wantedPrice}, but you only have $${player.money}.`,
+					description: `You do not have enough money to mark ${playerChosen.name} as wanted. You need $${wantedPrice}, but you only have $${player.money}.`
 				})
 			)
 		}
@@ -82,8 +93,8 @@ export default class Want extends ApplicationCommand {
 
 		const dayChat = await database.keyV.findFirst({
 			where: {
-				key: "dayChat",
-			},
+				key: "dayChat"
+			}
 		})
 		if (dayChat?.value) {
 			const channel = this.client.channels.resolve(dayChat.value) as TextChannel
@@ -92,23 +103,29 @@ export default class Want extends ApplicationCommand {
 					` <a:siren:1084362013247033405> Someone has declared ${playerChosen.name} as wanted! <a:siren:1084362013247033405>\nIt now costs $${newPrice} to declare someone wanted!`
 				)
 				.catch(() => {})
-			channel.setTopic(`Wanted: ${playerChosen.name} | Price to change: $${newPrice}`).catch(() => {})
+			channel
+				.setTopic(
+					`Wanted: ${playerChosen.name} | Price to change: $${newPrice}`
+				)
+				.catch(() => {})
 		}
 
 		await database.keyV.upsert({
 			where: {
-				key: "wantedPrice",
+				key: "wantedPrice"
 			},
 			update: {
-				valueInt: newPrice,
+				valueInt: newPrice
 			},
 			create: {
 				key: "wantedPrice",
-				valueInt: newPrice,
-			},
+				valueInt: newPrice
+			}
 		})
 
-		logger.gameLog(`${player.name} has declared ${playerChosen.name} as wanted for ${wantedPrice}!`)
+		logger.gameLog(
+			`${player.name} has declared ${playerChosen.name} as wanted for ${wantedPrice}!`
+		)
 
 		return interaction.editReply({ content: `Success!` })
 	}

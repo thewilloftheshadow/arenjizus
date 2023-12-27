@@ -1,6 +1,7 @@
-/* eslint-disable prefer-const */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const shuffle = (arr: any[], options?: { copy?: boolean; rng?: () => number }) => {
+export const shuffle = (
+	arr: any[],
+	options?: { copy?: boolean; rng?: () => number }
+) => {
 	if (!Array.isArray(arr)) {
 		throw new Error("shuffle expect an array as parameter.")
 	}

@@ -13,9 +13,9 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.String,
 					name: "entry",
 					description: "The entry to add",
-					required: true,
-				},
-			],
+					required: true
+				}
+			]
 		})
 	}
 

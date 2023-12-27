@@ -1,10 +1,13 @@
-import { ChannelType, ChatInputCommandInteraction, TextChannel } from "discord.js"
+import {
+	ChannelType,
+	ChatInputCommandInteraction,
+	TextChannel
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
 
-// eslint-disable-next-line no-promise-executor-return
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export default class Ping extends ApplicationCommand {
@@ -17,15 +20,16 @@ export default class Ping extends ApplicationCommand {
 					name: "channel",
 					description: "The channel to send from",
 					required: true,
-					channelTypes: [ChannelType.GuildText],
+					channelTypes: [ChannelType.GuildText]
 				},
 				{
 					type: ApplicationCommandOptionType.Integer,
 					name: "amount",
-					description: "The amount of messages to send (default is 5, max is 20)",
-					required: false,
-				},
-			],
+					description:
+						"The amount of messages to send (default is 5, max is 20)",
+					required: false
+				}
+			]
 		})
 	}
 
@@ -33,10 +37,14 @@ export default class Ping extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 		if (!this.client.user || !interaction.channel) return
 		const thisChannel = interaction.channel as TextChannel
-		const channel = interaction.options.getChannel("channel", true) as TextChannel
+		const channel = interaction.options.getChannel(
+			"channel",
+			true
+		) as TextChannel
 		const amount = interaction.options.getInteger("amount", false) || 5
 
-		if (amount > 50) return interaction.editReply("You can only send 20 messages at a time")
+		if (amount > 50)
+			return interaction.editReply("You can only send 20 messages at a time")
 
 		const raw = await channel.messages.fetch({ limit: 50 })
 
@@ -47,20 +55,25 @@ export default class Ping extends ApplicationCommand {
 
 		const hooks = await thisChannel.fetchWebhooks()
 		let hook = hooks.find((h) => h.owner?.id === this.client.user?.id)
-		if (!hook) hook = await thisChannel.createWebhook({ name: this.client.user.username, avatar: this.client.user.displayAvatarURL() })
+		if (!hook)
+			hook = await thisChannel.createWebhook({
+				name: this.client.user.username,
+				avatar: this.client.user.displayAvatarURL()
+			})
 
-		logger.gameLog(`Spying on <#${channel.id}> for ${amount} messages in <#${thisChannel}>`)
+		logger.gameLog(
+			`Spying on <#${channel.id}> for ${amount} messages in <#${thisChannel}>`
+		)
 
 		thisChannel.send("*Beginning transmission...*")
 
-		// eslint-disable-next-line no-restricted-syntax
 		for await (const message of messages) {
 			await sleep(3000)
 			await hook.send({
 				content: message.content || "** **",
 				embeds: message.embeds.map((x) => x),
 				username: message.author.username,
-				avatarURL: message.author.displayAvatarURL(),
+				avatarURL: message.author.displayAvatarURL()
 			})
 		}
 

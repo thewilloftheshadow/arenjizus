@@ -7,7 +7,9 @@ export default class Ready extends EventHandler {
 	override async run() {
 		await this.client.application?.fetch()
 		const allGuilds = await this.client.shard?.broadcastEval(async (c) =>
-			c.guilds.cache.map((guild) => `${guild.name} [${guild.id}] - ${guild.memberCount} members.`)
+			c.guilds.cache.map(
+				(guild) => `${guild.name} [${guild.id}] - ${guild.memberCount} members.`
+			)
 		)
 		const guildsStringList: string[] = []
 		// @ts-ignore
@@ -16,7 +18,9 @@ export default class Ready extends EventHandler {
 			guildsStringList.push(`Shard ${i + 1}\n${allGuilds[i].join("\n")}`)
 		}
 		// const stats = await this.client.fetchStats()
-		logger.info(`Logged in as ${this.client.user?.tag} [${this.client.user?.id}]`) // with ${stats.guilds} guilds and ${stats.users} users.`)
+		logger.info(
+			`Logged in as ${this.client.user?.tag} [${this.client.user?.id}]`
+		) // with ${stats.guilds} guilds and ${stats.users} users.`)
 
 		loadAndStartCrons(this.client)
 	}
@@ -28,7 +32,6 @@ async function loadAndStartCrons(client: BetterClient) {
 		const jobs = getFiles(join(client.__dirname, "../jobs"), "js")
 		for await (const job of jobs) {
 			logger.info(`[CRON] Starting CRON "${job}"`)
-			// eslint-disable-next-line no-await-in-loop
 			const { startCron } = await import(join(__dirname, "../jobs", job))
 			startCron(client)
 			logger.info(`[CRON] Started CRON "${job}"`)

@@ -1,4 +1,9 @@
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, EmbedBuilder } from "discord.js"
+import {
+	ActionRowBuilder,
+	APIEmbed,
+	ButtonBuilder,
+	EmbedBuilder
+} from "discord.js"
 import { GeneratedMessage } from "../index.js"
 import { colors } from "@internal/config"
 import { logger } from "@internal/logger"
@@ -11,11 +16,15 @@ import { logger } from "@internal/logger"
  * @param ephemeral - Whether our message should be ephemeral or not.
  * @returns The generated error message.
  */
-export const generateErrorMessage = (embedInfo: APIEmbed, supportServer = true, ephemeral = true): GeneratedMessage => {
+export const generateErrorMessage = (
+	embedInfo: APIEmbed,
+	supportServer = true,
+	ephemeral = true
+): GeneratedMessage => {
 	logger.null(supportServer)
 	return {
 		embeds: [new EmbedBuilder(embedInfo).setColor(colors.error).data],
-		ephemeral,
+		ephemeral
 	}
 }
 
@@ -27,7 +36,7 @@ export const generateSuccessMessage = (
 	return {
 		embeds: [new EmbedBuilder(embedInfo).setColor(colors.success).data],
 		components,
-		ephemeral,
+		ephemeral
 	}
 }
 
@@ -39,6 +48,6 @@ export const generateWarningMessage = (
 	return {
 		embeds: [new EmbedBuilder(embedInfo).setColor(colors.warning).data],
 		components,
-		ephemeral,
+		ephemeral
 	}
 }

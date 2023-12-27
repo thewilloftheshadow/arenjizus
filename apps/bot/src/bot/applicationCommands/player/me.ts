@@ -6,7 +6,7 @@ import { generateErrorMessage } from "@internal/functions"
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("me", client, {
-			description: `See your own data`,
+			description: `See your own data`
 		})
 	}
 
@@ -18,7 +18,8 @@ export default class Ping extends ApplicationCommand {
 				generateErrorMessage(
 					{
 						title: "Player not linked",
-						description: "The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so.",
+						description:
+							"The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so."
 					},
 					false,
 					true

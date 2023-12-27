@@ -1,9 +1,21 @@
-import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction } from "discord.js"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
-import database, { getAllPlayers, getAllRoles, getPlayer, getRole, givePlayerRole, removePlayerRole, roleEmbed } from "@internal/database"
+import database, {
+	getAllPlayers,
+	getAllRoles,
+	getPlayer,
+	getRole,
+	givePlayerRole,
+	removePlayerRole,
+	roleEmbed
+} from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -21,16 +33,16 @@ export default class Ping extends ApplicationCommand {
 							name: "player",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "role",
 							description: "The name of the role",
 							required: true,
-							autocomplete: true,
-						},
-					],
+							autocomplete: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -42,16 +54,16 @@ export default class Ping extends ApplicationCommand {
 							name: "player",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "role",
 							description: "The name of the role",
 							required: true,
-							autocomplete: true,
-						},
-					],
+							autocomplete: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -63,15 +75,15 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the role",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.Boolean,
 							name: "hide_users",
 							description: "Whether to hide the users with this role",
-							required: false,
-						},
-					],
+							required: false
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -82,15 +94,15 @@ export default class Ping extends ApplicationCommand {
 							type: ApplicationCommandOptionType.String,
 							name: "name",
 							description: "The name of the role",
-							required: true,
+							required: true
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "description",
 							description: "The description of the role",
-							required: true,
-						},
-					],
+							required: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -102,15 +114,15 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the role",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "description",
 							description: "The description of the role",
-							required: true,
-						},
-					],
+							required: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -122,32 +134,59 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the role",
 							required: true,
-							autocomplete: true,
-						},
-					],
-				},
-			],
+							autocomplete: true
+						}
+					]
+				}
+			]
 		})
 	}
 
-	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+	override async autocomplete(
+		interaction: AutocompleteInteraction,
+		option: AutocompleteFocusedOption
+	) {
 		switch (option.name) {
 			case "player": {
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
-					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+					const players = allPlayers.filter((player: { name: string }) =>
+						player.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						players.map((player: { name: string }) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
 				}
-				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				return interaction.respond(
+					allPlayers.map((player: { name: string }) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
 			}
 			case "name":
 			case "role":
 				const allRoles = await getAllRoles()
 				if (option.value) {
-					const roles = allRoles.filter((role: { name: string }) => role.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(roles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
+					const roles = allRoles.filter((role: { name: string }) =>
+						role.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						roles.map((role: { name: string }) => ({
+							name: role.name,
+							value: role.name
+						}))
+					)
 				}
-				return interaction.respond(allRoles.map((role: { name: string }) => ({ name: role.name, value: role.name })))
+				return interaction.respond(
+					allRoles.map((role: { name: string }) => ({
+						name: role.name,
+						value: role.name
+					}))
+				)
 		}
 	}
 
@@ -163,7 +202,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Role not found",
-							description: `The role ${name} was not found in the database.`,
+							description: `The role ${name} was not found in the database.`
 						})
 					)
 				}
@@ -176,64 +215,70 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Role not found",
-							description: `The role ${name} was not found in the database.`,
+							description: `The role ${name} was not found in the database.`
 						})
 					)
 				}
 				role = await database.role.update({
 					where: {
-						id: role.id,
+						id: role.id
 					},
 					data: {
-						description: interaction.options.getString("description") || "",
+						description: interaction.options.getString("description") || ""
 					},
 					include: {
 						players: true,
-						linkedAbilities: true,
-					},
+						linkedAbilities: true
+					}
 				})
 				logger.gameLog(`Role ${role.name} was updated.`)
-				return interaction.editReply({ content: "Role successfully updated:", embeds: [roleEmbed(role)] })
+				return interaction.editReply({
+					content: "Role successfully updated:",
+					embeds: [roleEmbed(role)]
+				})
 			}
 			case "create": {
 				const role = await database.role.create({
 					data: {
 						name,
-						description: interaction.options.getString("description") || "",
+						description: interaction.options.getString("description") || ""
 					},
 					include: {
 						players: true,
-						linkedAbilities: true,
-					},
+						linkedAbilities: true
+					}
 				})
 				logger.gameLog(`Role ${role.name} was created.`)
-				return interaction.editReply({ content: "Role successfully created:", embeds: [roleEmbed(role)] })
+				return interaction.editReply({
+					content: "Role successfully created:",
+					embeds: [roleEmbed(role)]
+				})
 			}
 			case "delete": {
 				const role = await database.role.findFirst({
 					where: {
-						name,
-					},
+						name
+					}
 				})
 				if (!role) {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Role not found",
-							description: `The role ${name} was not found in the database.`,
+							description: `The role ${name} was not found in the database.`
 						})
 					)
 				}
 				await database.playerRoles.deleteMany({
 					where: {
 						role: {
-							id: role.id,
-						},
-					},
+							id: role.id
+						}
+					}
 				})
 				await database.role.delete({
 					where: {
-						id: role.id,
-					},
+						id: role.id
+					}
 				})
 				logger.gameLog(`Role ${role.name} was deleted.`)
 				return interaction.editReply({ content: "Role successfully deleted." })
@@ -247,7 +292,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Role not found",
-							description: `The role ${roleName} was not found in the database.`,
+							description: `The role ${roleName} was not found in the database.`
 						})
 					)
 				}
@@ -256,13 +301,17 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${playerName} was not found in the database.`,
+							description: `The player ${playerName} was not found in the database.`
 						})
 					)
 				}
 				await givePlayerRole(player.name, role.name)
-				logger.gameLog(`Player ${player.name} was assigned to role ${role.name}.`)
-				return interaction.editReply({ content: "Player successfully assigned to role." })
+				logger.gameLog(
+					`Player ${player.name} was assigned to role ${role.name}.`
+				)
+				return interaction.editReply({
+					content: "Player successfully assigned to role."
+				})
 			}
 			case "unassign": {
 				const playerName = interaction.options.getString("player", true)
@@ -273,7 +322,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Role not found",
-							description: `The role ${roleName} was not found in the database.`,
+							description: `The role ${roleName} was not found in the database.`
 						})
 					)
 				}
@@ -282,13 +331,17 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${playerName} was not found in the database.`,
+							description: `The player ${playerName} was not found in the database.`
 						})
 					)
 				}
 				await removePlayerRole(player.name, role.name)
-				logger.gameLog(`Player ${player.name} was unassigned from role ${role.name}.`)
-				return interaction.editReply({ content: "Player successfully unassigned from role." })
+				logger.gameLog(
+					`Player ${player.name} was unassigned from role ${role.name}.`
+				)
+				return interaction.editReply({
+					content: "Player successfully unassigned from role."
+				})
 			}
 			default:
 				break

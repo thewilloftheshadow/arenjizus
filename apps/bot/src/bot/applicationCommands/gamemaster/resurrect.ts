@@ -17,9 +17,9 @@ export default class Ping extends ApplicationCommand {
 					name: "name",
 					description: "The name of the player",
 					required: true,
-					autocomplete: true,
-				},
-			],
+					autocomplete: true
+				}
+			]
 		})
 	}
 
@@ -28,7 +28,12 @@ export default class Ping extends ApplicationCommand {
 		const name = interaction.options.getString("name", true)
 		const player = await getPlayer(name)
 		if (!player) {
-			return interaction.editReply(generateErrorMessage({ title: "Player not found", description: `Could not find player ${name}` }))
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Player not found",
+					description: `Could not find player ${name}`
+				})
+			)
 		}
 
 		await toggleDeath(name, Death.ALIVE)
@@ -44,7 +49,7 @@ export default class Ping extends ApplicationCommand {
 				.catch(() => {})
 		}
 
-		await logger.gameLog(`${name} has been resurrected!`)
+		logger.gameLog(`${name} has been resurrected!`)
 		return interaction.editReply("<a:atada_big:543825795727228942>")
 	}
 }

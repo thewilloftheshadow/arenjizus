@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import * as config from "@internal/config"
 import { TextCommand, BetterClient, Type } from "@buape/lib"
 import { logger, DebugType } from "@internal/logger"
@@ -8,19 +7,30 @@ import db from "@internal/database"
 import * as database from "@internal/database"
 import * as lib from "@buape/lib"
 import * as functions from "@internal/functions"
-const bot = { db, database, config, lib, functions, logger: { logger, DebugType } }
+const bot = {
+	db,
+	database,
+	config,
+	lib,
+	functions,
+	logger: { logger, DebugType }
+}
 
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {
 		super("eval", client, {
-			restriction: "gamemaster",
+			restriction: "gamemaster"
 		})
 
 		logger.null(bot)
 	}
 
 	override async run(message: Message, args: string[]) {
-		logger.info(`${message.author.tag} ran eval in ${message.guild?.name} ${message.guild?.id}, ${args.join(" ")}`)
+		logger.info(
+			`${message.author.tag} ran eval in ${message.guild?.name} ${
+				message.guild?.id
+			}, ${args.join(" ")}`
+		)
 		logger.null(`${DebugType.GENERAL}`)
 
 		const { success, result, type } = await this.eval(message, args.join(" "))
@@ -30,39 +40,45 @@ export default class Eval extends TextCommand {
 			return message.reply({
 				embeds: [
 					new EmbedBuilder({
-						title: success ? "🆗 Evaluated successfully." : "🆘 JavaScript failed.",
-						description: `Output too long for Discord, view it [here](${await functions.uploadHaste(result, "js")})`,
+						title: success
+							? "🆗 Evaluated successfully."
+							: "🆘 JavaScript failed.",
+						description: `Output too long for Discord, view it [here](${await functions.uploadHaste(
+							result,
+							"js"
+						)})`,
 						fields: [
 							{
 								name: "Type",
-								value: `\`\`\`ts\n${type}\`\`\``,
-							},
+								value: `\`\`\`ts\n${type}\`\`\``
+							}
 						],
-						color: success ? config.colors.success : config.colors.error,
-					}),
-				],
+						color: success ? config.colors.success : config.colors.error
+					})
+				]
 			})
 		}
 
 		return message.reply({
 			embeds: [
 				new EmbedBuilder({
-					title: success ? "🆗 Evaluated successfully." : "🆘 JavaScript failed.",
+					title: success
+						? "🆗 Evaluated successfully."
+						: "🆘 JavaScript failed.",
 					description: `\`\`\`js\n${result}\`\`\``,
 					fields: [
 						{
 							name: "Type",
-							value: `\`\`\`ts\n${type}\`\`\``,
-						},
+							value: `\`\`\`ts\n${type}\`\`\``
+						}
 					],
-					color: success ? config.colors.success : config.colors.error,
-				}),
-			],
+					color: success ? config.colors.success : config.colors.error
+				})
+			]
 		})
 	}
 
 	private async eval(message: Message, codeInput: string) {
-		// eslint-disable-next-line prefer-destructuring, no-unused-vars
 		// if (message.id === user.id) {
 		//     logger.info("Eval has been executed")
 		// }
@@ -71,8 +87,8 @@ export default class Eval extends TextCommand {
 		let result
 		let type
 		try {
-			if (message.content.includes("--async")) code = `(async () => {\n${code}\n})();`
-			// eslint-disable-next-line no-eval
+			if (message.content.includes("--async"))
+				code = `(async () => {\n${code}\n})();`
 			result = eval(code)
 			type = new Type(result)
 			if (this.isThenable(result)) {
@@ -80,7 +96,6 @@ export default class Eval extends TextCommand {
 				type.addValue(result)
 			}
 			success = true
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			if (!type) type = new Type(error)
 			if (error && error.stack) this.client.emit("error", error.stack)
@@ -91,7 +106,7 @@ export default class Eval extends TextCommand {
 		return {
 			success,
 			type,
-			result: this.parseContent(inspect(result)),
+			result: this.parseContent(inspect(result))
 		}
 	}
 
@@ -104,10 +119,14 @@ export default class Eval extends TextCommand {
 		return content.replace(this.client.token || "", "[ T O K E N ]")
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private isThenable(input: any): boolean {
 		if (!input) return false
-		return input instanceof Promise || (input !== Promise.prototype && this.isFunction(input.then) && this.isFunction(input.catch))
+		return (
+			input instanceof Promise ||
+			(input !== Promise.prototype &&
+				this.isFunction(input.then) &&
+				this.isFunction(input.catch))
+		)
 	}
 
 	public isFunction(input: unknown): boolean {

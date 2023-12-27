@@ -1,11 +1,14 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
 import { ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
-import { getPlayer, givePlayerItem, removePlayerItem, setPlayerMoney } from "@internal/database"
+import {
+	getPlayer,
+	givePlayerItem,
+	removePlayerItem,
+	setPlayerMoney
+} from "@internal/database"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -16,15 +19,15 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.String,
 					name: "from",
 					description: "The player to loot from",
-					required: true,
+					required: true
 				},
 				{
 					type: ApplicationCommandOptionType.String,
 					name: "to",
 					description: "The player to loot to",
-					required: true,
-				},
-			],
+					required: true
+				}
+			]
 		})
 	}
 
@@ -48,7 +51,7 @@ export default class Ping extends ApplicationCommand {
 			} else {
 				itemList.push({
 					name: item.itemName,
-					amount: item.amount,
+					amount: item.amount
 				})
 			}
 			givePlayerItem(to.name, item.itemName, item.amount)
@@ -57,10 +60,10 @@ export default class Ping extends ApplicationCommand {
 		await setPlayerMoney(to.name, to.money + from.money)
 		await setPlayerMoney(from.name, 0)
 		await interaction.editReply(`Looted ${from.name} to ${to.name}`)
-		await logger.gameLog(
-			`${to.name} looted ${from.name} and got ${from.money} money and ${from.items.length} items: ${itemList
-				.map((i) => `${i.name} x${i.amount}`)
-				.join(", ")}`
+		logger.gameLog(
+			`${to.name} looted ${from.name} and got ${from.money} money and ${
+				from.items.length
+			} items: ${itemList.map((i) => `${i.name} x${i.amount}`).join(", ")}`
 		)
 	}
 }

@@ -17,14 +17,14 @@ export default class Ping extends ApplicationCommand {
 					name: "name",
 					description: "The name of the player",
 					required: true,
-					autocomplete: true,
+					autocomplete: true
 				},
 				{
 					type: ApplicationCommandOptionType.Boolean,
 					name: "fake",
-					description: "Whether this death is faked (e.g. ketchup) or real",
-				},
-			],
+					description: "Whether this death is faked (e.g. ketchup) or real"
+				}
+			]
 		})
 	}
 
@@ -34,12 +34,17 @@ export default class Ping extends ApplicationCommand {
 		const fake = interaction.options.getBoolean("fake", false)
 		const player = await getPlayer(name)
 		if (!player) {
-			return interaction.editReply(generateErrorMessage({ title: "Player not found", description: `Could not find player ${name}` }))
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Player not found",
+					description: `Could not find player ${name}`
+				})
+			)
 		}
 
 		await toggleDeath(name, fake ? Death.FAKED : Death.DEAD)
 
-		await logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
+		logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
 		if (player.discordId) {
 			await interaction.guild?.members
 				.resolve(player.discordId)
@@ -52,7 +57,8 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		return interaction.editReply({
-			content: "<:aukilling:762406290898288640><:aukilled:762406290952814632> 👻",
+			content:
+				"<:aukilling:762406290898288640><:aukilled:762406290952814632> 👻"
 		})
 	}
 }

@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@biomejs/biome':
+        specifier: ^1.4.1
+        version: 1.4.1
       '@sapphire/result':
         specifier: ^2.6.3
         version: 2.6.3
@@ -26,15 +29,6 @@ importers:
       dotenv-mono:
         specifier: ^1.3.10
         version: 1.3.10
-      eslint-config-custom:
-        specifier: workspace:*
-        version: link:packages/eslint-config-custom
-      prettier:
-        specifier: latest
-        version: 2.8.8
-      rome:
-        specifier: ^12.0.0
-        version: 12.0.0
       tsc-watch:
         specifier: ^6.0.4
         version: 6.0.4(typescript@4.9.5)
@@ -237,6 +231,74 @@ packages:
     dependencies:
       regenerator-runtime: 0.13.11
     dev: false
+
+  /@biomejs/biome@1.4.1:
+    resolution: {integrity: sha512-JccVAwPbhi37pdxbAGmaOBjUTKEwEjWAhl7rKkVVuXHo4MLASXJ5HR8BTgrImi4/7rTBsGz1tgVD1Kwv1CHGRg==}
+    engines: {node: '>=14.*'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@biomejs/cli-darwin-arm64': 1.4.1
+      '@biomejs/cli-darwin-x64': 1.4.1
+      '@biomejs/cli-linux-arm64': 1.4.1
+      '@biomejs/cli-linux-x64': 1.4.1
+      '@biomejs/cli-win32-arm64': 1.4.1
+      '@biomejs/cli-win32-x64': 1.4.1
+    dev: false
+
+  /@biomejs/cli-darwin-arm64@1.4.1:
+    resolution: {integrity: sha512-PZWy2Idndqux38p6AXSDQM2ldRAWi32bvb7bMbTN0ALzpWYMYnxd71ornatumSSJYoNhKmxzDLq+jct7nZJ79w==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@biomejs/cli-darwin-x64@1.4.1:
+    resolution: {integrity: sha512-soj3BWhnsM1M2JlzR09cibUzG1owJqetwj/Oo7yg0foijo9lNH9XWXZfJBYDKgW/6Fomn+CC2EcUS+hisQzt9g==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@biomejs/cli-linux-arm64@1.4.1:
+    resolution: {integrity: sha512-YIZqfJUg4F+fPsBTXxgD7EU2E5OAYbmYSl/snf4PevwfQCWE/omOFZv+NnIQmjYj9I7ParDgcJvanoA3/kO0JQ==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@biomejs/cli-linux-x64@1.4.1:
+    resolution: {integrity: sha512-9YOZw3qBd/KUj63A6Hn2zZgzGb2nbESM0qNmeMXgmqinVKM//uc4OgY5TuKITuGjMSvcVxxd4dX1IzYjV9qvNQ==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@biomejs/cli-win32-arm64@1.4.1:
+    resolution: {integrity: sha512-nWQbvkNKxYn/kCQ0yVF8kCaS3VzaGvtFSmItXiMknU4521LDjJ7tNWH12Gol+pIslrCbd4E1LhJa0a3ThRsBVg==}
+    engines: {node: '>=14.*'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@biomejs/cli-win32-x64@1.4.1:
+    resolution: {integrity: sha512-88fR2CQxQ4YLs2BUDuywWYQpUKgU3A3sTezANFc/4LGKQFFLV2yX+F7QAdZVkMHfA+RD9Xg178HomM/6mnTNPA==}
+    engines: {node: '>=14.*'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /@buape/functions@1.0.2:
     resolution: {integrity: sha512-HiZOZYUu49Enr1m/Z9ABQIanUSeezkW+S0fOKURO6SNVDTpu7ZYvihofeE9syDFxm6UC97K9lwelgyneHtKFGw==}
@@ -530,54 +592,6 @@ packages:
   /@prisma/engines@4.14.0:
     resolution: {integrity: sha512-PDNlhP/1vyTgmNyiucGqGCdXIp7HIkkvKO50si3y3PcceeHvqtiKPaH1iJdz63jCWMVMbj2MElSxXPOeBvEVIQ==}
     requiresBuild: true
-
-  /@rometools/cli-darwin-arm64@12.0.0:
-    resolution: {integrity: sha512-kEFCzU6cgy6vfY0mkMzq57ea3srqV5X2wyCAxjVfA2JF7fioq695uWhy7yOCBW+nUUFIz62N9v1nf/aYqX8XkA==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-darwin-x64@12.0.0:
-    resolution: {integrity: sha512-YDevVPKrkRFdjjM/3zOpOWI5mEY2ivjKM2eR8Yqv9xH3SZhyD/t67f/xo7Azp6NkGUVXSnHLGdkmIg+qrYgz5A==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-linux-arm64@12.0.0:
-    resolution: {integrity: sha512-n2LJg6eAZENUcJF99wjDeqQCr/40IqGUJDbX7NwiU1RvCy+RBZNmhcmSAaKOc6rCoLUcM9W5q+H4jfn4bWfJBA==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-linux-x64@12.0.0:
-    resolution: {integrity: sha512-VuQO4eOrKmfrLrc8KzMaZypz3i1rD9FXRxwOFk6ha16DNHV+17dRQYm7jRZ1p+HrXdjAJYTScxR/E03yGLThlQ==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-win32-arm64@12.0.0:
-    resolution: {integrity: sha512-lvOh5/B8YuQdI2ieGJnJ6CUMZxvVwA8+1VDkEZJyl5IEF8AXzbXYx4k6SFA5a79cfXEL9tJuJy0rn+Zs/+1yJQ==}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
-
-  /@rometools/cli-win32-x64@12.0.0:
-    resolution: {integrity: sha512-yTfz71k8+9QIDzglKnMbEMMv1JUk30qfeSomgEUG2v0qDSbSq0Gs1ff0H0dysYOHLvZZmWA3IheOY/SC8fj1nA==}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@rushstack/eslint-patch@1.2.0:
     resolution: {integrity: sha512-sXo/qW2/pAcmT43VoRKOJbDOfV3cYpq3szSVfIThQXNt+E4DfKj361vaAt3c88U5tPUxzEswam7GW48PJqtKAg==}
@@ -3001,12 +3015,6 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: false
 
-  /prettier@2.8.8:
-    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: false
-
   /prisma@4.14.0:
     resolution: {integrity: sha512-+5dMl1uxMQb4RepndY6AwR9xi1cDcaGFICu+ws6/Nmgt93mFPNj8tYxSfTdmfg+rkNrUId9rk/Ac2vTgLe/oXA==}
     engines: {node: '>=14.17'}
@@ -3160,20 +3168,6 @@ packages:
     dependencies:
       glob: 9.3.5
     dev: true
-
-  /rome@12.0.0:
-    resolution: {integrity: sha512-w/tLvLj5PGUCx3R+Kna08BMq4zL83Xzh9spvrqoWa3Nkzk16SkD8JSpyWWP9WhI2r3qv3Xvc7FnYZ4QDnjAiYg==}
-    engines: {node: '>=14.*'}
-    hasBin: true
-    requiresBuild: true
-    optionalDependencies:
-      '@rometools/cli-darwin-arm64': 12.0.0
-      '@rometools/cli-darwin-x64': 12.0.0
-      '@rometools/cli-linux-arm64': 12.0.0
-      '@rometools/cli-linux-x64': 12.0.0
-      '@rometools/cli-win32-arm64': 12.0.0
-      '@rometools/cli-win32-x64': 12.0.0
-    dev: false
 
   /run-applescript@5.0.0:
     resolution: {integrity: sha512-XcT5rBksx1QdIhlFOCtgZkB99ZEouFZ1E2Kc2LHqNW13U3/74YGdkQRmThTwxy4QIyookibDKYZOPqX//6BlAg==}

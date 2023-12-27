@@ -10,7 +10,7 @@ import {
 	PlayerAbilities,
 	AbilityRoleLink,
 	getPropertyDetails,
-	AbilityItemLink,
+	AbilityItemLink
 } from "../index.js"
 import { EmbedBuilder } from "discord.js"
 import { titleCase } from "@internal/functions"
@@ -22,8 +22,13 @@ export const itemEmbed = (
 	},
 	hideUsers = false
 ): EmbedBuilder => {
-	const embed = new EmbedBuilder().setTitle(item.name).setColor("Random").setImage(embedSpacer).setDescription("\n")
-	if (item.description) embed.data.description += `${item.description.slice(0, 1500)}\n\n`
+	const embed = new EmbedBuilder()
+		.setTitle(item.name)
+		.setColor("Random")
+		.setImage(embedSpacer)
+		.setDescription("\n")
+	if (item.description)
+		embed.data.description += `${item.description.slice(0, 1500)}\n\n`
 	embed.data.description += `Price: ${item.price}`
 	if (!hideUsers) {
 		embed.addFields({
@@ -33,7 +38,7 @@ export const itemEmbed = (
 					.filter((x) => x.amount > 0)
 					.map((x) => `${x.playerName} (${x.amount})`)
 					.join(", ") || "** **",
-			inline: true,
+			inline: true
 		})
 	}
 	return embed
@@ -49,7 +54,10 @@ export const playerEmbed = (
 		abilities?: PlayerAbilities[]
 	}
 ): EmbedBuilder => {
-	const embed = new EmbedBuilder().setTitle(player.name).setColor("Random").setImage(embedSpacer)
+	const embed = new EmbedBuilder()
+		.setTitle(player.name)
+		.setColor("Random")
+		.setImage(embedSpacer)
 
 	embed.data.description = `Money: ${player.money}\n`
 	embed.data.description += `Death Status: ${titleCase(player.deathStatus)}\n`
@@ -58,7 +66,7 @@ export const playerEmbed = (
 		embed.addFields({
 			name: `${player.roles.length} Roles:`,
 			value: `${player.roles.map((x) => x.roleName).join(", ")}` || "** **",
-			inline: true,
+			inline: true
 		})
 	if (player.items) {
 		embed.addFields({
@@ -68,18 +76,20 @@ export const playerEmbed = (
 					.filter((x) => x.amount > 0)
 					.map((x) => `${x.amount}x ${x.itemName}`)
 					.join(", ")}` || "** **",
-			inline: true,
+			inline: true
 		})
 	}
 	if (player.abilities) {
 		embed.addFields({
-			name: `${player.abilities.filter((x) => x.usesLeft > 0).length} Abilities:`,
+			name: `${
+				player.abilities.filter((x) => x.usesLeft > 0).length
+			} Abilities:`,
 			value:
 				`${player.abilities
 					.filter((x) => x.usesLeft > 0)
 					.map((x) => `${x.abilityName} - ${x.usesLeft}`)
 					.join("\n")}` || "** **",
-			inline: true,
+			inline: true
 		})
 	}
 	return embed
@@ -92,11 +102,19 @@ export const roleEmbed = (
 	},
 	hideUsers = false
 ): EmbedBuilder => {
-	const embed = new EmbedBuilder().setTitle(role.name).setColor("Random").setImage(embedSpacer)
+	const embed = new EmbedBuilder()
+		.setTitle(role.name)
+		.setColor("Random")
+		.setImage(embedSpacer)
 	if (role.description) embed.data.description = role.description.slice(0, 1500)
 	if (!hideUsers)
-		embed.addFields({ name: `${role.players.length} Players:`, value: role.players.map((x) => x.playerName).join(", ") || "** **", inline: true })
-	if (role.name.toLowerCase().includes("bezos")) embed.setImage("https://tenor.com/bgUX6.gif")
+		embed.addFields({
+			name: `${role.players.length} Players:`,
+			value: role.players.map((x) => x.playerName).join(", ") || "** **",
+			inline: true
+		})
+	if (role.name.toLowerCase().includes("bezos"))
+		embed.setImage("https://tenor.com/bgUX6.gif")
 	return embed
 }
 
@@ -107,14 +125,18 @@ export const abilityEmbed = (
 	},
 	hideUsers = false
 ): EmbedBuilder => {
-	const embed = new EmbedBuilder().setTitle(ability.name).setColor("Random").setImage(embedSpacer)
-	if (ability.description) embed.data.description = ability.description.slice(0, 1500)
+	const embed = new EmbedBuilder()
+		.setTitle(ability.name)
+		.setColor("Random")
+		.setImage(embedSpacer)
+	if (ability.description)
+		embed.data.description = ability.description.slice(0, 1500)
 	if (ability.linkedRoles.length > 0)
 		embed.addFields([
 			{
 				name: `Linked Roles:`,
-				value: ability.linkedRoles.map((x) => x.roleName).join(", ") || "** **",
-			},
+				value: ability.linkedRoles.map((x) => x.roleName).join(", ") || "** **"
+			}
 		])
 	embed.addFields([
 		{
@@ -122,19 +144,21 @@ export const abilityEmbed = (
 			value:
 				getPropertyDetails(ability.properties)
 					.map((x) => `${x.name} - ${x.description}`)
-					.join("\n") || "** **",
-		},
+					.join("\n") || "** **"
+		}
 	])
 	if (!hideUsers)
 		embed.addFields([
 			{
-				name: `${ability.playersWithAbility.filter((x) => x.usesLeft > 0).length} Players:`,
+				name: `${
+					ability.playersWithAbility.filter((x) => x.usesLeft > 0).length
+				} Players:`,
 				value:
 					ability.playersWithAbility
 						.filter((x) => x.usesLeft > 0)
 						.map((x) => x.playerName)
-						.join(", ") || "** **",
-			},
+						.join(", ") || "** **"
+			}
 		])
 	return embed
 }

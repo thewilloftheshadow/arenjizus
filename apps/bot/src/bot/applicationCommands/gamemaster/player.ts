@@ -1,11 +1,22 @@
-/* eslint-disable no-case-declarations */
 import { Prisma } from "@prisma/client"
-import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	EmbedBuilder
+} from "discord.js"
 import { logger } from "@internal/logger"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
-import database, { Death, addMoney, getAllPlayers, getPlayer, playerEmbed, removeMoney } from "@internal/database"
+import database, {
+	Death,
+	addMoney,
+	getAllPlayers,
+	getPlayer,
+	playerEmbed,
+	removeMoney
+} from "@internal/database"
 import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
 
 export default class Ping extends ApplicationCommand {
@@ -23,9 +34,9 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
-						},
-					],
+							autocomplete: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -36,14 +47,14 @@ export default class Ping extends ApplicationCommand {
 							type: ApplicationCommandOptionType.String,
 							name: "name",
 							description: "The name of the player",
-							required: true,
+							required: true
 						},
 						{
 							type: ApplicationCommandOptionType.Integer,
 							name: "money",
-							description: "The amount of money the player has",
-						},
-					],
+							description: "The amount of money the player has"
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -55,24 +66,24 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.Integer,
 							name: "money",
-							description: "The amount of money the player has",
+							description: "The amount of money the player has"
 						},
 						{
 							type: ApplicationCommandOptionType.Integer,
 							name: "robberies-left",
-							description: "The amount of robberies the player has left",
+							description: "The amount of robberies the player has left"
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "new-name",
-							description: "A new name for this player",
-						},
-					],
+							description: "A new name for this player"
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -84,9 +95,9 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
-						},
-					],
+							autocomplete: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -97,9 +108,9 @@ export default class Ping extends ApplicationCommand {
 							type: ApplicationCommandOptionType.Boolean,
 							name: "public-version",
 							description: "Whether to show the public version of the list",
-							required: false,
-						},
-					],
+							required: false
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -111,22 +122,22 @@ export default class Ping extends ApplicationCommand {
 							name: "from",
 							description: "The name of the player to transfer from",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.String,
 							name: "to",
 							description: "The name of the player to transfer to",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.Integer,
 							name: "amount",
 							description: "The amount to update the balance by",
-							required: true,
-						},
-					],
+							required: true
+						}
+					]
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -138,31 +149,46 @@ export default class Ping extends ApplicationCommand {
 							name: "name",
 							description: "The name of the player",
 							required: true,
-							autocomplete: true,
+							autocomplete: true
 						},
 						{
 							type: ApplicationCommandOptionType.User,
 							name: "user",
 							description: "The Discord user to link to",
-							required: true,
-						},
-					],
-				},
-			],
+							required: true
+						}
+					]
+				}
+			]
 		})
 	}
 
-	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+	override async autocomplete(
+		interaction: AutocompleteInteraction,
+		option: AutocompleteFocusedOption
+	) {
 		switch (option.name) {
 			case "name":
 			case "from":
 			case "to":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
-					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+					const players = allPlayers.filter((player: { name: string }) =>
+						player.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						players.map((player: { name: string }) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
 				}
-				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				return interaction.respond(
+					allPlayers.map((player: { name: string }) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
 		}
 	}
 
@@ -178,7 +204,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `A player named ${name} was not found in the database.`,
+							description: `A player named ${name} was not found in the database.`
 						})
 					)
 				}
@@ -186,22 +212,25 @@ export default class Ping extends ApplicationCommand {
 			}
 			case "create": {
 				const create: Prisma.PlayerCreateInput = {
-					name,
+					name
 				}
 				const money = interaction.options.getInteger("money")
 				if (money) create.money = money
 				const player = await database.player.create({
 					data: {
-						name,
+						name
 					},
 					include: {
 						roles: true,
 						items: true,
-						abilities: true,
-					},
+						abilities: true
+					}
 				})
 				logger.gameLog(`Player ${player.name} was created.`)
-				return interaction.editReply({ content: "Player successfully created:", embeds: [playerEmbed(player)] })
+				return interaction.editReply({
+					content: "Player successfully created:",
+					embeds: [playerEmbed(player)]
+				})
 			}
 			case "update": {
 				let player = await getPlayer(name)
@@ -209,7 +238,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${name} was not found in the database.`,
+							description: `The player ${name} was not found in the database.`
 						})
 					)
 				}
@@ -218,7 +247,9 @@ export default class Ping extends ApplicationCommand {
 				const newName = interaction.options.getString("new-name")
 				const robberiesLeft = interaction.options.getInteger("robberies-left")
 				logger.gameLog(
-					`Player ${player.name} was updated. ${money ? `Money: ${money}` : ""} ${newName ? `Name: ${newName}` : ""} ${
+					`Player ${player.name} was updated. ${
+						money ? `Money: ${money}` : ""
+					} ${newName ? `Name: ${newName}` : ""} ${
 						robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""
 					}`
 				)
@@ -227,70 +258,82 @@ export default class Ping extends ApplicationCommand {
 				if (robberiesLeft) data.robberiesLeft = robberiesLeft
 				player = await database.player.update({
 					where: {
-						id: player.id,
+						id: player.id
 					},
 					data,
 					include: {
 						items: true,
 						roles: true,
 						ballData: true,
-						abilities: true,
-					},
+						abilities: true
+					}
 				})
 				if (!player) throw new Error("Player not found")
-				return interaction.editReply({ content: "Player successfully updated:", embeds: [playerEmbed(player)] })
+				return interaction.editReply({
+					content: "Player successfully updated:",
+					embeds: [playerEmbed(player)]
+				})
 			}
 			case "delete": {
 				const player = await database.player.findFirst({
 					where: {
-						name,
-					},
+						name
+					}
 				})
 				if (!player) {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${name} was not found in the database.`,
+							description: `The player ${name} was not found in the database.`
 						})
 					)
 				}
 				await database.playerRoles.deleteMany({
 					where: {
 						player: {
-							id: player.id,
-						},
-					},
+							id: player.id
+						}
+					}
 				})
 				await database.playerItems.deleteMany({
 					where: {
 						player: {
-							id: player.id,
-						},
-					},
+							id: player.id
+						}
+					}
 				})
 
 				await database.player.delete({
 					where: {
-						id: player.id,
-					},
+						id: player.id
+					}
 				})
 				logger.gameLog(`Player ${player.name} was deleted.`)
-				return interaction.editReply({ content: "Player successfully deleted." })
+				return interaction.editReply({
+					content: "Player successfully deleted."
+				})
 			}
 			case "list": {
-				const publicVersion = interaction.options.getBoolean("public-version") || false
+				const publicVersion =
+					interaction.options.getBoolean("public-version") || false
 				const players = await getAllPlayers()
 				const embed = new EmbedBuilder()
 					.setTitle("All Players")
 					.setDescription("\n")
 					.setFooter({
 						text: publicVersion
-							? `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+							? `${
+									players.filter((x) => x.deathStatus === Death.ALIVE).length
+							  } alive, ${
 									players.filter((x) => x.deathStatus !== Death.ALIVE).length
 							  } dead`
-							: `${players.filter((x) => x.deathStatus === Death.ALIVE).length} alive, ${
+							: `${
+									players.filter((x) => x.deathStatus === Death.ALIVE).length
+							  } alive, ${
 									players.filter((x) => x.deathStatus === Death.DEAD).length
-							  } dead, ${players.filter((x) => x.deathStatus === Death.FAKED).length} faked`,
+							  } dead, ${
+									players.filter((x) => x.deathStatus === Death.FAKED).length
+							  } faked`
 					})
 				players
 					.sort((a, b) => {
@@ -306,13 +349,20 @@ export default class Ping extends ApplicationCommand {
 						const deathEmoji =
 							player.deathStatus === Death.ALIVE
 								? "😃"
-								: player.deathStatus === Death.DEAD || (player.deathStatus === Death.FAKED && publicVersion === true)
-								? "💀"
-								: player.deathStatus === Death.FAKED && publicVersion === false
-								? "👻"
-								: "??"
+								: player.deathStatus === Death.DEAD ||
+									  (player.deathStatus === Death.FAKED &&
+											publicVersion === true)
+								  ? "💀"
+								  : player.deathStatus === Death.FAKED &&
+										  publicVersion === false
+									  ? "👻"
+									  : "??"
 						embed.data.description += `${deathEmoji} ${player.name}${
-							publicVersion ? "\n" : ` - ${player.roles.map((role) => role.roleName).join(", ")} ($${player.money})\n`
+							publicVersion
+								? "\n"
+								: ` - ${player.roles
+										.map((role) => role.roleName)
+										.join(", ")} ($${player.money})\n`
 						}`
 					})
 
@@ -333,7 +383,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${from} was not found in the database.`,
+							description: `The player ${from} was not found in the database.`
 						})
 					)
 				}
@@ -341,7 +391,7 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${to} was not found in the database.`,
+							description: `The player ${to} was not found in the database.`
 						})
 					)
 				}
@@ -349,18 +399,25 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Insufficient funds",
-							description: `The player ${from} does not have enough money to transfer ${amount} to ${to}.`,
+							description: `The player ${from} does not have enough money to transfer ${amount} to ${to}.`
 						})
 					)
 				}
 				removeMoney(fromPlayer.name, amount)
 				addMoney(toPlayer.name, amount)
 				logger.gameLog(`Player ${from} transferred ${amount} to ${to}.`)
-				await interaction.editReply({ content: `${amount} has been successfully transferred.` })
+				await interaction.editReply({
+					content: `${amount} has been successfully transferred.`
+				})
 				try {
-					const toPlayerChannel = await getPlayerChannel(toPlayer.name, this.client)
+					const toPlayerChannel = await getPlayerChannel(
+						toPlayer.name,
+						this.client
+					)
 					if (toPlayerChannel) {
-						toPlayerChannel.send(`You have received ${amount} from ${fromPlayer.name}.`)
+						toPlayerChannel.send(
+							`You have received ${amount} from ${fromPlayer.name}.`
+						)
 					}
 				} catch (e) {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
@@ -369,46 +426,49 @@ export default class Ping extends ApplicationCommand {
 			}
 			case "link": {
 				const user = interaction.options.getUser("user", true)
-				if (!user) return interaction.editReply("You must specify a user to link to.")
+				if (!user)
+					return interaction.editReply("You must specify a user to link to.")
 				const player = await database.player.findFirst({
 					where: {
-						name,
-					},
+						name
+					}
 				})
 				if (!player) {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${name} was not found in the database.`,
+							description: `The player ${name} was not found in the database.`
 						})
 					)
 				}
 				const linked = await database.player.findFirst({
 					where: {
-						discordId: user.id,
-					},
+						discordId: user.id
+					}
 				})
 				if (linked) {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "User already linked",
-							description: `The user ${user.tag} is already linked to ${linked.name}.`,
+							description: `The user ${user.tag} is already linked to ${linked.name}.`
 						})
 					)
 				}
 				await database.player.update({
 					where: {
-						id: player.id,
+						id: player.id
 					},
 					data: {
-						discordId: user.id,
+						discordId: user.id
 					},
 					include: {
 						items: true,
-						roles: true,
-					},
+						roles: true
+					}
 				})
-				return interaction.editReply({ content: `Player has been linked to <@${user.id}>` })
+				return interaction.editReply({
+					content: `Player has been linked to <@${user.id}>`
+				})
 			}
 			default:
 				break

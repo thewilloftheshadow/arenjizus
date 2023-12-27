@@ -1,4 +1,7 @@
-import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js"
+import {
+	ApplicationCommandOptionType,
+	ChatInputCommandInteraction
+} from "discord.js"
 import { ApplicationCommand, BetterClient } from "@buape/lib"
 import { shuffle } from "@internal/functions"
 
@@ -11,9 +14,9 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.Integer,
 					name: "items",
 					description: "The items to shuffle, separated by commas",
-					required: true,
-				},
-			],
+					required: true
+				}
+			]
 		})
 	}
 

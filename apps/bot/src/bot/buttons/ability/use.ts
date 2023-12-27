@@ -13,29 +13,36 @@ export default class Buttony extends Button {
 		await interaction.deferReply({ ephemeral: true })
 		const member = await interaction.guild?.members.fetch(interaction.user.id)
 		if (!member) return
-		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return interaction.editReply("You are not a gamemaster.")
+		if (!member.roles.cache.has(serverIds.roles.gamemaster))
+			return interaction.editReply("You are not a gamemaster.")
 
 		const id = interaction.customId.split(":")[1]
 		const playerAbility = await database.playerAbilities.findFirst({
 			where: {
-				id,
+				id
 			},
 			include: {
 				player: true,
-				ability: true,
-			},
+				ability: true
+			}
 		})
 		if (!playerAbility) return interaction.editReply("Ability not found.")
 
 		await useAbility(playerAbility.playerName, playerAbility.abilityName)
-		const done = await runAbilityProperties(playerAbility.ability, "", this.client)
+		const done = await runAbilityProperties(
+			playerAbility.ability,
+			"",
+			this.client
+		)
 		await interaction.editReply(`Done\n${done ? done.join("\n") : ""}`)
-		await logger.gameLog(`${playerAbility.playerName} used ${playerAbility.abilityName}.`)
+		logger.gameLog(
+			`${playerAbility.playerName} used ${playerAbility.abilityName}.`
+		)
 		await interaction.followUp({
-			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`,
+			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`
 		})
 		await interaction.message.edit({
-			components: [],
+			components: []
 		})
 	}
 }

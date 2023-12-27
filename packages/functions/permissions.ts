@@ -28,5 +28,5 @@ export const permissionNames = new Map([
 	["MANAGE_NICKNAMES", "Manage Nicknames"],
 	["MANAGE_ROLES", "Manage Roles"],
 	["MANAGE_WEBHOOKS", "Manage Webhooks"],
-	["MANAGE_EMOJIS_AND_STICKERS", "Manage Emojis and Stickers"],
+	["MANAGE_EMOJIS_AND_STICKERS", "Manage Emojis and Stickers"]
 ])

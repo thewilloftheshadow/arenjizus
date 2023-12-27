@@ -8,7 +8,7 @@ export default class ChannelCreate extends EventHandler {
 		if (serverIds.inGameCategories.includes(channel.parentId || "")) {
 			await channel.permissionOverwrites.create(serverIds.roles.spectator, {
 				SendMessages: false,
-				ViewChannel: true,
+				ViewChannel: true
 			}) // spectator
 			logger.gameLog(`<#${channel.id}> was created`)
 		}

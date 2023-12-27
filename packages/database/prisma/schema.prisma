@@ -33,7 +33,11 @@ model Player {
 
     playersVotedFor Player[] @relation("votedFor")
 
+    location   Location? @relation(fields: [locationId], references: [id])
+    locationId String?
+
     @@index([votedForName])
+    @@index([locationId])
 }
 
 model PlayerBallData {
@@ -133,7 +137,7 @@ model AbilityItemLink {
 }
 
 model PlayerAbilities {
-    id         String  @id @unique @default(cuid())
+    id         String @id @unique @default(cuid())
     player     Player @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     playerName String
 
@@ -144,4 +148,12 @@ model PlayerAbilities {
 
     @@unique([playerName, abilityName])
     @@index([abilityName])
+}
+
+model Location {
+    id          String   @id @unique @default(cuid())
+    name        String   @unique
+    description String   @db.LongText
+    channel     String   @unique
+    players     Player[]
 }

@@ -1,7 +1,9 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-restricted-syntax */
 import { ApplicationCommand, BetterClient } from "@buape/lib"
-import { ChatInputCommandInteraction, GuildChannel, AttachmentBuilder } from "discord.js"
+import {
+	ChatInputCommandInteraction,
+	GuildChannel,
+	AttachmentBuilder
+} from "discord.js"
 
 type MessageStored = {
 	time: Date
@@ -14,7 +16,7 @@ type MessageStored = {
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("messagedump", client, {
-			description: `Dump the server`,
+			description: `Dump the server`
 		})
 	}
 
@@ -24,14 +26,24 @@ export default class Ping extends ApplicationCommand {
 		const channels = await interaction.guild.channels.fetch()
 		const messages: MessageStored[] = []
 
-		const blacklisted = ["highlights", "status-tracker", "discord-log", "welcome", "about-the-game", "bot-spam", "rwlboard"]
+		const blacklisted = [
+			"highlights",
+			"status-tracker",
+			"discord-log",
+			"welcome",
+			"about-the-game",
+			"bot-spam",
+			"rwlboard"
+		]
 
 		for await (const chan of channels.values()) {
 			if (chan?.isTextBased() && !blacklisted.includes(chan.name)) {
 				let lastID: string | undefined
-				// eslint-disable-next-line no-constant-condition
 				while (true) {
-					const channelMessages = await chan.messages.fetch({ limit: 100, ...(lastID && { before: lastID }) })
+					const channelMessages = await chan.messages.fetch({
+						limit: 100,
+						...(lastID && { before: lastID })
+					})
 					for await (const msg of channelMessages.values()) {
 						let content = msg.content.replace(/\n/g, " ")
 						msg.mentions.users.forEach((user) => {
@@ -42,7 +54,9 @@ export default class Ping extends ApplicationCommand {
 						})
 						msg.mentions.channels.forEach((channel) => {
 							const channell = channel as GuildChannel
-							content = content.split(`<#${channel.id}>`).join(`#${channell.name}`)
+							content = content
+								.split(`<#${channel.id}>`)
+								.join(`#${channell.name}`)
 						})
 						if (msg.mentions.repliedUser) {
 							content = `Replying to ${msg.mentions.repliedUser.tag}: ${content}`
@@ -52,7 +66,7 @@ export default class Ping extends ApplicationCommand {
 							id: msg.id,
 							author: msg.author ? msg.author.tag : "Unknown",
 							content,
-							channel: chan.name,
+							channel: chan.name
 						})
 					}
 					if (channelMessages.size === 0) break
@@ -60,10 +74,19 @@ export default class Ping extends ApplicationCommand {
 				}
 			}
 		}
-		const sortedMessages = messages.sort((a, b) => a.time.getTime() - b.time.getTime())
-		// eslint-disable-next-line no-tabs
-		const formatted = sortedMessages.map((msg) => `${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${msg.content || "No content"}`)
-		const attachment = new AttachmentBuilder(Buffer.from(formatted.join("\n"), "utf-8"), { name: "messages.tsv" })
+		const sortedMessages = messages.sort(
+			(a, b) => a.time.getTime() - b.time.getTime()
+		)
+		const formatted = sortedMessages.map(
+			(msg) =>
+				`${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${
+					msg.content || "No content"
+				}`
+		)
+		const attachment = new AttachmentBuilder(
+			Buffer.from(formatted.join("\n"), "utf-8"),
+			{ name: "messages.tsv" }
+		)
 		return interaction.editReply({ files: [attachment] })
 	}
 }

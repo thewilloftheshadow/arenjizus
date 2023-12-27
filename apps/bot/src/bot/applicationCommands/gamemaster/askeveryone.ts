@@ -1,4 +1,9 @@
-import { AutocompleteFocusedOption, AutocompleteInteraction, ChatInputCommandInteraction, TextChannel } from "discord.js"
+import {
+	AutocompleteFocusedOption,
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	TextChannel
+} from "discord.js"
 import { ApplicationCommand } from "@buape/lib"
 import { ApplicationCommandOptionType } from "discord.js"
 import { BetterClient } from "@buape/lib"
@@ -13,34 +18,49 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.String,
 					name: "question",
 					description: "The question to ask",
-					required: true,
+					required: true
 				},
 				{
 					type: ApplicationCommandOptionType.String,
 					name: "only-user",
 					description: "Only ask one user",
 					required: false,
-					autocomplete: true,
+					autocomplete: true
 				},
 				{
 					type: ApplicationCommandOptionType.Boolean,
 					name: "ping",
 					description: "Ping the user",
-					required: false,
-				},
-			],
+					required: false
+				}
+			]
 		})
 	}
 
-	override async autocomplete(interaction: AutocompleteInteraction, option: AutocompleteFocusedOption) {
+	override async autocomplete(
+		interaction: AutocompleteInteraction,
+		option: AutocompleteFocusedOption
+	) {
 		switch (option.name) {
 			case "only-user":
 				const allPlayers = await getAllPlayers()
 				if (option.value) {
-					const players = allPlayers.filter((player: { name: string }) => player.name.toLowerCase().includes(option.value.toLowerCase()))
-					return interaction.respond(players.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+					const players = allPlayers.filter((player: { name: string }) =>
+						player.name.toLowerCase().includes(option.value.toLowerCase())
+					)
+					return interaction.respond(
+						players.map((player: { name: string }) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
 				}
-				return interaction.respond(allPlayers.map((player: { name: string }) => ({ name: player.name, value: player.name })))
+				return interaction.respond(
+					allPlayers.map((player: { name: string }) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
 		}
 	}
 
@@ -53,12 +73,20 @@ export default class Ping extends ApplicationCommand {
 		if (ping === null) ping = true
 
 		players.forEach(async (x) => {
-			if (interaction.options.getString("only-user") && interaction.options.getString("only-user") !== x.name) return
+			if (
+				interaction.options.getString("only-user") &&
+				interaction.options.getString("only-user") !== x.name
+			)
+				return
 			const user = x.discordId
 			if (!user) return
 			const name = x.name.replace(/ /g, "-").toLowerCase()
-			const message = interaction.options.getString("question", true).replace(/;;/g, "\n")
-			const theirChannel = interaction.guild?.channels.cache.find((c) => c.name === `gm-${name.toLowerCase().replace(/ /g, "-")}`)
+			const message = interaction.options
+				.getString("question", true)
+				.replace(/;;/g, "\n")
+			const theirChannel = interaction.guild?.channels.cache.find(
+				(c) => c.name === `gm-${name.toLowerCase().replace(/ /g, "-")}`
+			)
 			if (!theirChannel) {
 				interaction.followUp(`Couldn't find channel for ${x.name} (${user})!`)
 			} else {
@@ -73,8 +101,9 @@ export default class Ping extends ApplicationCommand {
 				hook.send({
 					content: `${ping ? `<@${user}> ` : ""}${message}`,
 					username: "Kiyori",
-					avatarURL: "https://us-east-1.tixte.net/uploads/x.theshadow.xyz/kiyori.jpeg",
-					allowedMentions: { users: [user] },
+					avatarURL:
+						"https://us-east-1.tixte.net/uploads/x.theshadow.xyz/kiyori.jpeg",
+					allowedMentions: { users: [user] }
 				})
 			}
 		})

@@ -11,14 +11,15 @@ export default class Buttony extends Button {
 		await interaction.deferUpdate()
 		const member = await interaction.guild?.members.fetch(interaction.user.id)
 		if (!member) return
-		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return interaction.editReply("You are not a gamemaster.")
+		if (!member.roles.cache.has(serverIds.roles.gamemaster))
+			return interaction.editReply("You are not a gamemaster.")
 
 		await interaction.message.edit({
-			components: [],
+			components: []
 		})
 
 		interaction.followUp({
-			content: "Ability use has been denied.",
+			content: "Ability use has been denied."
 		})
 	}
 }

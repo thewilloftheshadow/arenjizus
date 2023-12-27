@@ -4,7 +4,7 @@ import { ButtonInteraction } from "discord.js"
 export default class Buttony extends Button {
 	constructor(client: BetterClient) {
 		super("cancelAction", client, {
-			authorOnly: true,
+			authorOnly: true
 		})
 	}
 
@@ -15,7 +15,7 @@ export default class Buttony extends Button {
 			content: "Action cancelled.",
 			embeds: [],
 			components: [],
-			attachments: [],
+			attachments: []
 		})
 	}
 }

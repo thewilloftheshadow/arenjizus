@@ -4,9 +4,7 @@ import { Message } from "discord.js"
 
 export default class Sudo extends TextCommand {
 	constructor(client: BetterClient) {
-		super("sudo", client, {
-			
-		})
+		super("sudo", client, {})
 	}
 
 	override async run(message: Message, args: string[]) {
