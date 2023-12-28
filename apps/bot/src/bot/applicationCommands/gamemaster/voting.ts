@@ -19,6 +19,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("voting", client, {
 			description: `Manage voting in the game`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.Subcommand,

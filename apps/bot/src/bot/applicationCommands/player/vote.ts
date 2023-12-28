@@ -15,6 +15,7 @@ export default class Vote extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("vote", client, {
 			description: `Vote for a player`,
+			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

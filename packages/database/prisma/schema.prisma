@@ -156,7 +156,7 @@ model Location {
     id          String   @id @unique @default(cuid())
     name        String   @unique
     description String   @db.LongText
-    channel     String   @unique
+    channel     String?  @unique
     players     Player[]
 }
 

@@ -11,6 +11,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("kill", client, {
 			description: `Kill a player`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

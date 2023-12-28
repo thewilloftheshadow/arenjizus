@@ -17,6 +17,7 @@ export default class Want extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("wanted", client, {
 			description: `Mark a player as wanted`,
+			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

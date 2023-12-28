@@ -23,6 +23,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("player", client, {
 			description: `Manage a player in the game`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.Subcommand,
@@ -35,6 +36,13 @@ export default class Ping extends ApplicationCommand {
 							description: "The name of the player",
 							required: true,
 							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.Boolean,
+							name: "public-version",
+							description:
+								"Whether to show the public version of the player (hiding notes, etc)",
+							required: true
 						}
 					]
 				},
@@ -228,7 +236,9 @@ export default class Ping extends ApplicationCommand {
 						})
 					)
 				}
-				return interaction.editReply({ embeds: [playerEmbed(player)] })
+				return interaction.editReply({
+					embeds: [playerEmbed(player, interaction.options.getBoolean("public-version", true))],
+				})
 			}
 			case "create": {
 				const create: Prisma.PlayerCreateInput = {

@@ -25,6 +25,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("item", client, {
 			description: `Manage an item in the game`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.Subcommand,

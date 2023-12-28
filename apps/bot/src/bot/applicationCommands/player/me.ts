@@ -6,7 +6,8 @@ import { ChatInputCommandInteraction } from "discord.js"
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("me", client, {
-			description: `See your own data`
+			description: `See your own data`,
+			restriction: "player",
 		})
 	}
 

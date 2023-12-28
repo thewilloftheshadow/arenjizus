@@ -6,6 +6,7 @@ import {
 	AbilityItemLink,
 	AbilityRoleLink,
 	Item,
+	Location,
 	Player,
 	PlayerAbilities,
 	PlayerBallData,
@@ -179,5 +180,27 @@ export const abilityEmbed = (
 						.join(", ") || "** **"
 			}
 		])
+	return embed
+}
+
+export const locationEmbed = (
+	location: Location & {
+		players: Player[]
+	}
+): EmbedBuilder => {
+	const embed = new EmbedBuilder()
+		.setTitle(location.name)
+		.setColor("Random")
+		.setImage(embedSpacer)
+	if (location.description)
+		embed.data.description = location.description.slice(0, 1500)
+	if (location.players) {
+		embed.addFields([
+			{
+				name: `Players:`,
+				value: location.players.map((x) => x.name).join(", ") || "** **"
+			}
+		])
+	}
 	return embed
 }

@@ -8,6 +8,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("log", client, {
 			description: `Add an entry to the game log`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

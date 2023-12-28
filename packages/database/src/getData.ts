@@ -123,5 +123,16 @@ export const getPlayerAbility = async (
 }
 
 export const getAllLocations = async () => {
-	return await database.location.findMany()
+	return await database.location.findMany({ include: { players: true } })
+}
+
+export const getLocation = async (name: string) => {
+	return await database.location.findFirst({
+		where: {
+			name
+		},
+		include: {
+			players: true
+		}
+	})
 }

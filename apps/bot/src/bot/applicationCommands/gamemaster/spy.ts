@@ -14,6 +14,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("spy", client, {
 			description: `Send messages from one channel into another`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.Channel,

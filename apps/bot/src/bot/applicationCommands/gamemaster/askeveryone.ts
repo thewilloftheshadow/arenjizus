@@ -13,6 +13,7 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("askeveryone", client, {
 			description: `Ask everyone something, Office cutaway style`,
+			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
