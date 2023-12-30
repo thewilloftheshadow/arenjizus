@@ -1,6 +1,7 @@
 import { ApplicationCommand, BetterClient } from "@buape/lib"
 import database, { getDiscordPlayer } from "@internal/database"
-import { generateErrorMessage } from "@internal/functions"
+import { generateErrorMessage, generateTimestamp } from "@internal/functions"
+import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
 	ChatInputCommandInteraction
@@ -24,7 +25,7 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply({ ephemeral: true })
+		await interaction.deferReply()
 		const player = await getDiscordPlayer(interaction.user.id)
 		if (!player) {
 			return interaction.editReply(
@@ -63,10 +64,19 @@ export default class Ping extends ApplicationCommand {
 				}
 			}
 		})
+		logger.gameLog(
+			`${player.name} invested ${amount} money, ends ${generateTimestamp({
+				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
+				type: "R"
+			})}`
+		)
 		return interaction.editReply({
 			content: `You have invested ${amount} money, and will receive ${
 				amount * 2
-			} money in 24 hours`
+			} money ${generateTimestamp({
+				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
+				type: "R"
+			})}`
 		})
 	}
 }
