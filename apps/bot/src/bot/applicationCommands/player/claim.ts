@@ -5,7 +5,6 @@ import {
 	generateSuccessMessage
 } from "@internal/functions"
 import { ChatInputCommandInteraction } from "discord.js"
-import { serverIds } from "@internal/config"
 import { logger } from "@internal/logger"
 
 export default class Ping extends ApplicationCommand {
@@ -31,7 +30,11 @@ export default class Ping extends ApplicationCommand {
 				)
 			)
 		}
-		const kiaiLevel = await kiai.leveling.getMember(serverIds.guild, player.id)
+		const kiaiLevel = await kiai.leveling.getMember(
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
+			interaction.guildId!,
+			player.id
+		)
 		if (kiaiLevel.currentLevel > player.lastKiaiLevel) {
 			await database.player.update({
 				where: {
