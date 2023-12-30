@@ -106,7 +106,7 @@ export const playerEmbed = (
 					.map(
 						(x) =>
 							`$${x.amount} investment ends ${generateTimestamp({
-								timestamp: x.createdAt,
+								timestamp: x.expiresAt,
 								type: "R"
 							})}`
 					)
