@@ -466,7 +466,7 @@ export default class Ping extends ApplicationCommand {
 				})
 				if (toPlayerChannel) {
 					toPlayerChannel.send(
-						`You have received ${amount} from ${fromPlayer.name}.`
+						`You have received ${amount}x ${item.name} from ${fromPlayer.name}.`
 					)
 				} else {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
