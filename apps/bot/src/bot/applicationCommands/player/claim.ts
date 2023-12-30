@@ -45,7 +45,7 @@ export default class Ping extends ApplicationCommand {
 				}
 			})
 			logger.gameLog(
-				`Player ${player.id} claimed $10 from Kiai for level ${kiaiLevel.currentLevel}`
+				`${player.name} claimed $10 from Kiai for level ${kiaiLevel.currentLevel}`
 			)
 			return interaction.editReply(
 				generateSuccessMessage({
@@ -55,14 +55,14 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 		logger.gameLog(
-			`Player ${player.id} tried to claim $10 from Kiai but did not actually level up (last checked level was ${player.lastKiaiLevel})`
+			`${player.name} tried to claim $10 from Kiai but did not actually level up (last checked level was ${player.lastKiaiLevel}, Kiai reported ${kiaiLevel.currentLevel})`
 		)
 		return interaction.editReply(
 			generateErrorMessage(
 				{
 					title: "Already claimed",
 					description:
-						"You have already claimed your $10 from Kiai. Stop trying to scam poor bots out of their money >:("
+						"You have already claimed your $10 from Kiai. Stop trying to scam poor bots out of their money >:(\n||If you did level up, try running this again in a couple minutes||"
 				},
 				false,
 				true
