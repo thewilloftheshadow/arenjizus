@@ -69,11 +69,26 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
+		if (!this.client.user || !interaction.channel) return
 		await interaction.reply({
 			content: `Robbery has begun...`,
 			ephemeral: true
 		})
-		if (!this.client.user || !interaction.channel) return
+
+		const isDay = (
+			await database.keyV.upsert({
+				where: {
+					key: "voteEnabled"
+				},
+				create: {
+					key: "voteEnabled",
+					valueBoolean: false
+				},
+				update: {
+					valueBoolean: false
+				}
+			})
+		).valueBoolean
 
 		const who = interaction.options.getString("who", true)
 		const amountInput = interaction.options.getInteger("amount", true)
@@ -100,6 +115,12 @@ export default class Ping extends ApplicationCommand {
 		if (!whoPlayer.discordId) {
 			return interaction.editReply(
 				`Player ${who} does not have a Discord account linked.`
+			)
+		}
+
+		if (!isDay && whoPlayer.locationId !== byPlayer.locationId) {
+			return interaction.editReply(
+				`You are not in the same location as ${who}.`
 			)
 		}
 
