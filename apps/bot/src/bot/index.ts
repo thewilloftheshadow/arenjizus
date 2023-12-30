@@ -9,7 +9,7 @@ const client = new BetterClient({
 	},
 	supportServer: "https://example.com",
 	accessSettings: {
-		server: "1105539807444217866",
+		server: config.serverIds.guild,
 		roles: {
 			gamemaster: [config.serverIds.roles.gamemaster],
 			player: [config.serverIds.roles.player],

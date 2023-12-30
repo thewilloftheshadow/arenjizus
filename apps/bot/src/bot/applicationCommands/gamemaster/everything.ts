@@ -15,7 +15,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("everything", client, {
 			description: `See a list of *everything*`,
-			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.Boolean,

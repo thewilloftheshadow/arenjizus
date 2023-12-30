@@ -14,7 +14,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("loot", client, {
 			description: `Loot a player's items and money`,
-			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

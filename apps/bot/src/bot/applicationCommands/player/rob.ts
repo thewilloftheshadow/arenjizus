@@ -22,7 +22,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("rob", client, {
 			description: `Initiate a robbery`,
-			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

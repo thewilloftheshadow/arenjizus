@@ -7,7 +7,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("me", client, {
 			description: `See your own data`,
-			restriction: "player",
 		})
 	}
 

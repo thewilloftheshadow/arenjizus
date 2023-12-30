@@ -21,7 +21,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("use", client, {
 			description: `Use one of your abilities`,
-			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

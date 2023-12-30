@@ -18,7 +18,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("travel", client, {
 			description: `Travel to a new location`,
-			restriction: "player",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,

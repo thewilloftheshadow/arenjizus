@@ -11,7 +11,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("resurrect", client, {
 			description: `Resurrect a player`,
-			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
