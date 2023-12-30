@@ -22,6 +22,7 @@ model Player {
     money         Int               @default(10)
     deathStatus   Death             @default(ALIVE)
     robberiesLeft Int               @default(3)
+    lastKiaiLevel Int               @default(0)
     roles         PlayerRoles[]
     items         PlayerItems[]
     ballData      PlayerBallData?
