@@ -84,9 +84,7 @@ export default class Ping extends ApplicationCommand {
 					key: "voteEnabled",
 					valueBoolean: false
 				},
-				update: {
-					valueBoolean: false
-				}
+				update: {}
 			})
 		).valueBoolean
 
