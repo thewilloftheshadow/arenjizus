@@ -130,9 +130,13 @@ export default class Ping extends ApplicationCommand {
 		}
 		if (!msg) return
 
-		await interaction.followUp(
-			`<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})! || <@&${serverIds.roles.gamemaster}>}`
-		)
+		await interaction.followUp({
+			content: `<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})! ||<@&${serverIds.roles.gamemaster}>||`,
+			allowedMentions: {
+				users: [interaction.user.id],
+				roles: [serverIds.roles.gamemaster]
+			}
+		})
 
 		const collected = await whoChannel.awaitMessages({
 			filter: (m) => m.author.id === whoPlayer.discordId,
