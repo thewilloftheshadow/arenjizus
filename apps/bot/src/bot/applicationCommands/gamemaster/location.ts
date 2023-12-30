@@ -58,6 +58,13 @@ export default class Ping extends ApplicationCommand {
 							name: "description",
 							description: "The description of the location",
 							required: true
+						},
+						{
+							type: ApplicationCommandOptionType.Integer,
+							name: "max-players",
+							description: "The max number of players in this location",
+							required: false,
+							minValue: 0
 						}
 					]
 				},
@@ -78,6 +85,13 @@ export default class Ping extends ApplicationCommand {
 							name: "description",
 							description: "The description of the location",
 							required: true
+						},
+						{
+							type: ApplicationCommandOptionType.Integer,
+							name: "max-players",
+							description: "The max number of players in this location",
+							required: false,
+							minValue: 0
 						}
 					]
 				},
@@ -168,12 +182,15 @@ export default class Ping extends ApplicationCommand {
 						})
 					)
 				}
+				const maxPlayers =
+					interaction.options.getInteger("max-players") || location.maxPlayers
 				const newLocation = await database.location.update({
 					where: {
 						id: location.id
 					},
 					data: {
-						description: interaction.options.getString("description") || ""
+						description: interaction.options.getString("description") || "",
+						maxPlayers
 					},
 					include: {
 						players: true
@@ -189,7 +206,8 @@ export default class Ping extends ApplicationCommand {
 				const location = await database.location.create({
 					data: {
 						name,
-						description: interaction.options.getString("description") || ""
+						description: interaction.options.getString("description") || "",
+						maxPlayers: interaction.options.getInteger("max-players")
 					},
 					include: {
 						players: true
@@ -293,6 +311,12 @@ export default class Ping extends ApplicationCommand {
 						}
 					)
 				}
+				database.location.updateMany({
+					where: {},
+					data: {
+						channel: null
+					}
+				})
 				return interaction.editReply({
 					content: "Channels successfully closed."
 				})

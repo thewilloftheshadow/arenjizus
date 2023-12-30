@@ -157,6 +157,7 @@ model Location {
     name        String   @unique
     description String   @db.LongText
     channel     String?  @unique
+    maxPlayers  Int?
     players     Player[]
 }
 

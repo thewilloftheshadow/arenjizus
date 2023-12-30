@@ -82,6 +82,18 @@ export default class Ping extends ApplicationCommand {
 				)
 			)
 		}
+		if (location.maxPlayers && location.players.length >= location.maxPlayers) {
+			return interaction.editReply(
+				generateErrorMessage(
+					{
+						title: "Location full",
+						description: `The location ${locationName} is full.`
+					},
+					false,
+					true
+				)
+			)
+		}
 
 		await database.player.update({
 			where: { id: player.id },
