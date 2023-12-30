@@ -5,7 +5,14 @@ export const getDiscordPlayer = async (discordId: string) => {
 		where: {
 			discordId
 		},
-		include: { roles: true, items: true, ballData: true, abilities: true }
+		include: {
+			roles: true,
+			items: true,
+			ballData: true,
+			abilities: true,
+			investments: true,
+			notes: true
+		}
 	})
 }
 
