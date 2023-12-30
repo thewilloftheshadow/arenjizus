@@ -447,17 +447,15 @@ export default class Ping extends ApplicationCommand {
 				await interaction.editReply({
 					content: `${amount} has been successfully transferred.`
 				})
-				try {
-					const toPlayerChannel = await getPlayerChannel(
-						toPlayer.name,
-						this.client
+				const toPlayerChannel = await getPlayerChannel(
+					toPlayer.name,
+					this.client
+				)
+				if (toPlayerChannel) {
+					toPlayerChannel.send(
+						`You have received ${amount} from ${fromPlayer.name}.`
 					)
-					if (toPlayerChannel) {
-						toPlayerChannel.send(
-							`You have received ${amount} from ${fromPlayer.name}.`
-						)
-					}
-				} catch (_e) {
+				} else {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
 				}
 				return

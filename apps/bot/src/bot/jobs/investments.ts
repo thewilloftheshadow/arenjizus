@@ -1,9 +1,9 @@
 import { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database from "@internal/database"
+import { getPlayerChannel } from "@internal/functions"
 import { logger } from "@internal/logger"
 import Cron from "croner"
-import { ChannelType, GuildTextBasedChannel } from "discord.js"
 
 const startCron = (client: BetterClient) => {
 	Cron("* * * * *", async () => {
@@ -29,11 +29,7 @@ const startCron = (client: BetterClient) => {
 					}
 				}
 			})
-			const channel = guild.channels.cache.find(
-				(c) =>
-					c.name === `gm-${investment.playerName.toLowerCase()}` &&
-					c.type === ChannelType.GuildText
-			) as GuildTextBasedChannel
+			const channel = await getPlayerChannel(investment.playerName, client)
 			if (!channel) {
 				logger.error(`Could not find channel for ${investment.playerName}`)
 				continue
