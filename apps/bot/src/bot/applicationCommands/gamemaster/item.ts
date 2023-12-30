@@ -12,7 +12,7 @@ import database, {
 	removeMoney,
 	removePlayerItem
 } from "@internal/database"
-import { generateErrorMessage } from "@internal/functions"
+import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
 	AutocompleteFocusedOption,
@@ -457,9 +457,21 @@ export default class Ping extends ApplicationCommand {
 				removePlayerItem(fromPlayer.name, item.name, amount)
 				givePlayerItem(toPlayer.name, item.name, amount)
 				logger.gameLog(`${from} gave ${amount} ${name} to ${to}.`)
-				return interaction.editReply({
+				const toPlayerChannel = await getPlayerChannel(
+					toPlayer.name,
+					this.client
+				)
+				interaction.editReply({
 					content: `${amount}x ${item.name} has been successfully transferred.`
 				})
+				if (toPlayerChannel) {
+					toPlayerChannel.send(
+						`You have received ${amount} from ${fromPlayer.name}.`
+					)
+				} else {
+					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
+				}
+				return
 			}
 			default:
 				break
