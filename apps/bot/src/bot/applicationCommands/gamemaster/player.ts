@@ -220,7 +220,9 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply()
+		await interaction.deferReply({
+			ephemeral: interaction.options.getBoolean("public-version", true)
+		})
 		const type = interaction.options.getSubcommand(false)
 		const name = interaction.options.getString("name") || ""
 
@@ -236,7 +238,12 @@ export default class Ping extends ApplicationCommand {
 					)
 				}
 				return interaction.editReply({
-					embeds: [playerEmbed(player, interaction.options.getBoolean("public-version", true))],
+					embeds: [
+						playerEmbed(
+							player,
+							interaction.options.getBoolean("public-version", true)
+						)
+					]
 				})
 			}
 			case "create": {
