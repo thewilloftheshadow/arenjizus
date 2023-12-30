@@ -65,13 +65,13 @@ export default class Ping extends ApplicationCommand {
 			}
 		})
 		logger.gameLog(
-			`${player.name} invested ${amount} money, ends ${generateTimestamp({
+			`${player.name} invested $${amount}, ends ${generateTimestamp({
 				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
 				type: "R"
 			})}`
 		)
 		return interaction.editReply({
-			content: `You have invested ${amount} money, and will receive ${
+			content: `You have invested $${amount}, and will receive ${
 				amount * 2
 			} money ${generateTimestamp({
 				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
