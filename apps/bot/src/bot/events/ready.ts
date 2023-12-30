@@ -29,10 +29,13 @@ export default class Ready extends EventHandler {
 async function loadAndStartCrons(client: BetterClient) {
 	logger.info("[CRON] Starting CRONs...")
 	try {
-		const jobs = getFiles(join(client.__dirname, "../jobs"), "js")
+		const jobs = getFiles(join(client.__dirname, "./src/bot/jobs"), "js")
+
 		for await (const job of jobs) {
 			logger.info(`[CRON] Starting CRON "${job}"`)
-			const { startCron } = await import(join(__dirname, "../jobs", job))
+			const { startCron } = await import(
+				join(client.__dirname, "./src/bot/jobs", job)
+			)
 			startCron(client)
 			logger.info(`[CRON] Started CRON "${job}"`)
 		}

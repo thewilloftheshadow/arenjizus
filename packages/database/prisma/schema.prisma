@@ -37,7 +37,8 @@ model Player {
     location   Location? @relation(fields: [locationId], references: [id])
     locationId String?
 
-    notes PlayerNotes[]
+    notes       PlayerNotes[]
+    investments Investment[]
 
     @@index([votedForName])
     @@index([locationId])
@@ -169,6 +170,17 @@ model PlayerNotes {
     note       String   @db.LongText
     author     String
     createdAt  DateTime @default(now())
+
+    @@index([playerName])
+}
+
+model Investment {
+    id         String   @id @unique @default(cuid())
+    player     Player   @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
+    playerName String
+    amount     Int
+    createdAt  DateTime @default(now())
+    expiresAt  DateTime
 
     @@index([playerName])
 }

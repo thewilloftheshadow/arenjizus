@@ -1,7 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
-import { Death, getPlayer, toggleDeath } from "@internal/database"
+import database, { Death, getPlayer, toggleDeath } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import { ChatInputCommandInteraction } from "discord.js"
@@ -40,6 +40,28 @@ export default class Ping extends ApplicationCommand {
 					description: `Could not find player ${name}`
 				})
 			)
+		}
+
+		const bodyItem = database.item.findFirst({
+			where: {
+				name: `${player.name}'s Body`
+			}
+		})
+		if (!bodyItem) {
+			database.item.create({
+				data: {
+					name: `${player.name}'s Body`,
+					price: 0,
+					description: "The body of a dead player",
+					players: {
+						create: {
+							playerName: player.name,
+							amount: 1
+						}
+					}
+				}
+			})
+			logger.gameLog(`A body has been generated for ${player.name}`)
 		}
 
 		await toggleDeath(name, fake ? Death.FAKED : Death.DEAD)

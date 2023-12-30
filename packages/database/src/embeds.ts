@@ -5,6 +5,7 @@ import {
 	Ability,
 	AbilityItemLink,
 	AbilityRoleLink,
+	Investment,
 	Item,
 	Location,
 	Player,
@@ -30,7 +31,7 @@ export const itemEmbed = (
 		.setImage(embedSpacer)
 		.setDescription("\n")
 	if (item.description)
-		embed.data.description += `${item.description.slice(0, 1500)}\n\n`
+		embed.data.description += `${item.description.slice(0, 1500)}`
 	embed.data.description += `Price: ${item.price}`
 	if (!hideUsers) {
 		embed.addFields({
@@ -55,6 +56,7 @@ export const playerEmbed = (
 		playersVotedFor?: Player[]
 		abilities?: PlayerAbilities[]
 		notes?: PlayerNotes[]
+		investments?: Investment[]
 	},
 	gamemaster = false
 ): EmbedBuilder => {
@@ -96,6 +98,22 @@ export const playerEmbed = (
 			inline: true
 		})
 	}
+	if (player.investments) {
+		embed.addFields({
+			name: `${player.investments.length} Investments:`,
+			value:
+				`${player.investments
+					.map(
+						(x) =>
+							`${x.amount} ends ${generateTimestamp({
+								timestamp: x.createdAt,
+								type: "R"
+							})}`
+					)
+					.join("\n")}` || "** **",
+			inline: true
+		})
+	}
 	if (player.notes && gamemaster) {
 		embed.addFields([
 			{
@@ -112,6 +130,7 @@ export const playerEmbed = (
 			}
 		])
 	}
+
 	return embed
 }
 

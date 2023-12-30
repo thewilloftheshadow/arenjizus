@@ -14,7 +14,14 @@ export const getPlayer = async (name: string) => {
 		where: {
 			name
 		},
-		include: { roles: true, items: true, ballData: true, abilities: true }
+		include: {
+			roles: true,
+			items: true,
+			ballData: true,
+			abilities: true,
+			investments: true,
+			notes: true
+		}
 	})
 }
 

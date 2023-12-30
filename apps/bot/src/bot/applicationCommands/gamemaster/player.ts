@@ -301,7 +301,9 @@ export default class Ping extends ApplicationCommand {
 						items: true,
 						roles: true,
 						ballData: true,
-						abilities: true
+						abilities: true,
+						notes: true,
+						investments: true
 					}
 				})
 				if (!player) throw new Error("Player not found")

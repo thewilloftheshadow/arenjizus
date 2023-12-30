@@ -1,6 +1,6 @@
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
-import {
+import database, {
 	getPlayer,
 	givePlayerItem,
 	removePlayerItem,
@@ -57,11 +57,24 @@ export default class Ping extends ApplicationCommand {
 			givePlayerItem(to.name, item.itemName, item.amount)
 			removePlayerItem(from.name, item.itemName, item.amount)
 		}
+		const investmentCount = from.investments.length
+		await database.investment.updateMany({
+			where: {
+				player: {
+					id: from.id
+				}
+			},
+			data: {
+				playerName: to.name
+			}
+		})
 		await setPlayerMoney(to.name, to.money + from.money)
 		await setPlayerMoney(from.name, 0)
 		await interaction.editReply(`Looted ${from.name} to ${to.name}`)
 		logger.gameLog(
-			`${to.name} looted ${from.name} and got ${from.money} money and ${
+			`${to.name} looted ${from.name} and got ${
+				from.money
+			} money, ${investmentCount} investments, and ${
 				from.items.length
 			} items: ${itemList.map((i) => `${i.name} x${i.amount}`).join(", ")}`
 		)
