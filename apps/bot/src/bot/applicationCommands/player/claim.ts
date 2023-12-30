@@ -17,7 +17,7 @@ export default class Ping extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply({ ephemeral: true })
 		const player = await getDiscordPlayer(interaction.user.id)
-		if (!player) {
+		if (!player || !player.discordId) {
 			return interaction.editReply(
 				generateErrorMessage(
 					{
@@ -33,8 +33,10 @@ export default class Ping extends ApplicationCommand {
 		const kiaiLevel = await kiai.leveling.getMember(
 			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			interaction.guildId!,
-			player.id
+			player.discordId
 		)
+
+		console.log(kiaiLevel)
 		if (kiaiLevel.currentLevel > player.lastKiaiLevel) {
 			await database.player.update({
 				where: {
