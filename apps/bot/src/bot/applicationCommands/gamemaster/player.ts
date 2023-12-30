@@ -221,7 +221,7 @@ export default class Ping extends ApplicationCommand {
 
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply({
-			ephemeral: interaction.options.getBoolean("public-version", true)
+			ephemeral: !interaction.options.getBoolean("public-version", true)
 		})
 		const type = interaction.options.getSubcommand(false)
 		const name = interaction.options.getString("name") || ""
