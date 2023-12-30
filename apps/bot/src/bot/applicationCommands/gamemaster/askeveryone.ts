@@ -77,7 +77,7 @@ export default class Ping extends ApplicationCommand {
 				interaction.options.getString("only-user") &&
 				interaction.options.getString("only-user") !== x.name
 			)
-				return
+				continue
 			const user = x.discordId
 			if (!user) return
 			const name = x.name.replace(/ /g, "-").toLowerCase()
