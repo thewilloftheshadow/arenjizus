@@ -32,7 +32,7 @@ export const itemEmbed = (
 		.setDescription("\n")
 	if (item.description)
 		embed.data.description += `${item.description.slice(0, 1500)}`
-	embed.data.description += `Price: ${item.price}`
+	embed.data.description += `\nPrice: ${item.price}`
 	if (!hideUsers) {
 		embed.addFields({
 			name: `${item.players.filter((x) => x.amount > 0).length} Players:`,
