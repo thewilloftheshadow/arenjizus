@@ -100,9 +100,9 @@ export default class Ping extends ApplicationCommand {
 
 				hook.send({
 					content: `${ping ? `<@${user}> ` : ""}${message}`,
-					username: "Kiyori",
+					username: "The Newscaster",
 					avatarURL:
-						"https://us-east-1.tixte.net/uploads/x.theshadow.xyz/kiyori.jpeg",
+						"https://thumbs.dreamstime.com/b/cheerful-interviewer-holding-microphone-gray-suit-looking-camera-isolated-white-background-60540771.jpg",
 					allowedMentions: { users: [user] }
 				})
 			}
