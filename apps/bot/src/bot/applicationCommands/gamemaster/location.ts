@@ -388,10 +388,16 @@ export default class Ping extends ApplicationCommand {
 						}
 					)
 				}
-				database.location.updateMany({
+				await database.location.updateMany({
 					where: {},
 					data: {
 						channel: null
+					}
+				})
+				await database.player.updateMany({
+					where: {},
+					data: {
+						locationId: null
 					}
 				})
 				return interaction.editReply({

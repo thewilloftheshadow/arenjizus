@@ -97,8 +97,8 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		const votingEnabled = await database.keyV.upsert({
-			where: { key: "votingEnabled" },
-			create: { key: "votingEnabled", value: "false" },
+			where: { key: "voteEnabled" },
+			create: { key: "voteEnabled", valueBoolean: false },
 			update: {}
 		})
 		if (!votingEnabled.valueBoolean) {
