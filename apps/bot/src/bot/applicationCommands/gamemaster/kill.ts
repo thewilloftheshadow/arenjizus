@@ -42,13 +42,13 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		const bodyItem = database.item.findFirst({
+		const bodyItem = await database.item.findFirst({
 			where: {
 				name: `${player.name}'s Body`
 			}
 		})
 		if (!bodyItem) {
-			database.item.create({
+			await database.item.create({
 				data: {
 					name: `${player.name}'s Body`,
 					price: 0,
@@ -79,8 +79,7 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		return interaction.editReply({
-			content:
-				"<a:abearstab:1191103361118916698> 👻"
+			content: "<a:abearstab:1191103361118916698> 👻"
 		})
 	}
 }
