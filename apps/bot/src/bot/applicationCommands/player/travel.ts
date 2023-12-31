@@ -55,7 +55,7 @@ export default class Ping extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 
 		const player = await getDiscordPlayer(interaction.user.id)
-		if (!player) {
+		if (!player || !player.discordId) {
 			return interaction.editReply(
 				generateErrorMessage(
 					{
@@ -101,7 +101,7 @@ export default class Ping extends ApplicationCommand {
 			create: { key: "votingEnabled", value: "false" },
 			update: {}
 		})
-		if (!votingEnabled) {
+		if (!votingEnabled.valueBoolean) {
 			if (player.teleports <= 0) {
 				return interaction.editReply(
 					generateErrorMessage(
@@ -143,10 +143,10 @@ export default class Ping extends ApplicationCommand {
 				oldChannel?.isTextBased() &&
 				oldChannel?.type === ChannelType.GuildText
 			) {
-				await oldChannel.permissionOverwrites.delete(player.id)
+				await oldChannel.permissionOverwrites.delete(player.discordId)
 			}
 			channel.permissionOverwrites
-				.create(player.id, {
+				.create(player.discordId, {
 					ViewChannel: true
 				})
 				.catch(() => {
