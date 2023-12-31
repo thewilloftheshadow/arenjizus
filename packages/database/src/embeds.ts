@@ -68,6 +68,7 @@ export const playerEmbed = (
 	embed.data.description = `Money: ${player.money}\n`
 	embed.data.description += `Death Status: ${titleCase(player.deathStatus)}\n`
 	embed.data.description += `Robberies Left: ${player.robberiesLeft}\n`
+	embed.data.description += `Night Teleports Left: ${player.teleports}\n`
 	if (player.roles)
 		embed.addFields({
 			name: `${player.roles.length} Roles:`,
