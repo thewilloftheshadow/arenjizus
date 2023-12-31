@@ -29,6 +29,11 @@ const startCron = (client: BetterClient) => {
 					}
 				}
 			})
+			await database.investment.delete({
+				where: {
+					id: investment.id
+				}
+			})
 			const channel = await getPlayerChannel(investment.playerName, client)
 			if (!channel) {
 				logger.error(`Could not find channel for ${investment.playerName}`)
