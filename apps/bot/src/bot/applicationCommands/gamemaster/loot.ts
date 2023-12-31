@@ -1,6 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
 import database, {
+	Death,
 	getPlayer,
 	givePlayerItem,
 	removePlayerItem,
@@ -32,7 +33,7 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply()
+		await interaction.deferReply({ ephemeral: true })
 		if (!interaction.guild) return
 		const from = await getPlayer(interaction.options.getString("from", true))
 		const to = await getPlayer(interaction.options.getString("to", true))
@@ -41,6 +42,10 @@ export default class Ping extends ApplicationCommand {
 		}
 		if (!to) {
 			return interaction.editReply("Invalid to")
+		}
+
+		if (from.deathStatus !== Death.DEAD) {
+			return interaction.editReply(`${to.name} is not dead`)
 		}
 
 		const itemList: { name: string; amount: number }[] = []
@@ -70,7 +75,8 @@ export default class Ping extends ApplicationCommand {
 		})
 		await setPlayerMoney(to.name, to.money + from.money)
 		await setPlayerMoney(from.name, 0)
-		await interaction.editReply(`Looted ${from.name} to ${to.name}`)
+		await interaction.editReply(`Done`)
+		await interaction.followUp(`Looted ${from.name} to ${to.name}`)
 		logger.gameLog(
 			`${to.name} looted ${from.name} and got ${
 				from.money
