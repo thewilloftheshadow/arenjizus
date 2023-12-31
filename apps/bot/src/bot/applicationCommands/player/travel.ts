@@ -35,20 +35,19 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction<CacheType>,
 		option: AutocompleteFocusedOption
 	): Promise<void> {
+		const locations = await getAllLocations()
 		switch (option.name) {
 			case "to":
-				if (option.value) {
-					const locations = await getAllLocations()
-					return interaction.respond(
-						locations
-							.filter((x) => x.name.includes(option.value))
-							.map((location) => ({
-								name: location.name,
-								value: location.name
-							}))
-					)
-				}
-				break
+				return interaction.respond(
+					locations
+						.filter((x) =>
+							option.value ? x.name.includes(option.value) : true
+						)
+						.map((location) => ({
+							name: location.name,
+							value: location.name
+						}))
+				)
 		}
 	}
 
