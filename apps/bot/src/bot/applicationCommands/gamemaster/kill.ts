@@ -80,7 +80,7 @@ export default class Ping extends ApplicationCommand {
 
 		return interaction.editReply({
 			content:
-				"<:aukilling:762406290898288640><:aukilled:762406290952814632> 👻"
+				"<a:abearstab:1191103361118916698> 👻"
 		})
 	}
 }
