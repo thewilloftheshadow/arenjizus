@@ -11,6 +11,7 @@ export const getDiscordPlayer = async (discordId: string) => {
 			ballData: true,
 			abilities: true,
 			investments: true,
+			location: true,
 			notes: true
 		}
 	})
@@ -27,6 +28,7 @@ export const getPlayer = async (name: string) => {
 			ballData: true,
 			abilities: true,
 			investments: true,
+			location: true,
 			notes: true
 		}
 	})
@@ -34,7 +36,7 @@ export const getPlayer = async (name: string) => {
 
 export const getAllPlayers = async () => {
 	return await database.player.findMany({
-		include: { roles: true, items: true }
+		include: { roles: true, items: true, location: true }
 	})
 }
 

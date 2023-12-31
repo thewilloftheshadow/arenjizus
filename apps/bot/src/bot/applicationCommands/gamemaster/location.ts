@@ -118,6 +118,27 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.Subcommand,
 					name: "close",
 					description: "Close all location channels for a new day"
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "send",
+					description: "Send a player to a location",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "location",
+							description: "The name of the location",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "player",
+							description: "The player to send",
+							required: true,
+							autocomplete: true
+						}
+					]
 				}
 			]
 		})
@@ -130,6 +151,7 @@ export default class Ping extends ApplicationCommand {
 		const alllocations = await getAllLocations()
 		switch (option.name) {
 			case "name":
+			case "location":
 				if (option.value) {
 					const locations = alllocations.filter((location: { name: string }) =>
 						location.name.toLowerCase().includes(option.value.toLowerCase())
@@ -147,6 +169,21 @@ export default class Ping extends ApplicationCommand {
 						value: location.name
 					}))
 				)
+			case "player": {
+				const players = await database.player.findMany({
+					where: {
+						name: {
+							contains: option.value
+						}
+					}
+				})
+				return interaction.respond(
+					players.map((player) => ({
+						name: player.name,
+						value: player.name
+					}))
+				)
+			}
 		}
 	}
 
@@ -170,6 +207,46 @@ export default class Ping extends ApplicationCommand {
 				}
 				return interaction.editReply({
 					embeds: [locationEmbed(location)]
+				})
+			}
+			case "send": {
+				const location = await getLocation(
+					interaction.options.getString("location") || ""
+				)
+				if (!location) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Location not found",
+							description: `The location ${name} was not found in the database.`
+						})
+					)
+				}
+				const player = await database.player.findFirst({
+					where: {
+						name: interaction.options.getString("player") || ""
+					}
+				})
+				if (!player) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Player not found",
+							description: `The player ${
+								interaction.options.getString("player") || ""
+							} was not found in the database.`
+						})
+					)
+				}
+				await database.player.update({
+					where: {
+						id: player.id
+					},
+					data: {
+						locationId: location.id
+					}
+				})
+				logger.gameLog(`${player.name} was manually sent to ${location.name}`)
+				return interaction.editReply({
+					content: `Successfully sent ${player.name} to ${location.name}`
 				})
 			}
 			case "update": {

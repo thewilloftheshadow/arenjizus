@@ -303,6 +303,7 @@ export default class Ping extends ApplicationCommand {
 						ballData: true,
 						abilities: true,
 						notes: true,
+						location: true,
 						investments: true
 					}
 				})
@@ -401,7 +402,11 @@ export default class Ping extends ApplicationCommand {
 								? "\n"
 								: ` - ${player.roles
 										.map((role) => role.roleName)
-										.join(", ")} ($${player.money})\n`
+										.join(", ")} ($${player.money}, ${
+										player.location
+											? player.location.name
+											: "No location selected"
+								  })\n`
 						}`
 					})
 
