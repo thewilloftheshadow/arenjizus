@@ -150,7 +150,9 @@ export default class Ping extends ApplicationCommand {
 					.setDescription("\n")
 				for (const vote in votes) {
 					if (vote === "No Vote") {
-						embed.data.description += `No votes:\n> ${votes[vote]
+						embed.data.description += `**${
+							votes[vote].length
+						} people didn't vote**:\n> ${votes[vote]
 							.map((y) => y.from)
 							.join(", ")}\n\n`
 						continue
