@@ -153,7 +153,7 @@ export default class Ping extends ApplicationCommand {
 						embed.data.description += `No votes:\n> ${votes[vote]
 							.map((y) => y.from)
 							.join(", ")}\n\n`
-						return
+						continue
 					}
 					const x = votes[vote]
 					const worth = x.reduce((a, b) => a + b.worth, 0)
