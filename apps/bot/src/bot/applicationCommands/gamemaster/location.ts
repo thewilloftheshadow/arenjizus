@@ -384,7 +384,7 @@ export default class Ping extends ApplicationCommand {
 					await (channel as GuildChannel).permissionOverwrites.edit(
 						interaction.guild.id,
 						{
-							ViewChannel: false
+							SendMessages: false
 						}
 					)
 				}
