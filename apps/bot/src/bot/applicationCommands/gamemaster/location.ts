@@ -1,6 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
 import database, {
+	Death,
 	getAllLocations,
 	getLocation,
 	locationEmbed
@@ -321,6 +322,14 @@ export default class Ping extends ApplicationCommand {
 				})
 			}
 			case "open": {
+				await database.player.updateMany({
+					where: {
+						deathStatus: Death.DEAD
+					},
+					data: {
+						locationId: null
+					}
+				})
 				const locations = await getAllLocations()
 				for (const location of locations) {
 					const channel = await interaction.guild?.channels.create({
