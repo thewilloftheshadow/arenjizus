@@ -298,17 +298,6 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 	if (!ability) return
 	const playerLink = await getPlayerAbility(playerName, abilityName)
 	if (!playerLink) return
-	if (playerLink.usesLeft - 1 <= 0) {
-		await database.playerAbilities.delete({
-			where: {
-				playerName_abilityName: {
-					playerName,
-					abilityName
-				}
-			}
-		})
-		return
-	}
 	await database.playerAbilities.update({
 		where: {
 			playerName_abilityName: {
