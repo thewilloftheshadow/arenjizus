@@ -88,12 +88,9 @@ export const playerEmbed = (
 	}
 	if (player.abilities) {
 		embed.addFields({
-			name: `${
-				player.abilities.filter((x) => x.usesLeft > 0).length
-			} Abilities:`,
+			name: `${player.abilities.length} Abilities:`,
 			value:
 				`${player.abilities
-					.filter((x) => x.usesLeft > 0)
 					.map((x) => `${x.abilityName} - ${x.usesLeft}`)
 					.join("\n")}` || "** **",
 			inline: true
