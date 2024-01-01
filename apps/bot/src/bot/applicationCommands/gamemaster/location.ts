@@ -11,6 +11,7 @@ import { logger } from "@internal/logger"
 import {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
+	ChannelType,
 	ChatInputCommandInteraction,
 	GuildChannel
 } from "discord.js"
@@ -245,6 +246,17 @@ export default class Ping extends ApplicationCommand {
 						locationId: location.id
 					}
 				})
+				if (location.channel && player.discordId) {
+					const channel = await interaction.guild.channels.fetch(
+						location.channel
+					)
+					if (channel?.type !== ChannelType.GuildText || !channel?.guild) return
+					if (channel) {
+						await channel.permissionOverwrites.create(player.discordId, {
+							ViewChannel: true
+						})
+					}
+				}
 				logger.gameLog(`${player.name} was manually sent to ${location.name}`)
 				return interaction.editReply({
 					content: `Successfully sent ${player.name} to ${location.name}`
