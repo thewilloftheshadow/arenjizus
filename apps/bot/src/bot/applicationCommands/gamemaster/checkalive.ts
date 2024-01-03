@@ -22,6 +22,7 @@ export default class Ping extends ApplicationCommand {
 
 		const channels = interaction.guild.channels.cache
 			.filter((x) => x.type === ChannelType.GuildText)
+			.filter((x) => serverIds.inGameCategories.includes(x.parentId ?? ""))
 			.filter((x) => {
 				return filtered.every((member) =>
 					x.permissionsFor(member)?.has("ViewChannel")
