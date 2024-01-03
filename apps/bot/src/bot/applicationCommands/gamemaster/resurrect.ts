@@ -50,6 +50,6 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		logger.gameLog(`${name} has been resurrected!`)
-		return interaction.editReply("<a:party_moogle:1192168660815593643		")
+		return interaction.editReply("<a:party_moogle:1192168660815593643>")
 	}
 }
