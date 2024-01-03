@@ -116,6 +116,12 @@ export default class Ping extends ApplicationCommand {
 							name: "public-version",
 							description: "Whether to show the public version of the list",
 							required: false
+						},
+						{
+							type: ApplicationCommandOptionType.Boolean,
+							name: "alive-only",
+							description: "Whether to only show alive players",
+							required: false
 						}
 					]
 				},
@@ -357,6 +363,7 @@ export default class Ping extends ApplicationCommand {
 			case "list": {
 				const publicVersion =
 					interaction.options.getBoolean("public-version") || false
+				const aliveOnly = interaction.options.getBoolean("alive-only") || false
 				const players = await getAllPlayers()
 				const embed = new EmbedBuilder()
 					.setTitle("All Players")
@@ -386,6 +393,12 @@ export default class Ping extends ApplicationCommand {
 							return 1
 						}
 						return 0
+					})
+					.filter((player) => {
+						if (aliveOnly) {
+							return player.deathStatus === Death.ALIVE
+						}
+						return true
 					})
 					.forEach((player) => {
 						const deathEmoji =
