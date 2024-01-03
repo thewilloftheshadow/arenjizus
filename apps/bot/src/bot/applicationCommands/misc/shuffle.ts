@@ -11,7 +11,7 @@ export default class Ping extends ApplicationCommand {
 			description: `Shuffle a list of items`,
 			options: [
 				{
-					type: ApplicationCommandOptionType.Integer,
+					type: ApplicationCommandOptionType.String,
 					name: "items",
 					description: "The items to shuffle, separated by commas",
 					required: true
