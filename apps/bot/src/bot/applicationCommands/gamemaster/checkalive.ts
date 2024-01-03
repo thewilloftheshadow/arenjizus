@@ -1,6 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
+import { Death, getAllPlayers } from "@internal/database"
 import { ChannelType, ChatInputCommandInteraction } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
@@ -14,10 +15,10 @@ export default class Ping extends ApplicationCommand {
 		await interaction.deferReply()
 		if (!interaction.guild)
 			return interaction.editReply("This command can only be used in a server")
-		const members = await interaction.guild.members.fetch()
 
-		const filtered = members.filter((x) =>
-			x.roles.cache.has(serverIds.roles.player)
+		const players = await getAllPlayers()
+		const filtered = players.filter(
+			(x) => x.deathStatus !== Death.DEAD && x.discordId !== null
 		)
 
 		const channels = interaction.guild.channels.cache
@@ -25,9 +26,13 @@ export default class Ping extends ApplicationCommand {
 			.filter((x) => serverIds.inGameCategories.includes(x.parentId ?? ""))
 			.filter((x) => {
 				return filtered.every((member) =>
-					x.permissionsFor(member)?.has("ViewChannel")
+					x
+						// biome-ignore lint/style/noNonNullAssertion: hrm
+						.permissionsFor(member.discordId!)
+						?.has("ViewChannel")
 				)
 			})
+			.filter((x) => x.name !== "instructions")
 
 		return interaction.editReply(
 			`Found ${channels.size} channels:\n${channels
