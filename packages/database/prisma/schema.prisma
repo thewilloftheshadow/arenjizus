@@ -3,14 +3,8 @@ generator client {
 }
 
 datasource db {
-    provider          = "sqlite"
-    url	              = "file:./dev.db"
-}
-
-enum Death {
-    ALIVE
-    DEAD
-    FAKED
+    provider = "sqlite"
+    url      = "file:./dev.db"
 }
 
 model Player {
@@ -18,7 +12,8 @@ model Player {
     discordId     String?
     name          String            @unique
     money         Int               @default(10)
-    deathStatus   Death             @default(ALIVE)
+    isAlive       Boolean           @default(true)
+    isFaked       Boolean           @default(false)
     robberiesLeft Int               @default(3)
     teleports     Int               @default(3)
     lastKiaiLevel Int               @default(0)
@@ -53,7 +48,7 @@ model PlayerBallData {
 model Role {
     id              String            @id @unique @default(cuid())
     name            String            @unique
-    description     String            @db.LongText
+    description     String
     players         PlayerRoles[]
     linkedAbilities AbilityRoleLink[]
 }
@@ -74,7 +69,7 @@ model Item {
     id          String        @id @unique @default(cuid())
     name        String        @unique
     price       Int
-    description String        @db.LongText
+    description String
     players     PlayerItems[]
 
     linkedAbilities AbilityItemLink[]
@@ -97,14 +92,13 @@ model KeyV {
     key          String   @id @unique
     value        String?
     valueInt     Int?
-    valueArray   Json?
     valueBoolean Boolean?
 }
 
 model Ability {
     id          String @id @unique @default(cuid())
     name        String @unique
-    description String @db.LongText
+    description String
 
     uses       Int @default(1)
     properties Int @default(0)
@@ -156,7 +150,7 @@ model PlayerAbilities {
 model Location {
     id          String   @id @unique @default(cuid())
     name        String   @unique
-    description String   @db.LongText
+    description String
     channel     String?  @unique
     maxPlayers  Int?
     players     Player[]
@@ -166,7 +160,7 @@ model PlayerNotes {
     id         String   @id @unique @default(cuid())
     player     Player   @relation(fields: [playerName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     playerName String
-    note       String   @db.LongText
+    note       String
     author     String
     createdAt  DateTime @default(now())
 
