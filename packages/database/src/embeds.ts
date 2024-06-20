@@ -1,5 +1,5 @@
 import { embedSpacer } from "@internal/config"
-import { generateTimestamp, titleCase } from "@internal/functions"
+import { generateTimestamp } from "@internal/functions"
 import { EmbedBuilder } from "discord.js"
 import {
 	type Ability,
@@ -66,7 +66,7 @@ export const playerEmbed = (
 		.setImage(embedSpacer)
 
 	embed.data.description = `Money: ${player.money}\n`
-	embed.data.description += `Death Status: ${titleCase(player.deathStatus)}\n`
+	embed.data.description += `Death Status: ${player.isAlive ? "Alive" : player.isFaked && gamemaster ? "Faked" : "Dead"}\n`
 	embed.data.description += `Robberies Left: ${player.robberiesLeft}\n`
 	embed.data.description += `Night Teleports Left: ${player.teleports}\n`
 	if (player.roles)
