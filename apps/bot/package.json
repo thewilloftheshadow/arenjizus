@@ -10,19 +10,19 @@
 		"clean": "rimraf dist turbo-*.log --glob"
 	},
 	"dependencies": {
-		"@buape/lib": "^1.1.0",
+		"@buape/lib": "^1.2.5",
 		"@internal/config": "workspace:*",
 		"@internal/database": "workspace:*",
 		"@internal/functions": "workspace:*",
 		"@internal/logger": "workspace:*",
 		"@sapphire/discord.js-utilities": "^6.1.0",
-		"croner": "^6.0.3",
-		"discord.js": "^14.11.0",
-		"kiai.js": "^1.1.4"
+		"croner": "^6.0.7",
+		"discord.js": "^14.15.3",
+		"kiai.js": "^1.1.5"
 	},
 	"devDependencies": {
-		"@types/ms": "^0.7.31",
-		"@types/node": "^18.16.6",
+		"@types/ms": "^0.7.34",
+		"@types/node": "^18.19.37",
 		"tsconfig": "workspace:*"
 	}
 }

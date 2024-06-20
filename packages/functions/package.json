@@ -13,11 +13,11 @@
     "dependencies": {
         "@internal/config": "workspace:*",
         "@internal/logger": "workspace:*",
-        "discord.js": "^14.11.0",
+        "discord.js": "^14.15.3",
         "next-api-route-middleware": "^1.0.2"
     },
     "devDependencies": {
-        "@types/node": "^18.16.6",
+        "@types/node": "^18.19.37",
         "tsconfig": "workspace:*"
     }
 }

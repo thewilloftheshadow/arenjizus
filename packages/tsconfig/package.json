@@ -8,6 +8,6 @@
         "react-library.json"
     ],
     "dependencies": {
-        "@types/node": "^18.16.6"
+        "@types/node": "^18.19.37"
     }
 }
