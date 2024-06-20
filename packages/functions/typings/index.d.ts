@@ -1,4 +1,4 @@
-import { APIEmbed, ActionRowBuilder, ButtonBuilder } from "discord.js"
+import type { APIEmbed, ActionRowBuilder, ButtonBuilder } from "discord.js"
 
 export interface GeneratedMessage {
 	embeds?: APIEmbed[]

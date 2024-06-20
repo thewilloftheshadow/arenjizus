@@ -1,5 +1,5 @@
-import { ApplicationCommand, BetterClient } from "@buape/lib"
-import { ChatInputCommandInteraction, Message } from "discord.js"
+import { ApplicationCommand, type BetterClient } from "@buape/lib"
+import type { ChatInputCommandInteraction, Message } from "discord.js"
 
 export default class Command extends ApplicationCommand {
 	constructor(client: BetterClient) {

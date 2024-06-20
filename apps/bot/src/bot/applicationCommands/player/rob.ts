@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database, {
 	addMoney,
@@ -11,7 +11,7 @@ import database, {
 import { generateTimestamp, getPlayerChannel } from "@internal/functions"
 import { logger } from "@internal/logger"
 import { Death } from "@prisma/client"
-import {
+import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction
@@ -141,12 +141,9 @@ export default class Ping extends ApplicationCommand {
 			timestamp
 		})
 		const send = `<a:siren:1084362013247033405> <@${whoPlayer.discordId}>, YOU ARE BEING ROBBED! <a:siren:1084362013247033405> \nSend any message here to stop the robbery! Time is up ${timeCounter} (at ${timeString})!`
-		let msg
-		try {
-			msg = await whoChannel.send(send)
-		} catch (_e) {
+		const msg = await whoChannel.send(send).catch((_e) => {
 			return interaction.editReply(`Failed to send message to ${whoChannel}.`)
-		}
+		})
 		if (!msg) return
 
 		await interaction.followUp({

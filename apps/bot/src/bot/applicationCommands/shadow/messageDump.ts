@@ -1,8 +1,8 @@
-import { ApplicationCommand, BetterClient } from "@buape/lib"
+import { ApplicationCommand, type BetterClient } from "@buape/lib"
 import {
 	AttachmentBuilder,
-	ChatInputCommandInteraction,
-	GuildChannel
+	type ChatInputCommandInteraction,
+	type GuildChannel
 } from "discord.js"
 
 type MessageStored = {

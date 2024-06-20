@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	AbilityProperty,
 	abilityEmbed,
@@ -22,10 +22,10 @@ import database, {
 } from "@internal/database"
 import {
 	ActionRowBuilder,
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	CacheType,
-	ChatInputCommandInteraction,
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
+	type CacheType,
+	type ChatInputCommandInteraction,
 	ComponentType,
 	StringSelectMenuBuilder
 } from "discord.js"
@@ -436,8 +436,8 @@ export default class Ping extends ApplicationCommand {
 					type === "day"
 						? AbilityProperty.resetWithDay
 						: type === "night"
-						  ? AbilityProperty.resetWithNight
-						  : AbilityProperty.resetWithPhase
+							? AbilityProperty.resetWithNight
+							: AbilityProperty.resetWithPhase
 				)
 				const errors: string[] = []
 				for (const ability of abilities) {
@@ -495,7 +495,7 @@ export default class Ping extends ApplicationCommand {
 				await result.deferUpdate()
 
 				const properties = result.values
-					.map((value) => parseInt(value))
+					.map((value) => Number.parseInt(value))
 					.reduce((a, b) => a | b)
 				await setPropertiesForAbility(abilityName, properties)
 				return interaction.followUp(

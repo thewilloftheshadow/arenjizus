@@ -1,6 +1,6 @@
 import { serverIds } from "@internal/config"
-import { TextChannel } from "discord.js"
-import { Client } from "discord.js"
+import type { TextChannel } from "discord.js"
+import type { Client } from "discord.js"
 
 export const getPlayerChannel = async (name: string, client: Client) => {
 	const guild = client.guilds.cache.get(serverIds.guild)

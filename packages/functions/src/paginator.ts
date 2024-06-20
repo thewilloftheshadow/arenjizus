@@ -1,18 +1,18 @@
 import { EventEmitter } from "node:events"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import {
-	APIEmbed,
+	type APIEmbed,
 	ActionRowBuilder,
 	ButtonBuilder,
-	ButtonInteraction,
-	ChatInputCommandInteraction,
+	type ButtonInteraction,
+	type ChatInputCommandInteraction,
 	ComponentType,
-	InteractionReplyOptions,
-	InteractionResponse,
-	Message,
-	MessageActionRowComponentBuilder
+	type InteractionReplyOptions,
+	type InteractionResponse,
+	type Message,
+	type MessageActionRowComponentBuilder
 } from "discord.js"
-import { GeneratedMessage } from "../index.js"
+import type { GeneratedMessage } from "../index.js"
 
 type PaginatorSettings = {
 	/** A unique ID for this paginator, typically the ID of the interaction. Max 75 characters */
@@ -119,7 +119,9 @@ export class Paginator extends EventEmitter {
 	}
 
 	private async handleDiscordInteraction(interaction: ButtonInteraction) {
-		const page = parseInt(interaction.customId.split("-")[1].split(",")[1])
+		const page = Number.parseInt(
+			interaction.customId.split("-")[1].split(",")[1]
+		)
 		const message = this.getDiscordMessage(page)
 		await interaction.update(message)
 		this.emit("pageChange", page)

@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	Death,
 	addMoney,
@@ -10,11 +10,11 @@ import database, {
 } from "@internal/database"
 import { generateErrorMessage, getPlayerChannel } from "@internal/functions"
 import { logger } from "@internal/logger"
-import { Prisma } from "@prisma/client"
+import type { Prisma } from "@prisma/client"
 import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChatInputCommandInteraction,
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
+	type ChatInputCommandInteraction,
 	EmbedBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
@@ -372,16 +372,16 @@ export default class Ping extends ApplicationCommand {
 						text: publicVersion
 							? `${
 									players.filter((x) => x.deathStatus === Death.ALIVE).length
-							  } alive, ${
+								} alive, ${
 									players.filter((x) => x.deathStatus !== Death.ALIVE).length
-							  } dead`
+								} dead`
 							: `${
 									players.filter((x) => x.deathStatus === Death.ALIVE).length
-							  } alive, ${
+								} alive, ${
 									players.filter((x) => x.deathStatus === Death.DEAD).length
-							  } dead, ${
+								} dead, ${
 									players.filter((x) => x.deathStatus === Death.FAKED).length
-							  } faked`
+								} faked`
 					})
 				// biome-ignore lint/complexity/noForEach: no
 				players
@@ -405,13 +405,13 @@ export default class Ping extends ApplicationCommand {
 							player.deathStatus === Death.ALIVE
 								? "😃"
 								: player.deathStatus === Death.DEAD ||
-									  (player.deathStatus === Death.FAKED &&
+										(player.deathStatus === Death.FAKED &&
 											publicVersion === true)
-								  ? "💀"
-								  : player.deathStatus === Death.FAKED &&
-										  publicVersion === false
-									  ? "👻"
-									  : "??"
+									? "💀"
+									: player.deathStatus === Death.FAKED &&
+											publicVersion === false
+										? "👻"
+										: "??"
 						embed.data.description += `${deathEmoji} ${player.name}${
 							publicVersion
 								? "\n"
@@ -421,7 +421,7 @@ export default class Ping extends ApplicationCommand {
 										player.location
 											? player.location.name
 											: "No location selected"
-								  })\n`
+									})\n`
 						}`
 					})
 

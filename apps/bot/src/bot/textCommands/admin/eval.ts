@@ -1,12 +1,12 @@
 import { inspect } from "util"
-import { BetterClient, TextCommand, Type } from "@buape/lib"
+import { type BetterClient, TextCommand, Type } from "@buape/lib"
 import * as lib from "@buape/lib"
 import * as config from "@internal/config"
 import db from "@internal/database"
 import * as database from "@internal/database"
 import * as functions from "@internal/functions"
 import { DebugType, logger } from "@internal/logger"
-import { EmbedBuilder, Message } from "discord.js"
+import { EmbedBuilder, type Message } from "discord.js"
 const bot = {
 	db,
 	database,

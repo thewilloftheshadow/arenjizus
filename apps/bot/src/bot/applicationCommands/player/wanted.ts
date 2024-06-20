@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	getDiscordPlayer,
 	getPlayer,
@@ -9,8 +9,8 @@ import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
-	ChatInputCommandInteraction,
-	TextChannel
+	type ChatInputCommandInteraction,
+	type TextChannel
 } from "discord.js"
 
 export default class Want extends ApplicationCommand {

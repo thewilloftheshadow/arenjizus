@@ -1,5 +1,5 @@
-import { BetterClient, Button } from "@buape/lib"
-import { ButtonInteraction } from "discord.js"
+import { type BetterClient, Button } from "@buape/lib"
+import type { ButtonInteraction } from "discord.js"
 
 export default class Buttony extends Button {
 	constructor(client: BetterClient) {

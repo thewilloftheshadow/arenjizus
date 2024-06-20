@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	getAllPlayers,
 	getPlayer,
@@ -7,10 +7,10 @@ import database, {
 	setVoteWorth
 } from "@internal/database"
 import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
 	ChannelType,
-	ChatInputCommandInteraction,
+	type ChatInputCommandInteraction,
 	EmbedBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"

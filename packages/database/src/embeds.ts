@@ -2,19 +2,19 @@ import { embedSpacer } from "@internal/config"
 import { generateTimestamp, titleCase } from "@internal/functions"
 import { EmbedBuilder } from "discord.js"
 import {
-	Ability,
-	AbilityItemLink,
-	AbilityRoleLink,
-	Investment,
-	Item,
-	Location,
-	Player,
-	PlayerAbilities,
-	PlayerBallData,
-	PlayerItems,
-	PlayerNotes,
-	PlayerRoles,
-	Role,
+	type Ability,
+	type AbilityItemLink,
+	type AbilityRoleLink,
+	type Investment,
+	type Item,
+	type Location,
+	type Player,
+	type PlayerAbilities,
+	type PlayerBallData,
+	type PlayerItems,
+	type PlayerNotes,
+	type PlayerRoles,
+	type Role,
 	getPropertyDetails
 } from "../index.js"
 

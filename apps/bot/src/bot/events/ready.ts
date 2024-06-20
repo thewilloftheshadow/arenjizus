@@ -1,5 +1,5 @@
 import { join } from "path"
-import { BetterClient, EventHandler } from "@buape/lib"
+import { type BetterClient, EventHandler } from "@buape/lib"
 import { getFiles } from "@internal/functions"
 import { logger } from "@internal/logger"
 

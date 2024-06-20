@@ -1,11 +1,11 @@
-import { ApplicationCommand, BetterClient } from "@buape/lib"
+import { ApplicationCommand, type BetterClient } from "@buape/lib"
 import database, { getDiscordPlayer, kiai } from "@internal/database"
 import {
 	generateErrorMessage,
 	generateSuccessMessage
 } from "@internal/functions"
-import { ChatInputCommandInteraction } from "discord.js"
 import { logger } from "@internal/logger"
+import type { ChatInputCommandInteraction } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

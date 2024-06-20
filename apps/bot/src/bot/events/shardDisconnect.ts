@@ -1,6 +1,6 @@
 import { EventHandler } from "@buape/lib"
 import { logger } from "@internal/logger"
-import { CloseEvent } from "discord.js"
+import type { CloseEvent } from "discord.js"
 
 export default class ShardDisconnect extends EventHandler {
 	override async run(event: CloseEvent, shardId: number) {

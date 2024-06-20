@@ -1,4 +1,4 @@
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database from "@internal/database"
 import { getPlayerChannel } from "@internal/functions"

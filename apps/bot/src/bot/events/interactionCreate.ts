@@ -2,8 +2,8 @@ import { EventHandler } from "@buape/lib"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
-	ChatInputCommandInteraction,
-	Interaction,
+	type ChatInputCommandInteraction,
+	type Interaction,
 	InteractionType
 } from "discord.js"
 
@@ -44,7 +44,7 @@ export default class InteractionCreate extends EventHandler {
 		// @ts-ignore
 		return interaction.isRepliable()
 			? // @ts-ignore
-			  interaction.reply(
+				interaction.reply(
 					generateErrorMessage(
 						{
 							title: "Invalid Interaction",
@@ -52,7 +52,7 @@ export default class InteractionCreate extends EventHandler {
 						},
 						true
 					)
-			  )
+				)
 			: logger.warn(`Interaction was not repliable`)
 	}
 }

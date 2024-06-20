@@ -1,6 +1,6 @@
-import { BetterClient, TextCommand } from "@buape/lib"
+import { type BetterClient, TextCommand } from "@buape/lib"
 import { generateTimestamp } from "@internal/functions"
-import { Message } from "discord.js"
+import type { Message } from "discord.js"
 
 export default class Restart extends TextCommand {
 	constructor(client: BetterClient) {
@@ -17,7 +17,10 @@ export default class Restart extends TextCommand {
 
 		if (!this.client.shard) return message.reply("This bot is not sharded.")
 		const toRestart = args[0] === "all" ? "all" : args[0]
-		if (toRestart !== "all" && parseInt(toRestart) > this.client.shard.count)
+		if (
+			toRestart !== "all" &&
+			Number.parseInt(toRestart) > this.client.shard.count
+		)
 			return message.reply("Invalid shard ID.")
 
 		if (!toRestart)

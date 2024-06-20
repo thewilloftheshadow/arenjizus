@@ -1,14 +1,14 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, { getAllPlayers } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	ChatInputCommandInteraction,
-	TextBasedChannel
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
+	type ChatInputCommandInteraction,
+	type TextBasedChannel
 } from "discord.js"
 
 export default class Vote extends ApplicationCommand {

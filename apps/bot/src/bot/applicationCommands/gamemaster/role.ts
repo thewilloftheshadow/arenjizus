@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	getAllPlayers,
 	getAllRoles,
@@ -11,7 +11,7 @@ import database, {
 } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
-import {
+import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction

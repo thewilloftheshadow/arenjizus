@@ -1,4 +1,4 @@
-import { Client, User } from "discord.js"
+import type { Client, User } from "discord.js"
 
 export const parseUser = async (
 	userInput: string,

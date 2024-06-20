@@ -1,5 +1,5 @@
 import { Result } from "@sapphire/result"
-import database, { Ability, getAbility, getPlayer } from "../index.js"
+import database, { type Ability, getAbility, getPlayer } from "../index.js"
 
 export const grantAbility = async (playerName: string, abilityName: string) => {
 	const player = await getPlayer(playerName)
@@ -147,7 +147,7 @@ export const convertPropertiesToNumber = (properties: AbilityProperty[]) => {
 export const convertNumberToProperties = (permissions: number) => {
 	const result = [] as AbilityProperty[]
 	for (const [key, _] of Object.entries(AbilityProperty)) {
-		const num = parseInt(key)
+		const num = Number.parseInt(key)
 		if (permissions & num) result.push(num)
 	}
 	return result

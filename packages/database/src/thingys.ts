@@ -1,8 +1,8 @@
 import { logger } from "@internal/logger"
 import { Result } from "@sapphire/result"
-import { Client, TextBasedChannel } from "discord.js"
+import type { Client, TextBasedChannel } from "discord.js"
 import database, {
-	Ability,
+	type Ability,
 	AbilityProperty,
 	Death,
 	convertNumberToProperties,

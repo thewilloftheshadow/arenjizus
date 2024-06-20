@@ -1,7 +1,7 @@
 import { EventHandler } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import { logger } from "@internal/logger"
-import { GuildChannel } from "discord.js"
+import type { GuildChannel } from "discord.js"
 
 export default class ChannelCreate extends EventHandler {
 	override async run(channel: GuildChannel) {

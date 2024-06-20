@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import database, {
 	Death,
 	getAllLocations,
@@ -9,11 +9,11 @@ import database, {
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
 	ChannelType,
-	ChatInputCommandInteraction,
-	GuildChannel
+	type ChatInputCommandInteraction,
+	type GuildChannel
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 

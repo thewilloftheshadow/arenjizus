@@ -1,4 +1,4 @@
-import database, { AbilityProperty, hasProperty } from "../index.js"
+import database, { type AbilityProperty, hasProperty } from "../index.js"
 
 export const getDiscordPlayer = async (discordId: string) => {
 	return await database.player.findFirst({

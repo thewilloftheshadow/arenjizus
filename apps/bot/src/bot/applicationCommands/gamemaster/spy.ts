@@ -1,10 +1,10 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import { logger } from "@internal/logger"
 import {
 	ChannelType,
-	ChatInputCommandInteraction,
-	TextChannel
+	type ChatInputCommandInteraction,
+	type TextChannel
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 

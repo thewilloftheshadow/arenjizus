@@ -1,5 +1,5 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import {
 	getAllAbilities,
 	getAllItems,
@@ -8,7 +8,7 @@ import {
 	getAllRoles
 } from "@internal/database"
 import { Paginator } from "@internal/functions"
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
@@ -42,7 +42,7 @@ export default class Ping extends ApplicationCommand {
 			player.votedForName
 				? `${player.name} - ${player.voteWorth} vote${
 						player.voteWorth === 1 ? "" : "s"
-				  } for ${player.votedForName}`
+					} for ${player.votedForName}`
 				: `${player.name} - No vote`
 		)
 		const abilities = abilityData.map((ability) => ability.name)

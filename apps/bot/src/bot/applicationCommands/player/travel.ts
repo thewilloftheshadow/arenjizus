@@ -1,4 +1,4 @@
-import { ApplicationCommand, BetterClient } from "@buape/lib"
+import { ApplicationCommand, type BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database, {
 	getAllLocations,
@@ -9,11 +9,11 @@ import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
-	AutocompleteFocusedOption,
-	AutocompleteInteraction,
-	CacheType,
+	type AutocompleteFocusedOption,
+	type AutocompleteInteraction,
+	type CacheType,
 	ChannelType,
-	ChatInputCommandInteraction
+	type ChatInputCommandInteraction
 } from "discord.js"
 
 export default class Ping extends ApplicationCommand {

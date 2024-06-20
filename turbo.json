@@ -1,6 +1,6 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"pipeline": {
+	"tasks": {
 		"build": {
 			"dependsOn": ["^db:generate", "^build"],
 			"outputs": ["dist/**", ".next/**"],
@@ -20,7 +20,9 @@
 		"db:push": {
 			"cache": false
 		},
-		"db:studio": {},
+		"db:studio": {
+			"outputs": ["dist/**", "build/**"]
+		},
 		"lint": {
 			"cache": false
 		},

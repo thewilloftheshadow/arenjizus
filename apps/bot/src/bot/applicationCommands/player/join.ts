@@ -1,11 +1,11 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database from "@internal/database"
 import { logger } from "@internal/logger"
 import {
 	ApplicationCommandOptionType,
-	ChatInputCommandInteraction
+	type ChatInputCommandInteraction
 } from "discord.js"
 
 export default class Vote extends ApplicationCommand {

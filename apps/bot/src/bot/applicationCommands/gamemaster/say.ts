@@ -1,12 +1,12 @@
 import { ApplicationCommand } from "@buape/lib"
-import { BetterClient } from "@buape/lib"
+import type { BetterClient } from "@buape/lib"
 import { generateErrorMessage } from "@internal/functions"
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
 	ChannelType,
-	ChatInputCommandInteraction
+	type ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 
