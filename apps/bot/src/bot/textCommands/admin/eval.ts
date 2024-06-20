@@ -1,4 +1,4 @@
-import { inspect } from "util"
+import { inspect } from "node:util"
 import { type BetterClient, TextCommand, Type } from "@buape/lib"
 import * as lib from "@buape/lib"
 import * as config from "@internal/config"
@@ -78,17 +78,21 @@ export default class Eval extends TextCommand {
 		})
 	}
 
-	private async eval(message: Message, codeInput: string) {
+	private async eval(message: Message, code: string) {
 		// if (message.id === user.id) {
 		//     logger.info("Eval has been executed")
 		// }
-		let code = codeInput.replace(/[“”]/g, `"`).replace(/[‘’]/g, "'")
+		// biome-ignore lint/suspicious/noImplicitAnyLet: any
 		let success
+		// biome-ignore lint/suspicious/noImplicitAnyLet: any
 		let result
+		// biome-ignore lint/suspicious/noImplicitAnyLet: any
 		let type
 		try {
 			if (message.content.includes("--async"))
+				// biome-ignore lint/style/noParameterAssign: <explanation>
 				code = `(async () => {\n${code}\n})();`
+			// biome-ignore lint/security/noGlobalEval: <explanation>
 			result = eval(code)
 			type = new Type(result)
 			if (this.isThenable(result)) {

@@ -10,7 +10,9 @@ export const shuffle = (
 	let collection = arr
 	let len = arr.length
 	const rng = options.rng || Math.random
+	// biome-ignore lint/suspicious/noImplicitAnyLet: any
 	let random
+	// biome-ignore lint/suspicious/noImplicitAnyLet: any
 	let temp
 
 	if (options.copy === true) {

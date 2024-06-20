@@ -10,7 +10,7 @@
 		"db:studio": "dotenv -- turbo run db:studio",
 		"dev": "dotenv -- turbo run dev",
 		"format": "biome format --write .",
-		"lint": "biome check . --apply",
+		"lint": "biome check . --write",
 		"preinstall": "npx only-allow pnpm",
 		"pretty": "pnpm run clean && pnpm run format && pnpm run lint",
 		"start": "dotenv -- turbo run start"

@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readdirSync } from "fs"
+import { existsSync, mkdirSync, readdirSync } from "node:fs"
 
 /**
  * Get all the files in all the subdirectories of a directory.

@@ -1,4 +1,4 @@
-import { join } from "path"
+import { join } from "node:path"
 import { type BetterClient, EventHandler } from "@buape/lib"
 import { getFiles } from "@internal/functions"
 import { logger } from "@internal/logger"
