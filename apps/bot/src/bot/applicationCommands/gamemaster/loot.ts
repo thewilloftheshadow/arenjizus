@@ -1,7 +1,6 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import database, {
-	Death,
 	getPlayer,
 	givePlayerItem,
 	removePlayerItem,
@@ -44,7 +43,7 @@ export default class Ping extends ApplicationCommand {
 			return interaction.editReply("Invalid to")
 		}
 
-		if (from.deathStatus !== Death.DEAD) {
+		if (from.isAlive || from.isFaked) {
 			return interaction.editReply(`${to.name} is not dead`)
 		}
 

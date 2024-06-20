@@ -1,7 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
-import { Death, getAllPlayers } from "@internal/database"
+import { getAllPlayers } from "@internal/database"
 import { ChannelType, type ChatInputCommandInteraction } from "discord.js"
 
 export default class Ping extends ApplicationCommand {
@@ -18,7 +18,7 @@ export default class Ping extends ApplicationCommand {
 
 		const players = await getAllPlayers()
 		const filtered = players.filter(
-			(x) => x.deathStatus !== Death.DEAD && x.discordId !== null
+			(x) => x.isAlive && x.discordId !== null
 		)
 
 		const channels = interaction.guild.channels.cache

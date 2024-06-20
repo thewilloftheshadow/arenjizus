@@ -1,7 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
-import database, { Death, getPlayer, toggleDeath } from "@internal/database"
+import database, { getPlayer, toggleDeath } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import type { ChatInputCommandInteraction } from "discord.js"
@@ -31,7 +31,7 @@ export default class Ping extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
 		const name = interaction.options.getString("name", true)
-		const fake = interaction.options.getBoolean("fake", false)
+		const fake = interaction.options.getBoolean("fake", false) || undefined
 		const player = await getPlayer(name)
 		if (!player) {
 			return interaction.editReply(
@@ -64,7 +64,7 @@ export default class Ping extends ApplicationCommand {
 			logger.gameLog(`A body has been generated for ${player.name}`)
 		}
 
-		await toggleDeath(name, fake ? Death.FAKED : Death.DEAD)
+		await toggleDeath(name, false, fake)
 
 		logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
 		if (player.discordId) {

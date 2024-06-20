@@ -1,7 +1,6 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import database, {
-	Death,
 	addMoney,
 	getAllPlayers,
 	getPlayer,
@@ -370,17 +369,13 @@ export default class Ping extends ApplicationCommand {
 					.setDescription("\n")
 					.setFooter({
 						text: publicVersion
-							? `${
-									players.filter((x) => x.deathStatus === Death.ALIVE).length
-								} alive, ${
-									players.filter((x) => x.deathStatus !== Death.ALIVE).length
+							? `${players.filter((x) => x.isAlive).length} alive, ${
+									players.filter((x) => x.isAlive).length
 								} dead`
-							: `${
-									players.filter((x) => x.deathStatus === Death.ALIVE).length
-								} alive, ${
-									players.filter((x) => x.deathStatus === Death.DEAD).length
+							: `${players.filter((x) => x.isAlive).length} alive, ${
+									players.filter((x) => !x.isAlive).length
 								} dead, ${
-									players.filter((x) => x.deathStatus === Death.FAKED).length
+									players.filter((x) => !x.isAlive && x.isFaked).length
 								} faked`
 					})
 				// biome-ignore lint/complexity/noForEach: no
@@ -396,22 +391,18 @@ export default class Ping extends ApplicationCommand {
 					})
 					.filter((player) => {
 						if (aliveOnly) {
-							return player.deathStatus === Death.ALIVE
+							return player.isAlive
 						}
 						return true
 					})
 					.forEach((player) => {
-						const deathEmoji =
-							player.deathStatus === Death.ALIVE
-								? "😃"
-								: player.deathStatus === Death.DEAD ||
-										(player.deathStatus === Death.FAKED &&
-											publicVersion === true)
-									? "💀"
-									: player.deathStatus === Death.FAKED &&
-											publicVersion === false
-										? "👻"
-										: "??"
+						const deathEmoji = player.isAlive
+							? "😃"
+							: !player.isAlive || (player.isFaked && publicVersion === true)
+								? "💀"
+								: player.isFaked && publicVersion === false
+									? "👻"
+									: "??"
 						embed.data.description += `${deathEmoji} ${player.name}${
 							publicVersion
 								? "\n"

@@ -36,7 +36,7 @@ export default class Ping extends ApplicationCommand {
 		const roles = rolesData.map((role) => role.name)
 		const items = itemsData.map((item) => item.name)
 		const players = playersData.map(
-			(player) => ` ${player.deathStatus ? "😃" : "💀"} ${player.name}`
+			(player) => ` ${player.isAlive ? "😃" : "💀"} ${player.name}`
 		)
 		const votes = playersData.map((player) =>
 			player.votedForName

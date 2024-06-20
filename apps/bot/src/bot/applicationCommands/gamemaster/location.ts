@@ -1,7 +1,6 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import database, {
-	Death,
 	getAllLocations,
 	getLocation,
 	locationEmbed
@@ -336,7 +335,8 @@ export default class Ping extends ApplicationCommand {
 			case "open": {
 				await database.player.updateMany({
 					where: {
-						deathStatus: Death.DEAD
+						isAlive: false,
+						isFaked: false
 					},
 					data: {
 						locationId: null

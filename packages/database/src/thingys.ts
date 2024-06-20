@@ -4,7 +4,6 @@ import type { Client, TextBasedChannel } from "discord.js"
 import database, {
 	type Ability,
 	AbilityProperty,
-	Death,
 	convertNumberToProperties,
 	getAbility,
 	getItem,
@@ -212,7 +211,11 @@ export const deleteItem = async (name: string) => {
 	})
 }
 
-export const toggleDeath = async (name: string, status: Death) => {
+export const toggleDeath = async (
+	name: string,
+	isAlive: boolean,
+	faked?: boolean
+) => {
 	const player = await getPlayer(name)
 	if (!player) return
 	await database.player.update({
@@ -220,7 +223,8 @@ export const toggleDeath = async (name: string, status: Death) => {
 			name
 		},
 		data: {
-			deathStatus: status
+			isAlive,
+			isFaked: isAlive ? true : faked
 		}
 	})
 }
@@ -350,11 +354,11 @@ export const runAbilityProperties = async (
 			else result.push(`Gave ${targetName} ${ability.name}`)
 		} else if (property === AbilityProperty.killTarget) {
 			if (!target) return ["Target not found"]
-			await toggleDeath(targetName, Death.DEAD)
+			await toggleDeath(targetName, false)
 			result.push(`Killed ${targetName}`)
 		} else if (property === AbilityProperty.resurrectTarget) {
 			if (!target) return ["Target not found"]
-			await toggleDeath(targetName, Death.ALIVE)
+			await toggleDeath(targetName, true)
 			result.push(`Resurrected ${targetName}`)
 		} else if (property === AbilityProperty.lockDayChat) {
 			const dayChat = await database.keyV.findFirst({

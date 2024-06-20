@@ -10,7 +10,6 @@ import database, {
 } from "@internal/database"
 import { generateTimestamp, getPlayerChannel } from "@internal/functions"
 import { logger } from "@internal/logger"
-import { Death } from "@prisma/client"
 import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
@@ -102,10 +101,10 @@ export default class Ping extends ApplicationCommand {
 		if (whoPlayer.name === byPlayer.name) {
 			return interaction.editReply(`You cannot rob yourself.`)
 		}
-		if (byPlayer.deathStatus === Death.DEAD) {
+		if (byPlayer.isAlive && !byPlayer.isFaked) {
 			return interaction.editReply(`You are dead.`)
 		}
-		if (whoPlayer.deathStatus === Death.DEAD) {
+		if (whoPlayer.isAlive && !whoPlayer.isFaked) {
 			return interaction.editReply(
 				`Player ${who} is dead. Are you trying to use </loot:1061026940045242448>?`
 			)

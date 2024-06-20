@@ -1,7 +1,7 @@
 import { ApplicationCommand } from "@buape/lib"
 import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
-import { Death, getPlayer, toggleDeath } from "@internal/database"
+import { getPlayer, toggleDeath } from "@internal/database"
 import { generateErrorMessage } from "@internal/functions"
 import { logger } from "@internal/logger"
 import type { ChatInputCommandInteraction } from "discord.js"
@@ -36,7 +36,7 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		await toggleDeath(name, Death.ALIVE)
+		await toggleDeath(name, true)
 
 		if (player.discordId) {
 			await interaction.guild?.members
