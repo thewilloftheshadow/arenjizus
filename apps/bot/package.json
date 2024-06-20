@@ -4,7 +4,7 @@
 	"main": "dist/src/index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "pnpm run clean && cross-env NODE_ENV=development tsc-watch --onSuccess \"node .\"",
+		"dev": "cross-env NODE_ENV=development tsc-watch --onSuccess \"node .\"",
 		"build": "pnpm run clean && tsc -b",
 		"start": "cross-env NODE_ENV=production node .",
 		"clean": "rimraf dist turbo-*.log --glob"
