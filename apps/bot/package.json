@@ -15,14 +15,14 @@
 		"@internal/database": "workspace:*",
 		"@internal/functions": "workspace:*",
 		"@internal/logger": "workspace:*",
-		"@sapphire/discord.js-utilities": "^6.1.0",
-		"croner": "^6.0.7",
+		"@sapphire/discord.js-utilities": "^7.3.0",
+		"croner": "^8.0.2",
 		"discord.js": "^14.15.3",
-		"kiai.js": "^1.1.5"
+		"kiai.js": "^2.2.0"
 	},
 	"devDependencies": {
 		"@types/ms": "^0.7.34",
-		"@types/node": "^18.19.37",
+		"@types/node": "^20.14.6",
 		"tsconfig": "workspace:*"
 	}
 }

@@ -17,9 +17,7 @@ export default class Ping extends ApplicationCommand {
 			return interaction.editReply("This command can only be used in a server")
 
 		const players = await getAllPlayers()
-		const filtered = players.filter(
-			(x) => x.isAlive && x.discordId !== null
-		)
+		const filtered = players.filter((x) => x.isAlive && x.discordId !== null)
 
 		const channels = interaction.guild.channels.cache
 			.filter((x) => x.type === ChannelType.GuildText)
