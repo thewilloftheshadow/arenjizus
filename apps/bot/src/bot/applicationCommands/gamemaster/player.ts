@@ -370,7 +370,7 @@ export default class Ping extends ApplicationCommand {
 					.setFooter({
 						text: publicVersion
 							? `${players.filter((x) => x.isAlive).length} alive, ${
-									players.filter((x) => x.isAlive).length
+									players.filter((x) => !x.isAlive).length
 								} dead`
 							: `${players.filter((x) => x.isAlive).length} alive, ${
 									players.filter((x) => !x.isAlive).length
