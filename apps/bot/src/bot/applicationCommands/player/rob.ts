@@ -101,10 +101,10 @@ export default class Ping extends ApplicationCommand {
 		if (whoPlayer.name === byPlayer.name) {
 			return interaction.editReply(`You cannot rob yourself.`)
 		}
-		if (byPlayer.isAlive && !byPlayer.isFaked) {
+		if (!byPlayer.isAlive && !byPlayer.isFaked) {
 			return interaction.editReply(`You are dead.`)
 		}
-		if (whoPlayer.isAlive && !whoPlayer.isFaked) {
+		if (!whoPlayer.isAlive && !whoPlayer.isFaked) {
 			return interaction.editReply(
 				`Player ${who} is dead. Are you trying to use </loot:1061026940045242448>?`
 			)
