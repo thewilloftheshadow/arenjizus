@@ -34,6 +34,9 @@ const startCron = (client: BetterClient) => {
 				await channel.send(
 					`Your investment of $${investment.amount} has failed!`
 				)
+				logger.gameLog(
+					`Investment failed for ${investment.playerName} with $${investment.amount}`
+				)
 				continue
 			}
 			await database.player.update({
@@ -58,6 +61,9 @@ const startCron = (client: BetterClient) => {
 			}
 			await channel.send(
 				`You have received $${investment.amount * 2} from your investment!`
+			)
+			logger.gameLog(
+				`Investment succeeded for ${investment.playerName} with $${investment.amount * 2}`
 			)
 		}
 	})
