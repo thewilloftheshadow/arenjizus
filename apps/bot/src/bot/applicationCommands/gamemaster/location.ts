@@ -149,12 +149,12 @@ export default class Ping extends ApplicationCommand {
 		interaction: AutocompleteInteraction,
 		option: AutocompleteFocusedOption
 	) {
-		const alllocations = await getAllLocations()
+		const allLocations = await getAllLocations()
 		switch (option.name) {
 			case "name":
 			case "location":
 				if (option.value) {
-					const locations = alllocations.filter((location: { name: string }) =>
+					const locations = allLocations.filter((location: { name: string }) =>
 						location.name.toLowerCase().includes(option.value.toLowerCase())
 					)
 					return interaction.respond(
@@ -165,7 +165,7 @@ export default class Ping extends ApplicationCommand {
 					)
 				}
 				return interaction.respond(
-					alllocations.map((location: { name: string }) => ({
+					allLocations.map((location: { name: string }) => ({
 						name: location.name,
 						value: location.name
 					}))

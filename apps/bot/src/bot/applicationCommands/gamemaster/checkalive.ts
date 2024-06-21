@@ -33,7 +33,7 @@ export default class Ping extends ApplicationCommand {
 			.filter((x) => x.name !== "instructions")
 
 		return interaction.editReply(
-			`Found ${channels.size} channels:\n${channels
+			`Found ${channels.size} alliance channels that all alive players have access to:\n${channels
 				.map((x) => `<#${x.id}>`)
 				.join("\n")}`
 		)
