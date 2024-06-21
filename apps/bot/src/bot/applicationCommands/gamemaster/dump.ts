@@ -21,6 +21,8 @@ export default class Ping extends ApplicationCommand {
 			`/home/ubuntu/arenjizus/packages/database/prisma/dev.db`,
 			`/home/ubuntu/arenjizus/packages/database/prisma/${newName}`
 		)
-		return interaction.editReply(`Backup created as ${newName}`)
+		return interaction.editReply(
+			`Backup created as ${newName}, contact Shadow to rollback`
+		)
 	}
 }
