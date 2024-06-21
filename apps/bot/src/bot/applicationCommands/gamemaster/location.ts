@@ -122,6 +122,20 @@ export default class Ping extends ApplicationCommand {
 				},
 				{
 					type: ApplicationCommandOptionType.Subcommand,
+					name: "leftover",
+					description: "Send all leftover players to a location",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "location",
+							description: "The name of the location",
+							required: true,
+							autocomplete: true
+						}
+					]
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
 					name: "send",
 					description: "Send a player to a location",
 					options: [
@@ -259,6 +273,49 @@ export default class Ping extends ApplicationCommand {
 				logger.gameLog(`${player.name} was manually sent to ${location.name}`)
 				return interaction.editReply({
 					content: `Successfully sent ${player.name} to ${location.name}`
+				})
+			}
+			case "leftover": {
+				const location = await getLocation(
+					interaction.options.getString("location") || ""
+				)
+				if (!location) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Location not found",
+							description: `The location ${name} was not found in the database.`
+						})
+					)
+				}
+				const players = await database.player.findMany({
+					where: {
+						locationId: null
+					}
+				})
+				for (const player of players) {
+					await database.player.update({
+						where: {
+							id: player.id
+						},
+						data: {
+							locationId: location.id
+						}
+					})
+					if (location.channel && player.discordId) {
+						const channel = await interaction.guild.channels.fetch(
+							location.channel
+						)
+						if (channel?.type !== ChannelType.GuildText || !channel?.guild) return
+						if (channel) {
+							await channel.permissionOverwrites.create(player.discordId, {
+								ViewChannel: true
+							})
+						}
+					}
+					logger.gameLog(`${player.name} was sent to ${location.name}`)
+				}
+				return interaction.editReply({
+					content: `Successfully sent all leftover players to ${location.name}`
 				})
 			}
 			case "update": {
