@@ -18,8 +18,8 @@ export default class Ping extends ApplicationCommand {
 			)
 		const newName = `backup_${Date.now()}.db`
 		copyFileSync(
-			`/home/ubuntu/arenjizus/packages/database/dev.db`,
-			`/home/ubuntu/arenjizus/packages/database/${newName}`
+			`/home/ubuntu/arenjizus/packages/database/prisma/dev.db`,
+			`/home/ubuntu/arenjizus/packages/database/prisma/${newName}`
 		)
 		return interaction.editReply(`Backup created as ${newName}`)
 	}
