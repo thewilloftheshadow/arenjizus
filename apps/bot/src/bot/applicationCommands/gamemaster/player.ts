@@ -152,6 +152,53 @@ export default class Ping extends ApplicationCommand {
 					]
 				},
 				{
+					type: ApplicationCommandOptionType.SubcommandGroup,
+					name: "money",
+					description: "Manage a player's money",
+					options: [
+						{
+							type: ApplicationCommandOptionType.Subcommand,
+							name: "add",
+							description: "Add money to a player",
+							options: [
+								{
+									type: ApplicationCommandOptionType.String,
+									name: "name",
+									description: "The name of the player",
+									required: true,
+									autocomplete: true
+								},
+								{
+									type: ApplicationCommandOptionType.Integer,
+									name: "amount",
+									description: "The amount to add",
+									required: true
+								}
+							]
+						},
+						{
+							type: ApplicationCommandOptionType.Subcommand,
+							name: "remove",
+							description: "Remove money from a player",
+							options: [
+								{
+									type: ApplicationCommandOptionType.String,
+									name: "name",
+									description: "The name of the player",
+									required: true,
+									autocomplete: true
+								},
+								{
+									type: ApplicationCommandOptionType.Integer,
+									name: "amount",
+									description: "The amount to remove",
+									required: true
+								}
+							]
+						}
+					]
+				},
+				{
 					type: ApplicationCommandOptionType.Subcommand,
 					name: "link",
 					description: "Link a player to their Discord account",
@@ -231,7 +278,36 @@ export default class Ping extends ApplicationCommand {
 			)
 		})
 		const type = interaction.options.getSubcommand(false)
+		const group = interaction.options.getSubcommandGroup(false)
 		const name = interaction.options.getString("name") || ""
+
+		switch (group) {
+			case "money": {
+				switch (type) {
+					case "add": {
+						const name = interaction.options.getString("name", true)
+						const amount = interaction.options.getInteger("amount", true)
+						addMoney(name, amount)
+						logger.gameLog(`Player ${name} was given $${amount}.`)
+						return interaction.editReply({
+							content: `Player ${name} was given $${amount}.`
+						})
+					}
+					case "remove": {
+						const name = interaction.options.getString("name", true)
+						const amount = interaction.options.getInteger("amount", true)
+						removeMoney(name, amount)
+						logger.gameLog(`Player ${name} has had $${amount} removed.`)
+						return interaction.editReply({
+							content: `Player ${name} has had $${amount} removed.`
+						})
+					}
+					default:
+						break
+				}
+				break
+			}
+		}
 
 		switch (type) {
 			case "view": {
