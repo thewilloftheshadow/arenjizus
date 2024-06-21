@@ -16,11 +16,11 @@ export default class Ping extends ApplicationCommand {
 		interaction.reply(
 			generateSuccessMessage({
 				title: "Pending Investments",
-				description: `There are currently ${investments.length} pending investments.\n\n${investments.map(
-					(x) => {
-						return `- **${x.playerName}** invested $${x.amount}, expires at ${generateTimestamp({ timestamp: x.expiresAt, type: "T" })} (${generateTimestamp({ timestamp: x.expiresAt, type: "R" })})\n`
-					}
-				)}`
+				description: `There are currently ${investments.length} pending investments.\n\n${investments
+					.map((x) => {
+						return `- **${x.playerName}** invested $${x.amount}, expires at ${generateTimestamp({ timestamp: x.expiresAt, type: "T" })} (${generateTimestamp({ timestamp: x.expiresAt, type: "R" })})`
+					})
+					.join("\n")}`
 			})
 		)
 	}
