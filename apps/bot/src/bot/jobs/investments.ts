@@ -1,7 +1,7 @@
 import type { BetterClient } from "@buape/lib"
 import { serverIds } from "@internal/config"
 import database from "@internal/database"
-import { getPlayerChannel } from "@internal/functions"
+import { getPlayerChannel, randomInt } from "@internal/functions"
 import { logger } from "@internal/logger"
 import Cron from "croner"
 
@@ -19,6 +19,23 @@ const startCron = (client: BetterClient) => {
 		if (!guild) return
 		await guild.channels.fetch()
 		for await (const investment of investments) {
+			const fail = randomInt(0, 3) === 0
+			if (fail) {
+				await database.investment.delete({
+					where: {
+						id: investment.id
+					}
+				})
+				const channel = await getPlayerChannel(investment.playerName, client)
+				if (!channel) {
+					logger.error(`Could not find channel for ${investment.playerName}`)
+					continue
+				}
+				await channel.send(
+					`Your investment of $${investment.amount} has failed!`
+				)
+				continue
+			}
 			await database.player.update({
 				where: {
 					name: investment.playerName
