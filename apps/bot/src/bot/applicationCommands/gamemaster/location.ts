@@ -305,11 +305,14 @@ export default class Ping extends ApplicationCommand {
 						const channel = await interaction.guild.channels.fetch(
 							location.channel
 						)
-						if (channel?.type !== ChannelType.GuildText || !channel?.guild) return
+						if (channel?.type !== ChannelType.GuildText || !channel?.guild)
+							return
 						if (channel) {
-							await channel.permissionOverwrites.create(player.discordId, {
-								ViewChannel: true
-							})
+							await channel.permissionOverwrites
+								.create(player.discordId, {
+									ViewChannel: true
+								})
+								.catch(() => {})
 						}
 					}
 					logger.gameLog(`${player.name} was sent to ${location.name}`)
