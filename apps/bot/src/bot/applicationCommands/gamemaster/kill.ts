@@ -31,7 +31,7 @@ export default class Ping extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
 		const name = interaction.options.getString("name", true)
-		const fake = interaction.options.getBoolean("fake", false) || undefined
+		const fake = interaction.options.getBoolean("fake", false) || false
 		const player = await getPlayer(name)
 		if (!player) {
 			return interaction.editReply(

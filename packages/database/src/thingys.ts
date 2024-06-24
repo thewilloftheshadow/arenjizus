@@ -224,7 +224,7 @@ export const toggleDeath = async (
 		},
 		data: {
 			isAlive,
-			isFaked: isAlive ? true : faked
+			isFaked: isAlive ? false : faked
 		}
 	})
 }
