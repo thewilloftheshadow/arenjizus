@@ -474,11 +474,11 @@ export default class Ping extends ApplicationCommand {
 					.forEach((player) => {
 						const deathEmoji = player.isAlive
 							? "😃"
-							: !player.isAlive || (player.isFaked && publicVersion === true)
-								? "💀"
-								: player.isFaked && publicVersion === false
-									? "👻"
-									: "??"
+							: !player.isAlive
+								? player.isFaked && publicVersion === true
+									? "💀"
+									: "👻"
+								: "??"
 						embed.data.description += `${deathEmoji} ${player.name}${
 							publicVersion
 								? "\n"
