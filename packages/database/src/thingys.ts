@@ -10,8 +10,10 @@ import database, {
 	getPlayer,
 	getPlayerAbility,
 	getRole,
-	grantAbility
+	grantAbility,
+	getAllPlayers
 } from "../index.js"
+import { serverIds } from "@internal/config"
 
 export const addMoney = async (name: string, amount: number) => {
 	const player = await getPlayer(name)
@@ -225,6 +227,34 @@ export const toggleDeath = async (
 		data: {
 			isAlive,
 			isFaked: isAlive ? false : faked
+		}
+	})
+}
+
+export const syncDeathRoles = async (client: Client) => {
+	const players = await getAllPlayers()
+	const guild = await client.guilds.fetch(serverIds.guild)
+	players.map(async (player) => {
+		if (player.discordId) {
+			if (player.isAlive) {
+				await guild.members
+					.resolve(player.discordId)
+					?.roles.remove(serverIds.roles.dead)
+					.catch(() => {})
+				await guild.members
+					.resolve(player.discordId)
+					?.roles.add(serverIds.roles.player)
+					.catch(() => {})
+			} else {
+				await guild.members
+					.resolve(player.discordId)
+					?.roles.remove(serverIds.roles.player)
+					.catch(() => {})
+				await guild.members
+					.resolve(player.discordId)
+					?.roles.add(serverIds.roles.dead)
+					.catch(() => {})
+			}
 		}
 	})
 }
