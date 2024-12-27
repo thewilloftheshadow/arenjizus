@@ -5,13 +5,13 @@
 	"private": true,
 	"scripts": {
 		"clean": "turbo run clean",
-		"db:generate": "env-cmd -- turbo run db:generate",
-		"db:push": "env-cmd -- turbo run db:push",
-		"db:studio": "env-cmd -- turbo run db:studio",
-		"dev": "env-cmd -- turbo run dev",
+		"db:generate": "bun x prisma generate",
+		"db:push": "bun x prisma db push",
+		"db:studio": "bun x prisma studio",
+		"dev": "bun run . --watch",
 		"lint": "biome check . --write",
 		"preinstall": "npx only-allow bun",
-		"postinstall": "bun x prisma generate",
+		"postinstall": "bun run db:generate",
 		"start": "bun run ."
 	},
 	"engines": {
