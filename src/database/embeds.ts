@@ -150,7 +150,7 @@ export const roleEmbed = (
 			inline: true
 		})
 	if (role.name.toLowerCase().includes("bezos"))
-		embed.setImage("https://tenor.com/bgUX6.gif")
+		embed.setImage("https://media1.tenor.com/m/bPnCW0WkamkAAAAd/im-the-richest-person-ever-i-can-do-whatever-i-want-jeff-bezos.gif")
 	return embed
 }
 
