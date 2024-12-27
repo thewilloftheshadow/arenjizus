@@ -11,7 +11,7 @@ const client = new BetterClient({
 	accessSettings: {
 		server: config.serverIds.guild,
 		roles: {
-			gamemaster: [config.serverIds.roles.gamemaster],
+			gamemaster: [config.serverIds.roles.gamemaster, "1105539807444217875"],
 			player: [config.serverIds.roles.player],
 			spectator: [config.serverIds.roles.spectator]
 		}

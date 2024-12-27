@@ -86,7 +86,7 @@ export default class BetterClient extends Client {
 			await Promise.all(
 				eventFileNames.map(async (eventFileName) => {
 					try {
-						const fileUrl = "../../events/" + eventFileName
+						const fileUrl = `../../events/${eventFileName}`
 						const eventFile = await import(fileUrl)
 						const eventName = eventFileName.split(".")[0]
 						const event = new eventFile.default(this, {

@@ -338,6 +338,11 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 			}
 		}
 	})
+	await database.abilityQueue.delete({
+		where: {
+			abilityId: playerLink.id
+		}
+	}).catch(() => { })
 
 	if (ability.linkedItems.length > 0) {
 		for (const itemLink of ability.linkedItems) {

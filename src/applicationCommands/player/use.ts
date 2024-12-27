@@ -193,6 +193,10 @@ export default class Ping extends ApplicationCommand {
 						.setLabel("Approve")
 						.setStyle(ButtonStyle.Success),
 					new ButtonBuilder()
+						.setCustomId(`queue:${playerAbility.id}`)
+						.setLabel("Add to Queue")
+						.setStyle(ButtonStyle.Primary),
+					new ButtonBuilder()
 						.setCustomId(`rejectUse`)
 						.setLabel("Deny")
 						.setStyle(ButtonStyle.Danger)

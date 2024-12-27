@@ -43,13 +43,13 @@ const bot = {
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {
 		super("eval", client, {
-			restriction: "gamemaster"
 		})
 
 		logger.null(bot)
 	}
 
 	override async run(message: Message, args: string[]) {
+		if (!config.admins.includes(message.author.id)) return
 		logger.info(
 			`${message.author.tag} ran eval in ${message.guild?.name} ${message.guild?.id
 			}, ${args.join(" ")}`

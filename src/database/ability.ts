@@ -114,6 +114,34 @@ export const resetAbilityUses = async (
 	return Result.ok(link)
 }
 
+export const queueAbility = async (abilityId: string) => {
+	const ability = await database.playerAbilities.findFirst({
+		where: {
+			id: abilityId
+		},
+		include: {
+			player: true,
+			ability: true
+		}
+	})
+	if (!ability) return Result.err("Ability not found")
+	const queue = await database.abilityQueue
+		.upsert({
+			where: {
+				abilityId
+			},
+			create: {
+				abilityId
+			},
+			update: {}
+		})
+		.catch((e) => {
+			console.error(e)
+			return Result.err("Failed to queue ability")
+		})
+	return Result.ok({ abilityId, queue })
+}
+
 export enum AbilityProperty {
 	resetWithDay = 1 << 0,
 	lockDayChat = 1 << 1,

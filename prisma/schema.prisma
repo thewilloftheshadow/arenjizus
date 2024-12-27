@@ -141,7 +141,8 @@ model PlayerAbilities {
     ability     Ability @relation(fields: [abilityName], references: [name], onDelete: Cascade, onUpdate: Cascade)
     abilityName String
 
-    usesLeft Int
+    usesLeft     Int
+    queueEntries AbilityQueue[]
 
     @@unique([playerName, abilityName])
     @@index([abilityName])
@@ -176,4 +177,10 @@ model Investment {
     expiresAt  DateTime
 
     @@index([playerName])
+}
+
+model AbilityQueue {
+    ability   PlayerAbilities @relation(fields: [abilityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    abilityId String          @unique
+    createdAt DateTime        @default(now())
 }
