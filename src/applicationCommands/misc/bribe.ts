@@ -5,7 +5,6 @@ import {
 	ButtonStyle,
 	type ChatInputCommandInteraction
 } from "discord.js"
-import { titleCase } from "~/functions/titleCase"
 import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Command extends ApplicationCommand {
@@ -35,6 +34,12 @@ export default class Command extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		const person = interaction.options.getSubcommand(true)
 		if (!person) return
+		const id =
+			person === "seven"
+				? "960888903764676618"
+				: person === "turkey"
+					? "389840562112561183"
+					: "439223656200273932"
 		const link =
 			person === "seven"
 				? "https://ko-fi.com/seventhheart"
@@ -48,7 +53,7 @@ export default class Command extends ApplicationCommand {
 					? "https://tenor.com/U4fh.gif"
 					: "https://tenor.com/bCqtn.gif"
 		return interaction.reply({
-			content: `## [Bribe ${titleCase(person)} by clicking here or using the button below!](<${link}>)\n\n-# ${gif}`,
+			content: `## [Bribe <@${id}> by clicking here or using the button below!](<${link}>)\n\n-# ${gif}`,
 			components: [
 				new ActionRowBuilder<ButtonBuilder>().addComponents(
 					new ButtonBuilder()
