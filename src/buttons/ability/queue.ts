@@ -31,11 +31,12 @@ export default class Buttony extends Button {
 
 		await queueAbility(playerAbility.id)
 
-		await interaction.editReply(`Ability added to queue.\n-# ${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}`)
+		await interaction.editReply(`Ability added to queue.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`)
 		logger.gameLog(
-			`${playerAbility.abilityName} has been queued for ${playerAbility.playerName}.\n-# ${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}`
+			`${playerAbility.abilityName} has been queued for ${playerAbility.playerName}.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`
 		)
 		await interaction.message.edit({
+			content: `Ability added to queue.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`,
 			components: []
 		})
 	}

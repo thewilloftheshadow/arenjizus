@@ -323,7 +323,7 @@ export default class Ping extends ApplicationCommand {
 					embeds: [
 						playerEmbed(
 							player,
-							interaction.options.getBoolean("public-version", true)
+							!interaction.options.getBoolean("public-version", true)
 						)
 					]
 				})

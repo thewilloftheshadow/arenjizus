@@ -11,8 +11,8 @@ import {
 	ButtonStyle,
 	type ChatInputCommandInteraction
 } from "discord.js"
-import { getAllPlayers, getDiscordPlayer, getAbility, getPlayer } from "~/database/getData"
-import { generateErrorMessage } from "~/functions/generateMessage"
+import { getAllPlayers, getDiscordPlayer, getAbility, getPlayer, getPlayerAbility } from "~/database/getData"
+import { generateErrorMessage, generateWarningMessage } from "~/functions/generateMessage"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -57,17 +57,23 @@ export default class Ping extends ApplicationCommand {
 							.includes(option.value.toLowerCase())
 					)
 					return interaction.respond(
-						abilities.map((ability) => ({
+						[...abilities.map((ability) => ({
 							name: ability.abilityName,
 							value: ability.abilityName
-						}))
+						})), {
+							name: option.value,
+							value: option.value
+						}]
 					)
 				}
 				return interaction.respond(
-					allAbilities.map((ability) => ({
+					[...allAbilities.map((ability) => ({
 						name: ability.abilityName,
 						value: ability.abilityName
-					}))
+					})), {
+						name: "You can also type in a custom ability you want to do!",
+						value: "x"
+					}]
 				)
 			}
 			case "target": {
@@ -92,6 +98,11 @@ export default class Ping extends ApplicationCommand {
 
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply({ ephemeral: true })
+		if (interaction.options.getString("ability", true) === "x")
+			return interaction.editReply(generateWarningMessage({
+				description: "Please select an ability from the list or type in your own ability to do."
+			}))
+
 		const player = await getDiscordPlayer(interaction.user.id)
 		if (!player) {
 			return interaction.editReply(
@@ -108,11 +119,11 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		const ability = await getAbility(
-			interaction.options.getString("ability", true)
+			interaction.options.getString("ability", true),
+			player.id
 		)
-		const playerAbility = player.abilities.find(
-			(a) => a.abilityName === ability?.name
-		)
+		if (!ability) return interaction.editReply("Ability not found.")
+		const playerAbility = await getPlayerAbility(player.name, ability.name)
 
 		if (!ability || !playerAbility) {
 			return interaction.editReply(

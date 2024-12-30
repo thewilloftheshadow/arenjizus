@@ -650,23 +650,37 @@ export default class Ping extends ApplicationCommand {
 					}
 				}))
 				const embed = new EmbedBuilder().setColor("Random")
-					.setDescription(`Queued abilities:\n${queued.map((x, i) => `${i === 0 ? "1." : "-"} ${x.ability.playerName}: ${x.ability.abilityName}`).join("\n")}`)
+					.setDescription(`** **\n${queued.map((x, i) => `${i === 0 ? "1." : "-"} ${x.ability.playerName}: ${x.ability.abilityName}`).join("\n")}`)
 					.setTitle("Ability Queue")
 					.setFooter({ text: "Last updated" }).setTimestamp()
-				const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-					new StringSelectMenuBuilder()
-						.setCustomId("queue")
-						.setPlaceholder("Trigger an Ability")
-						.addOptions(
-							queued.map((x) => {
-								return {
-									label: `${`${x.ability.playerName}: ${x.ability.abilityName}`.substring(0, 97)}...`,
-									value: `${x.ability.abilityName}:${x.ability.playerName}`
-								}
-							})
-						)
-						.setMinValues(1)
-				)
+				const row = new ActionRowBuilder<StringSelectMenuBuilder>()
+				if (queued.length > 0) {
+					row.addComponents(
+						new StringSelectMenuBuilder()
+							.setCustomId("use")
+							.setPlaceholder("Trigger an Ability")
+							.addOptions(
+								queued.map((x) => {
+									return {
+										label: `${`${x.ability.playerName}: ${x.ability.abilityName}`.substring(0, 97)}...`,
+										value: `${x.ability.abilityName}:${x.ability.playerName}`
+									}
+								})
+							)
+							.setMinValues(1)
+					)
+				} else {
+					row.addComponents([
+						new StringSelectMenuBuilder()
+							.setCustomId("use")
+							.setPlaceholder("Trigger an Ability")
+							.setDisabled(true)
+							.addOptions([{
+								label: "No abilities queued",
+								value: "No abilities queued"
+							}])
+					])
+				}
 				return interaction.editReply({ embeds: [embed], components: [row] })
 			}
 		}
