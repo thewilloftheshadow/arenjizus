@@ -29,7 +29,6 @@ const startCron = (client: BetterClient) => {
 				})
 				const channel = await getPlayerChannel(investment.playerName, client)
 				if (!channel) {
-					logger.error(`Could not find channel for ${investment.playerName}`)
 					continue
 				}
 				await channel.send(

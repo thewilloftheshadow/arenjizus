@@ -100,8 +100,9 @@ model Ability {
     name        String @unique
     description String
 
-    uses       Int @default(1)
-    properties Int @default(0)
+    uses         Int     @default(1)
+    properties   Int     @default(0)
+    customOneOff Boolean @default(false)
 
     linkedRoles        AbilityRoleLink[]
     linkedItems        AbilityItemLink[]

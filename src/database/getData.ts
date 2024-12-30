@@ -1,5 +1,5 @@
 import database from "~/database"
-import { AbilityProperty, hasProperty } from "~/database/ability"
+import { type AbilityProperty, hasProperty } from "~/database/ability"
 
 export const getDiscordPlayer = async (discordId: string) => {
 	return await database.player.findFirst({
@@ -100,17 +100,23 @@ export const getAllRoles = async () => {
 	})
 }
 
-export const getAbility = async (name: string) => {
-	return await database.ability.findFirst({
+export const getAbility = async (name: string, createCustomIfNeeded = false) => {
+	const ability = await database.ability.findFirst({
 		where: {
 			name
-		},
-		include: {
-			playersWithAbility: true,
-			linkedRoles: true,
-			linkedItems: true
 		}
 	})
+	if (!ability && createCustomIfNeeded) {
+		return await database.ability.create({
+			data: {
+				name,
+				uses: 1,
+				properties: 0,
+				customOneOff: true
+			}
+		})
+	}
+	return ability
 }
 
 export const getAbilitiesWithProperty = async (property: AbilityProperty) => {

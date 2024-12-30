@@ -214,9 +214,6 @@ export default class Ping extends ApplicationCommand {
 		switch (option.name) {
 			case "item":
 			case "name":
-				console.log(option.name)
-
-				console.log(allItems)
 				if (option.value) {
 					const items = allItems.filter((item: { name: string }) =>
 						item.name.toLowerCase().includes(option.value.toLowerCase())

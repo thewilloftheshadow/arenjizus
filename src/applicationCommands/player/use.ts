@@ -128,8 +128,6 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		console.log(ability)
-
 		if (playerAbility.usesLeft === 0) {
 			return interaction.editReply(
 				generateErrorMessage(

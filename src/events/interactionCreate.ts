@@ -9,13 +9,7 @@ import {
 
 export default class InteractionCreate extends EventHandler {
 	override async run(interaction: Interaction) {
-		logger.info(
-			`${interaction.type} interaction created by ${interaction.user.id}${interaction.type === InteractionType.ApplicationCommand
-				? `: ${interaction.toString()}`
-				: ""
-			}`
-		)
-		if (!interaction.guild) return
+		if (!interaction.inCachedGuild()) return
 
 		if (interaction.type === InteractionType.ModalSubmit) {
 			return this.client.modalSubmitHandler.handleModal(interaction)
