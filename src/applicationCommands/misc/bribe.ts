@@ -41,8 +41,14 @@ export default class Command extends ApplicationCommand {
 				: person === "turkey"
 					? "https://ko-fi.com/turkeywizard"
 					: "https://ko-fi.com/theshadow"
+		const gif =
+			person === "seven"
+				? "https://tenor.com/bCqtn.gif"
+				: person === "turkey"
+					? "https://tenor.com/U4fh.gif"
+					: "https://tenor.com/bCqtn.gif"
 		return interaction.reply({
-			content: `[Bribe ${titleCase(person)} by clicking here or using the button below!](<${link}>)\n\n-# https://tenor.com/bCqtn.gif`,
+			content: `## [Bribe ${titleCase(person)} by clicking here or using the button below!](<${link}>)\n\n-# ${gif}`,
 			components: [
 				new ActionRowBuilder<ButtonBuilder>().addComponents(
 					new ButtonBuilder()
