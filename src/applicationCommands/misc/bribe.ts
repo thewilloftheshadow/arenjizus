@@ -10,7 +10,7 @@ export default class Command extends ApplicationCommand {
 
 	override async run(interaction: ChatInputCommandInteraction) {
 		return interaction.reply(
-			`The <@&1105539807444217874>s are very bribable! :D\nJust list who you want the money to go to at https://ko-fi.com/theshadow`
+			`Money? Money. Money! MONEYYYYY\n[Shadow's Ko-fi](https://ko-fi.com/theshadow)\n[Turkey's Ko-fi](https://example.com)\n[Seven's Ko-fi](https://example.com)`
 		)
 	}
 }
