@@ -53,7 +53,7 @@ export default class Command extends ApplicationCommand {
 					? "https://tenor.com/U4fh.gif"
 					: "https://tenor.com/bCqtn.gif"
 		return interaction.reply({
-			content: `## [Bribe <@${id}> by clicking here or using the button below!](<${link}>)\n\n-# ${gif}`,
+			content: `## Bribe <@${id}> by clicking the button below!\n\n-# ${gif}`,
 			components: [
 				new ActionRowBuilder<ButtonBuilder>().addComponents(
 					new ButtonBuilder()
