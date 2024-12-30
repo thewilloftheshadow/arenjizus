@@ -1,11 +1,11 @@
-import { EventHandler } from "~/lib"
-import { generateErrorMessage } from "~/functions/generateMessage"
-import { logger } from "~/logger"
 import {
 	type ChatInputCommandInteraction,
 	type Interaction,
 	InteractionType
 } from "discord.js"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { EventHandler } from "~/lib"
+import { logger } from "~/logger"
 
 export default class InteractionCreate extends EventHandler {
 	override async run(interaction: Interaction) {
@@ -37,15 +37,15 @@ export default class InteractionCreate extends EventHandler {
 		// @ts-ignore
 		return interaction.isRepliable()
 			? // @ts-ignore
-			interaction.reply(
-				generateErrorMessage(
-					{
-						title: "Invalid Interaction",
-						description: "I've never seen this type of interaction"
-					},
-					true
+				interaction.reply(
+					generateErrorMessage(
+						{
+							title: "Invalid Interaction",
+							description: "I've never seen this type of interaction"
+						},
+						true
+					)
 				)
-			)
 			: logger.warn(`Interaction was not repliable`)
 	}
 }

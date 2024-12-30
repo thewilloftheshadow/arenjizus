@@ -38,7 +38,7 @@ export default class Logger {
 
 	public debug(
 		// biome-ignore lint/suspicious/noExplicitAny: True any
-		message: any,
+		message: any
 	): void {
 		// biome-ignore lint/style/noParameterAssign: Cleaner
 		if (typeof message === "object") message = JSON.stringify(message, null, 2)

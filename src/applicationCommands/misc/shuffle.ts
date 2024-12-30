@@ -1,9 +1,9 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
-import { shuffle } from "~/functions/shuffle"
 import {
 	ApplicationCommandOptionType,
 	type ChatInputCommandInteraction
 } from "discord.js"
+import { shuffle } from "~/functions/shuffle"
+import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

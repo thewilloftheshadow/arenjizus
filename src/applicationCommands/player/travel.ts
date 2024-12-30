@@ -1,6 +1,3 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
-import { serverIds } from "~/config"
-import { logger } from "~/logger"
 import {
 	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
@@ -9,9 +6,16 @@ import {
 	ChannelType,
 	type ChatInputCommandInteraction
 } from "discord.js"
+import { serverIds } from "~/config"
 import database from "~/database"
-import { getAllLocations, getDiscordPlayer, getLocation } from "~/database/getData"
+import {
+	getAllLocations,
+	getDiscordPlayer,
+	getLocation
+} from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand, type BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

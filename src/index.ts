@@ -1,5 +1,5 @@
-import { BetterClient } from "~/lib"
 import * as config from "~/config"
+import { BetterClient } from "~/lib"
 import { logger } from "~/logger"
 
 const client = new BetterClient({

@@ -1,16 +1,56 @@
+import {
+	ActionRowBuilder,
+	ApplicationCommandOptionType,
+	ButtonBuilder,
+	ButtonStyle,
+	type ChatInputCommandInteraction
+} from "discord.js"
+import { titleCase } from "~/functions/titleCase"
 import { ApplicationCommand, type BetterClient } from "~/lib"
-import type { ChatInputCommandInteraction } from "discord.js"
 
 export default class Command extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("bribe", client, {
-			description: ":D"
+			description: ":D",
+			options: [
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "seven",
+					description: ":D"
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "shadow",
+					description: ";)"
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "turkey",
+					description: "(:"
+				}
+			]
 		})
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		return interaction.reply(
-			`Money? Money. Money! MONEYYYYY\n[Shadow's Ko-fi](https://ko-fi.com/theshadow)\n[Turkey's Ko-fi](https://example.com)\n[Seven's Ko-fi](https://example.com)`
-		)
+		const person = interaction.options.getSubcommand(true)
+		if (!person) return
+		const link =
+			person === "seven"
+				? "https://ko-fi.com/seventhheart"
+				: person === "turkey"
+					? "https://ko-fi.com/turkeywizard"
+					: "https://ko-fi.com/theshadow"
+		return interaction.reply({
+			content: `[Bribe ${titleCase(person)} by clicking here or using the button below!](<${link}>)\n\n-# https://tenor.com/bCqtn.gif`,
+			components: [
+				new ActionRowBuilder<ButtonBuilder>().addComponents(
+					new ButtonBuilder()
+						.setURL(link)
+						.setLabel("Bribe")
+						.setStyle(ButtonStyle.Link)
+				)
+			]
+		})
 	}
 }

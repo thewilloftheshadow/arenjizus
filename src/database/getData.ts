@@ -100,7 +100,10 @@ export const getAllRoles = async () => {
 	})
 }
 
-export const getAbility = async (name: string, createCustomIfNeeded: Player["id"] | false = false) => {
+export const getAbility = async (
+	name: string,
+	createCustomIfNeeded: Player["id"] | false = false
+) => {
 	const ability = await database.ability.findFirst({
 		where: {
 			name
@@ -119,9 +122,7 @@ export const getAbility = async (name: string, createCustomIfNeeded: Player["id"
 				uses: 1,
 				properties: 0,
 				customOneOff: true,
-				playersWithAbility: {
-
-				}
+				playersWithAbility: {}
 			},
 			include: {
 				playersWithAbility: true,

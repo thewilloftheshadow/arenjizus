@@ -1,9 +1,9 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
 import {
 	AttachmentBuilder,
 	type ChatInputCommandInteraction,
 	type GuildChannel
 } from "discord.js"
+import { ApplicationCommand, type BetterClient } from "~/lib"
 
 type MessageStored = {
 	time: Date
@@ -80,7 +80,8 @@ export default class Ping extends ApplicationCommand {
 		)
 		const formatted = sortedMessages.map(
 			(msg) =>
-				`${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${msg.content || "No content"
+				`${msg.time.toISOString()}	${msg.author}	#${msg.channel}	${
+					msg.content || "No content"
 				}`
 		)
 		const attachment = new AttachmentBuilder(

@@ -1,5 +1,5 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
 import type { ChatInputCommandInteraction, Message } from "discord.js"
+import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Command extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -16,8 +16,9 @@ export default class Command extends ApplicationCommand {
 		const hostLatency = message.createdTimestamp - interaction.createdTimestamp
 		const apiLatency = Math.round(this.client.ws.ping)
 		return interaction.editReply({
-			content: `Pong! Host latency: ${hostLatency}ms. API latency: ${apiLatency}ms. Round trip latency: ${hostLatency + apiLatency
-				}ms`
+			content: `Pong! Host latency: ${hostLatency}ms. API latency: ${apiLatency}ms. Round trip latency: ${
+				hostLatency + apiLatency
+			}ms`
 		})
 	}
 }

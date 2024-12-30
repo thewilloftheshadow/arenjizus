@@ -1,10 +1,10 @@
-import { type BetterClient, Dropdown } from "~/lib"
+import type { StringSelectMenuInteraction } from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
-import { logger } from "~/logger"
-import type { StringSelectMenuInteraction } from "discord.js"
-import { useAbility, runAbilityProperties } from "~/database/thingys"
+import { runAbilityProperties, useAbility } from "~/database/thingys"
 import { getPlayerChannel } from "~/functions/player"
+import { type BetterClient, Dropdown } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Droppy extends Dropdown {
 	constructor(client: BetterClient) {
@@ -28,7 +28,8 @@ export default class Droppy extends Dropdown {
 				ability: true
 			}
 		})
-		if (!playerAbility) return interaction.editReply("Ability queue entry not found.")
+		if (!playerAbility)
+			return interaction.editReply("Ability queue entry not found.")
 
 		await useAbility(playerAbility.playerName, playerAbility.abilityName)
 		const done = await runAbilityProperties(
@@ -40,7 +41,10 @@ export default class Droppy extends Dropdown {
 		logger.gameLog(
 			`${playerAbility.playerName} used ${playerAbility.abilityName}.`
 		)
-		const playerChannel = await getPlayerChannel(playerAbility.playerName, this.client)
+		const playerChannel = await getPlayerChannel(
+			playerAbility.playerName,
+			this.client
+		)
 		if (!playerChannel) return
 		await playerChannel.send({
 			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`

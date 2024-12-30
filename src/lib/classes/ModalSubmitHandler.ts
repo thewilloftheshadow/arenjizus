@@ -1,9 +1,9 @@
 import path from "node:path"
 import { ComponentType, type ModalSubmitInteraction } from "discord.js"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { getFiles } from "~/functions/getFiles"
 import { type BetterClient, LogLevel } from "../"
 import type ModalSubmit from "./ModalSubmit"
-import { getFiles } from "~/functions/getFiles"
-import { generateErrorMessage } from "~/functions/generateMessage"
 
 export default class ModalSubmitHandler {
 	/**
@@ -119,13 +119,11 @@ export default class ModalSubmitHandler {
 			this.client.log(`${error}`, LogLevel.ERROR)
 			if (error instanceof Error)
 				this.client.log(`${error.stack}`, LogLevel.ERROR)
-			const toSend = generateErrorMessage(
-				{
-					title: "An Error Has Occurred",
-					description:
-						"An unexpected error was encountered while submitting this modal. Please try again later. If the problem persists, please contact support."
-				},
-			)
+			const toSend = generateErrorMessage({
+				title: "An Error Has Occurred",
+				description:
+					"An unexpected error was encountered while submitting this modal. Please try again later. If the problem persists, please contact support."
+			})
 			if (interaction.replied) return interaction.followUp(toSend)
 			return interaction.reply({
 				...toSend

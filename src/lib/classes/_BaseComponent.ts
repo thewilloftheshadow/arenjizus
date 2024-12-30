@@ -1,7 +1,7 @@
-import type { APIEmbed, BaseInteraction, PermissionsBitField } from "discord.js"
-import { type BaseComponentOptions, type BetterClient, LogLevel } from "../"
 import { checkAccess } from "@buape/functions"
+import type { APIEmbed, BaseInteraction, PermissionsBitField } from "discord.js"
 import { titleCase } from "~/functions/titleCase"
+import { type BaseComponentOptions, type BetterClient, LogLevel } from "../"
 
 /**
  * The base component class that other components extend from.
@@ -100,8 +100,9 @@ export default class BaseComponent {
 					description: `I need the ${this.clientPermissions
 						.toArray()
 						.map((permission) => `**${titleCase(permission)}**`)
-						.join(", ")} permission${this.clientPermissions.toArray().length > 1 ? "s" : ""
-						} to run this action.`
+						.join(", ")} permission${
+						this.clientPermissions.toArray().length > 1 ? "s" : ""
+					} to run this action.`
 				}
 			}
 		}
@@ -117,8 +118,9 @@ export default class BaseComponent {
 		) {
 			return {
 				title: "Missing Permissions",
-				description: `This action can only be used by ${this.client.user?.username || "the bot"
-					} ${this.restriction}s.`
+				description: `This action can only be used by ${
+					this.client.user?.username || "the bot"
+				} ${this.restriction}s.`
 			}
 		}
 

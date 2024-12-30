@@ -1,9 +1,4 @@
 {
 	"dotenv.enableAutocloaking": false,
-	"cSpell.words": [
-		"Arenjizus",
-		"gamemaster",
-		"gamemasters",
-		"Sudoing"
-	]
+	"cSpell.words": ["Arenjizus", "gamemaster", "gamemasters", "Sudoing"]
 }

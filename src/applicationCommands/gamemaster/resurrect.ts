@@ -1,12 +1,12 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import { serverIds } from "~/config"
-import { logger } from "~/logger"
 import type { ChatInputCommandInteraction } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import { serverIds } from "~/config"
 import { getPlayer } from "~/database/getData"
 import { toggleDeath } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -43,11 +43,11 @@ export default class Ping extends ApplicationCommand {
 			await interaction.guild?.members
 				.resolve(player.discordId)
 				?.roles.remove(serverIds.roles.dead)
-				.catch(() => { })
+				.catch(() => {})
 			await interaction.guild?.members
 				.resolve(player.discordId)
 				?.roles.add(serverIds.roles.player)
-				.catch(() => { })
+				.catch(() => {})
 		}
 
 		logger.gameLog(`${name} has been resurrected!`)

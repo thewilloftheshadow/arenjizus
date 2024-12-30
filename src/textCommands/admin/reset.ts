@@ -1,6 +1,6 @@
-import { type BetterClient, TextCommand } from "~/lib"
-import database from "~/database"
 import type { Message, TextChannel } from "discord.js"
+import database from "~/database"
+import { type BetterClient, TextCommand } from "~/lib"
 
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {

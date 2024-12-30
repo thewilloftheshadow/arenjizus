@@ -1,15 +1,15 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import { logger } from "~/logger"
 import {
 	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
-	type ChatInputCommandInteraction,
+	type ChatInputCommandInteraction
 } from "discord.js"
 import database from "~/database"
 import { getAllPlayers } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Vote extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -120,14 +120,12 @@ export default class Vote extends ApplicationCommand {
 			}
 		})
 		if (dayChat?.value) {
-			const channel = this.client.channels.resolve(
-				dayChat.value
-			)
+			const channel = this.client.channels.resolve(dayChat.value)
 			if (!channel || !channel.isSendable()) return
 			const m = await channel
 				.send(`${player.name} has voted for ${playerChosen.name}!`)
-				.catch(() => { })
-			m?.pin().catch(() => { })
+				.catch(() => {})
+			m?.pin().catch(() => {})
 		}
 
 		logger.gameLog(

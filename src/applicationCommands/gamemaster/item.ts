@@ -1,7 +1,6 @@
 import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
 
-import { logger } from "~/logger"
 import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
@@ -10,10 +9,22 @@ import type {
 import { ApplicationCommandOptionType } from "discord.js"
 import database from "~/database"
 import { itemEmbed } from "~/database/embeds"
-import { getAllItems, getAllPlayers, getItem, getPlayer, getPlayerItem } from "~/database/getData"
-import { removeMoney, givePlayerItem, removePlayerItem, deleteItem } from "~/database/thingys"
+import {
+	getAllItems,
+	getAllPlayers,
+	getItem,
+	getPlayer,
+	getPlayerItem
+} from "~/database/getData"
+import {
+	deleteItem,
+	givePlayerItem,
+	removeMoney,
+	removePlayerItem
+} from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getPlayerChannel } from "~/functions/player"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -370,7 +381,8 @@ export default class Ping extends ApplicationCommand {
 					}
 				})
 				logger.gameLog(
-					`Item ${item.name} was updated, description: ${interaction.options.getString("description") || ""
+					`Item ${item.name} was updated, description: ${
+						interaction.options.getString("description") || ""
 					}, price: ${interaction.options.getInteger("price", true)}.`
 				)
 				return interaction.editReply({

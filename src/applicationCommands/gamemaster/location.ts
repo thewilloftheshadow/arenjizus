@@ -1,7 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import { generateErrorMessage } from "~/functions/generateMessage"
-import { logger } from "~/logger"
 import {
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
@@ -13,6 +9,10 @@ import { ApplicationCommandOptionType } from "discord.js"
 import database from "~/database"
 import { locationEmbed } from "~/database/embeds"
 import { getAllLocations, getLocation } from "~/database/getData"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 const category = "1189790054411943979"
 
@@ -243,8 +243,9 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Player not found",
-							description: `The player ${interaction.options.getString("player") || ""
-								} was not found in the database.`
+							description: `The player ${
+								interaction.options.getString("player") || ""
+							} was not found in the database.`
 						})
 					)
 				}
@@ -309,7 +310,7 @@ export default class Ping extends ApplicationCommand {
 								.create(player.discordId, {
 									ViewChannel: true
 								})
-								.catch(() => { })
+								.catch(() => {})
 						}
 					}
 					logger.gameLog(`${player.name} was sent to ${location.name}`)

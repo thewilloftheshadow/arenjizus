@@ -1,8 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import database, {
-} from "~/database"
-import { logger } from "~/logger"
 import type { Prisma } from "@prisma/client"
 import {
 	type AutocompleteFocusedOption,
@@ -11,11 +6,15 @@ import {
 	EmbedBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import database, {} from "~/database"
 import { playerEmbed } from "~/database/embeds"
 import { getAllPlayers, getPlayer } from "~/database/getData"
 import { addMoney, removeMoney } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getPlayerChannel } from "~/functions/player"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -365,8 +364,10 @@ export default class Ping extends ApplicationCommand {
 				const newName = interaction.options.getString("new-name")
 				const robberiesLeft = interaction.options.getInteger("robberies-left")
 				logger.gameLog(
-					`Player ${player.name} was updated. ${money ? `Money: ${money}` : ""
-					} ${newName ? `Name: ${newName}` : ""} ${robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""
+					`Player ${player.name} was updated. ${
+						money ? `Money: ${money}` : ""
+					} ${newName ? `Name: ${newName}` : ""} ${
+						robberiesLeft ? `Robberies left: ${robberiesLeft}` : ""
 					}`
 				)
 				if (money) data.money = money
@@ -442,11 +443,14 @@ export default class Ping extends ApplicationCommand {
 					.setDescription("\n")
 					.setFooter({
 						text: publicVersion
-							? `${players.filter((x) => x.isAlive).length} alive, ${players.filter((x) => !x.isAlive).length
-							} dead`
-							: `${players.filter((x) => x.isAlive).length} alive, ${players.filter((x) => !x.isAlive).length
-							} dead, ${players.filter((x) => !x.isAlive && x.isFaked).length
-							} faked`
+							? `${players.filter((x) => x.isAlive).length} alive, ${
+									players.filter((x) => !x.isAlive).length
+								} dead`
+							: `${players.filter((x) => x.isAlive).length} alive, ${
+									players.filter((x) => !x.isAlive).length
+								} dead, ${
+									players.filter((x) => !x.isAlive && x.isFaked).length
+								} faked`
 					})
 				// biome-ignore lint/complexity/noForEach: no
 				players
@@ -475,15 +479,17 @@ export default class Ping extends ApplicationCommand {
 										: "👻"
 									: "💀"
 								: "??"
-						embed.data.description += `${deathEmoji} ${player.name}${publicVersion
-							? "\n"
-							: ` - ${player.roles
-								.map((role) => role.roleName)
-								.join(", ")} ($${player.money}, ${player.location
-									? player.location.name
-									: "No location selected"
-							})\n`
-							}`
+						embed.data.description += `${deathEmoji} ${player.name}${
+							publicVersion
+								? "\n"
+								: ` - ${player.roles
+										.map((role) => role.roleName)
+										.join(", ")} ($${player.money}, ${
+										player.location
+											? player.location.name
+											: "No location selected"
+									})\n`
+						}`
 					})
 
 				if (publicVersion) {

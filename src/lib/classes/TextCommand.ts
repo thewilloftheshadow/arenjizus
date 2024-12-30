@@ -1,7 +1,7 @@
-import type { APIEmbed, Message } from "discord.js"
-import type { BetterClient, TextCommandOptions } from "../"
-import { titleCase } from "~/functions/titleCase"
 import { checkAccess } from "@buape/functions"
+import type { APIEmbed, Message } from "discord.js"
+import { titleCase } from "~/functions/titleCase"
+import type { BetterClient, TextCommandOptions } from "../"
 
 export default class TextCommand {
 	public readonly client: BetterClient
@@ -26,13 +26,14 @@ export default class TextCommand {
 		) {
 			return {
 				title: "Missing Permissions",
-				description: `This command can only be used by ${this.client.user?.username || "the bot"
-					} ${titleCase(this.restriction)}s.`
+				description: `This command can only be used by ${
+					this.client.user?.username || "the bot"
+				} ${titleCase(this.restriction)}s.`
 			}
 		}
 
 		return null
 	}
 	// biome-ignore lint/suspicious/noExplicitAny: This can truly be any
-	public async run(_message: Message, _args: string[]): Promise<any> { }
+	public async run(_message: Message, _args: string[]): Promise<any> {}
 }

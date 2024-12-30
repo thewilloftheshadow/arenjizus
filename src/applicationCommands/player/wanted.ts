@@ -1,15 +1,15 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import database from "~/database"
-import { generateErrorMessage } from "~/functions/generateMessage"
-import { logger } from "~/logger"
 import {
 	ApplicationCommandOptionType,
 	type ChatInputCommandInteraction,
 	type TextChannel
 } from "discord.js"
+import database from "~/database"
 import { getDiscordPlayer, getPlayer } from "~/database/getData"
 import { removeMoney } from "~/database/thingys"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Want extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -100,12 +100,12 @@ export default class Want extends ApplicationCommand {
 				.send(
 					` <a:siren:1084362013247033405> Someone has declared ${playerChosen.name} as wanted! <a:siren:1084362013247033405>\nIt now costs $${newPrice} to declare someone wanted!`
 				)
-				.catch(() => { })
+				.catch(() => {})
 			channel
 				.setTopic(
 					`Wanted: ${playerChosen.name} | Price to change: $${newPrice}`
 				)
-				.catch(() => { })
+				.catch(() => {})
 		}
 
 		await database.keyV.upsert({

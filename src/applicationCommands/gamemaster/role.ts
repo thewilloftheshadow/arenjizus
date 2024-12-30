@@ -1,18 +1,22 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import database, {
-} from "~/database"
-import { logger } from "~/logger"
 import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
 	ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import database, {} from "~/database"
 import { roleEmbed } from "~/database/embeds"
-import { getAllRoles, getAllPlayers, getRole, getPlayer } from "~/database/getData"
+import {
+	getAllPlayers,
+	getAllRoles,
+	getPlayer,
+	getRole
+} from "~/database/getData"
 import { givePlayerRole, removePlayerRole } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

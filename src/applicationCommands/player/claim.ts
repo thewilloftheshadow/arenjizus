@@ -1,9 +1,12 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
-import database, { kiai } from "~/database"
-import { logger } from "~/logger"
 import type { ChatInputCommandInteraction } from "discord.js"
+import database, { kiai } from "~/database"
 import { getDiscordPlayer } from "~/database/getData"
-import { generateErrorMessage, generateSuccessMessage } from "~/functions/generateMessage"
+import {
+	generateErrorMessage,
+	generateSuccessMessage
+} from "~/functions/generateMessage"
+import { ApplicationCommand, type BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

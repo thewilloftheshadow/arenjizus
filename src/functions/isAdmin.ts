@@ -1,5 +1,5 @@
-import { admins } from "~/config"
 import type { Snowflake } from "discord.js"
+import { admins } from "~/config"
 
 /**
  * Get whether a user is an admin or not.

@@ -1,11 +1,8 @@
 import { inspect } from "node:util"
-import { type BetterClient, TextCommand, Type } from "~/lib"
-import * as lib from "~/lib"
+import { EmbedBuilder, type Message } from "discord.js"
 import * as config from "~/config"
 import db from "~/database"
 import * as database from "~/database"
-import { logger } from "~/logger"
-import { EmbedBuilder, type Message } from "discord.js"
 import * as generateMessage from "~/functions/generateMessage"
 import * as generateTimestamp from "~/functions/generateTimestamp"
 import * as getFiles from "~/functions/getFiles"
@@ -17,7 +14,9 @@ import * as randomInt from "~/functions/randomInt"
 import * as shuffle from "~/functions/shuffle"
 import * as titleCase from "~/functions/titleCase"
 import * as uploadHaste from "~/functions/uploadHaste"
-
+import { type BetterClient, TextCommand, Type } from "~/lib"
+import * as lib from "~/lib"
+import { logger } from "~/logger"
 
 const bot = {
 	db,
@@ -42,8 +41,7 @@ const bot = {
 
 export default class Eval extends TextCommand {
 	constructor(client: BetterClient) {
-		super("eval", client, {
-		})
+		super("eval", client, {})
 
 		logger.null(bot)
 	}
@@ -51,7 +49,8 @@ export default class Eval extends TextCommand {
 	override async run(message: Message, args: string[]) {
 		if (!config.admins.includes(message.author.id)) return
 		logger.info(
-			`${message.author.tag} ran eval in ${message.guild?.name} ${message.guild?.id
+			`${message.author.tag} ran eval in ${message.guild?.name} ${
+				message.guild?.id
 			}, ${args.join(" ")}`
 		)
 

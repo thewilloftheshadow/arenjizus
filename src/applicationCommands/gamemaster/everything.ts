@@ -1,5 +1,5 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
+import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
+import { ApplicationCommandOptionType } from "discord.js"
 import {
 	getAllAbilities,
 	getAllItems,
@@ -8,8 +8,8 @@ import {
 	getAllRoles
 } from "~/database/getData"
 import { Paginator } from "~/functions/paginator"
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -40,8 +40,9 @@ export default class Ping extends ApplicationCommand {
 		)
 		const votes = playersData.map((player) =>
 			player.votedForName
-				? `${player.name} - ${player.voteWorth} vote${player.voteWorth === 1 ? "" : "s"
-				} for ${player.votedForName}`
+				? `${player.name} - ${player.voteWorth} vote${
+						player.voteWorth === 1 ? "" : "s"
+					} for ${player.votedForName}`
 				: `${player.name} - No vote`
 		)
 		const abilities = abilityData.map((ability) => ability.name)

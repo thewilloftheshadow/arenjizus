@@ -1,5 +1,3 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
-import { logger } from "~/logger"
 import {
 	ApplicationCommandOptionType,
 	type ChatInputCommandInteraction
@@ -8,6 +6,8 @@ import database from "~/database"
 import { getDiscordPlayer } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { generateTimestamp } from "~/functions/generateTimestamp"
+import { ApplicationCommand, type BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -73,11 +73,12 @@ export default class Ping extends ApplicationCommand {
 			})}`
 		)
 		return interaction.editReply({
-			content: `You have invested $${amount}, and will receive ${amount * 2
-				} money ${generateTimestamp({
-					timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
-					type: "R"
-				})}`
+			content: `You have invested $${amount}, and will receive ${
+				amount * 2
+			} money ${generateTimestamp({
+				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
+				type: "R"
+			})}`
 		})
 	}
 }

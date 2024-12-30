@@ -1,8 +1,8 @@
 import path from "node:path"
 import type { Message } from "discord.js"
-import { type BetterClient, LogLevel, type TextCommand } from "../"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getFiles } from "~/functions/getFiles"
+import { type BetterClient, LogLevel, type TextCommand } from "../"
 
 export default class TextCommandHandler {
 	public client: BetterClient

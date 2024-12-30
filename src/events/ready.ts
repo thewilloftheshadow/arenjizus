@@ -1,5 +1,5 @@
-import { type BetterClient, EventHandler } from "~/lib"
 import { getFiles } from "~/functions/getFiles"
+import { type BetterClient, EventHandler } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ready extends EventHandler {
@@ -27,9 +27,7 @@ async function loadAndStartCrons(client: BetterClient) {
 
 		for await (const job of jobs) {
 			logger.info(`[CRON] Starting CRON "${job}"`)
-			const { startCron } = await import(
-				`../jobs/${job}`
-			)
+			const { startCron } = await import(`../jobs/${job}`)
 			startCron(client)
 			logger.info(`[CRON] Started CRON "${job}"`)
 		}

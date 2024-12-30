@@ -1,9 +1,9 @@
-import { type BetterClient, Button } from "~/lib"
+import type { ButtonInteraction } from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
-import { logger } from "~/logger"
-import type { ButtonInteraction } from "discord.js"
 import { queueAbility } from "~/database/ability"
+import { type BetterClient, Button } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Buttony extends Button {
 	constructor(client: BetterClient) {
@@ -31,7 +31,9 @@ export default class Buttony extends Button {
 
 		await queueAbility(playerAbility.id)
 
-		await interaction.editReply(`Ability added to queue.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`)
+		await interaction.editReply(
+			`Ability added to queue.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`
+		)
 		logger.gameLog(
 			`${playerAbility.abilityName} has been queued for ${playerAbility.playerName}.\n-# ||${playerAbility.abilityName}:${playerAbility.playerName}-${Date.now()}||`
 		)

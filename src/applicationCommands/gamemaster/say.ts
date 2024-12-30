@@ -1,6 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import { generateErrorMessage } from "~/functions/generateMessage"
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -9,6 +6,9 @@ import {
 	type ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -35,7 +35,7 @@ export default class Ping extends ApplicationCommand {
 		const text = interaction.options.getString("text", true)
 		const channel = await interaction.guild?.channels.fetch(
 			interaction.options.getChannel("channel", false)?.id ||
-			interaction.channelId
+				interaction.channelId
 		)
 
 		if (channel?.type !== ChannelType.GuildText) {

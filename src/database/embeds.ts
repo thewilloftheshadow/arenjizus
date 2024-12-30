@@ -1,21 +1,21 @@
-import { embedSpacer } from "~/config"
-import { generateTimestamp } from "~/functions/generateTimestamp"
 import { EmbedBuilder } from "discord.js"
-import {
-	type Ability,
-	type AbilityItemLink,
-	type AbilityRoleLink,
-	type Investment,
-	type Item,
-	type Location,
-	type Player,
-	type PlayerAbilities,
-	type PlayerBallData,
-	type PlayerItems,
-	type PlayerNotes,
-	type PlayerRoles,
-	type Role,
+import { embedSpacer } from "~/config"
+import type {
+	Ability,
+	AbilityItemLink,
+	AbilityRoleLink,
+	Investment,
+	Item,
+	Location,
+	Player,
+	PlayerAbilities,
+	PlayerBallData,
+	PlayerItems,
+	PlayerNotes,
+	PlayerRoles,
+	Role
 } from "~/database"
+import { generateTimestamp } from "~/functions/generateTimestamp"
 import { getPropertyDetails } from "./ability"
 
 export const itemEmbed = (
@@ -120,7 +120,8 @@ export const playerEmbed = (
 					player.notes
 						.map(
 							(x) =>
-								`${generateTimestamp({ timestamp: x.createdAt, type: "f" })} ${x.note
+								`${generateTimestamp({ timestamp: x.createdAt, type: "f" })} ${
+									x.note
 								}`
 						)
 						.join("\n") || "** **"
@@ -150,7 +151,9 @@ export const roleEmbed = (
 			inline: true
 		})
 	if (role.name.toLowerCase().includes("bezos"))
-		embed.setImage("https://media1.tenor.com/m/bPnCW0WkamkAAAAd/im-the-richest-person-ever-i-can-do-whatever-i-want-jeff-bezos.gif")
+		embed.setImage(
+			"https://media1.tenor.com/m/bPnCW0WkamkAAAAd/im-the-richest-person-ever-i-can-do-whatever-i-want-jeff-bezos.gif"
+		)
 	return embed
 }
 
@@ -186,8 +189,9 @@ export const abilityEmbed = (
 	if (!hideUsers)
 		embed.addFields([
 			{
-				name: `${ability.playersWithAbility.filter((x) => x.usesLeft > 0).length
-					} Players:`,
+				name: `${
+					ability.playersWithAbility.filter((x) => x.usesLeft > 0).length
+				} Players:`,
 				value:
 					ability.playersWithAbility
 						.filter((x) => x.usesLeft > 0)

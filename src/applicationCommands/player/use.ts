@@ -1,7 +1,3 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
-import { serverIds } from "~/config"
-import database, {
-} from "~/database"
 import {
 	ActionRowBuilder,
 	ApplicationCommandOptionType,
@@ -11,8 +7,20 @@ import {
 	ButtonStyle,
 	type ChatInputCommandInteraction
 } from "discord.js"
-import { getAllPlayers, getDiscordPlayer, getAbility, getPlayer, getPlayerAbility } from "~/database/getData"
-import { generateErrorMessage, generateWarningMessage } from "~/functions/generateMessage"
+import { serverIds } from "~/config"
+import database, {} from "~/database"
+import {
+	getAbility,
+	getAllPlayers,
+	getDiscordPlayer,
+	getPlayer,
+	getPlayerAbility
+} from "~/database/getData"
+import {
+	generateErrorMessage,
+	generateWarningMessage
+} from "~/functions/generateMessage"
+import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -56,25 +64,27 @@ export default class Ping extends ApplicationCommand {
 							.toLowerCase()
 							.includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						[...abilities.map((ability) => ({
+					return interaction.respond([
+						...abilities.map((ability) => ({
 							name: ability.abilityName,
 							value: ability.abilityName
-						})), {
+						})),
+						{
 							name: option.value,
 							value: option.value
-						}]
-					)
+						}
+					])
 				}
-				return interaction.respond(
-					[...allAbilities.map((ability) => ({
+				return interaction.respond([
+					...allAbilities.map((ability) => ({
 						name: ability.abilityName,
 						value: ability.abilityName
-					})), {
+					})),
+					{
 						name: "You can also type in a custom ability you want to do!",
 						value: "x"
-					}]
-				)
+					}
+				])
 			}
 			case "target": {
 				const allPlayers = await getAllPlayers()
@@ -99,9 +109,12 @@ export default class Ping extends ApplicationCommand {
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply({ ephemeral: true })
 		if (interaction.options.getString("ability", true) === "x")
-			return interaction.editReply(generateWarningMessage({
-				description: "Please select an ability from the list or type in your own ability to do."
-			}))
+			return interaction.editReply(
+				generateWarningMessage({
+					description:
+						"Please select an ability from the list or type in your own ability to do."
+				})
+			)
 
 		const player = await getDiscordPlayer(interaction.user.id)
 		if (!player) {
@@ -193,8 +206,9 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		await channel.send({
-			content: `<@&${serverIds.roles.gamemaster}>, ${player.name
-				} wants to use ${ability.name}${target ? ` on ${target}` : ""}!`,
+			content: `<@&${serverIds.roles.gamemaster}>, ${
+				player.name
+			} wants to use ${ability.name}${target ? ` on ${target}` : ""}!`,
 			components: [
 				new ActionRowBuilder<ButtonBuilder>().addComponents([
 					new ButtonBuilder()

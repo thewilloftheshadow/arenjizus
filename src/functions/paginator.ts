@@ -1,5 +1,4 @@
 import { EventEmitter } from "node:events"
-import type { BetterClient } from "~/lib"
 import {
 	type APIEmbed,
 	ActionRowBuilder,
@@ -13,6 +12,7 @@ import {
 	type MessageActionRowComponentBuilder
 } from "discord.js"
 import type { GeneratedMessage } from "~/functions/generateMessage"
+import type { BetterClient } from "~/lib"
 
 type PaginatorSettings = {
 	/** A unique ID for this paginator, typically the ID of the interaction. Max 75 characters */

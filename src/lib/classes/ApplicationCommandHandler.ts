@@ -1,9 +1,10 @@
-import { generateTimestamp } from "~/functions/generateTimestamp"
 import {
 	type ApplicationCommandData,
 	Collection,
 	type CommandInteraction
 } from "discord.js"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { generateTimestamp } from "~/functions/generateTimestamp"
 import {
 	type ApplicationCommand,
 	type BetterClient,
@@ -12,7 +13,6 @@ import {
 	type _BaseComponent
 } from "../"
 import _BaseHandler from "./_BaseHandler"
-import { generateErrorMessage } from "~/functions/generateMessage"
 
 export default class ApplicationCommandHandler extends _BaseHandler {
 	// Key is `${userID}-${commandName}`.
@@ -74,7 +74,7 @@ export default class ApplicationCommandHandler extends _BaseHandler {
 								})}.`
 							},
 							true,
-							true,
+							true
 						)
 					)
 				}

@@ -1,11 +1,15 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import { logger } from "~/logger"
 import type { ChatInputCommandInteraction } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 import database from "~/database"
 import { getPlayer } from "~/database/getData"
-import { givePlayerItem, removePlayerItem, setPlayerMoney } from "~/database/thingys"
+import {
+	givePlayerItem,
+	removePlayerItem,
+	setPlayerMoney
+} from "~/database/thingys"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
+import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -74,8 +78,10 @@ export default class Ping extends ApplicationCommand {
 		await interaction.editReply(`Done`)
 		await interaction.followUp(`Looted ${from.name} to ${to.name}`)
 		logger.gameLog(
-			`${to.name} looted ${from.name} and got ${from.money
-			} money, ${investmentCount} investments, and ${from.items.length
+			`${to.name} looted ${from.name} and got ${
+				from.money
+			} money, ${investmentCount} investments, and ${
+				from.items.length
 			} items: ${itemList.map((i) => `${i.name} x${i.amount}`).join(", ")}`
 		)
 	}

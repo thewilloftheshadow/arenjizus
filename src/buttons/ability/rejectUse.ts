@@ -1,6 +1,6 @@
-import { type BetterClient, Button } from "~/lib"
-import { serverIds } from "~/config"
 import type { ButtonInteraction } from "discord.js"
+import { serverIds } from "~/config"
+import { type BetterClient, Button } from "~/lib"
 
 export default class Buttony extends Button {
 	constructor(client: BetterClient) {

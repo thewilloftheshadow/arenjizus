@@ -1,7 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import database, {
-} from "~/database"
 import {
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
@@ -10,8 +6,11 @@ import {
 	EmbedBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import database, {} from "~/database"
 import { getAllPlayers, getPlayer } from "~/database/getData"
-import { setVoteWorth, setVote } from "~/database/thingys"
+import { setVote, setVoteWorth } from "~/database/thingys"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -148,18 +147,20 @@ export default class Ping extends ApplicationCommand {
 					.setDescription("\n")
 				for (const vote in votes) {
 					if (vote === "No Vote") {
-						embed.data.description += `**${votes[vote].length
-							} people didn't vote**:\n> ${votes[vote]
-								.map((y) => y.from)
-								.join(", ")}\n\n`
+						embed.data.description += `**${
+							votes[vote].length
+						} people didn't vote**:\n> ${votes[vote]
+							.map((y) => y.from)
+							.join(", ")}\n\n`
 						continue
 					}
 					const x = votes[vote]
 					const worth = x.reduce((a, b) => a + b.worth, 0)
-					embed.data.description += `**${worth} vote${worth === 1 ? "" : "s"
-						} for ${vote}**:\n> ${x
-							.map((y) => `${y.from} (${y.worth})`)
-							.join(", ")}\n\n`
+					embed.data.description += `**${worth} vote${
+						worth === 1 ? "" : "s"
+					} for ${vote}**:\n> ${x
+						.map((y) => `${y.from} (${y.worth})`)
+						.join(", ")}\n\n`
 				}
 				return interaction.editReply({ embeds: [embed] })
 			}

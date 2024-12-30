@@ -1,11 +1,11 @@
-import { colors } from "~/config"
-import { logger } from "~/logger"
 import {
 	type APIEmbed,
 	type ActionRowBuilder,
 	type ButtonBuilder,
 	EmbedBuilder
 } from "discord.js"
+import { colors } from "~/config"
+import { logger } from "~/logger"
 
 export type GeneratedMessage = {
 	embeds?: APIEmbed[]

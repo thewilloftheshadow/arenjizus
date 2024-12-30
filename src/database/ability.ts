@@ -1,6 +1,6 @@
 import { Result } from "@sapphire/result"
 import database, { type Ability } from "~/database"
-import { getPlayer, getAbility } from "./getData"
+import { getAbility, getPlayer } from "./getData"
 
 export const grantAbility = async (playerName: string, abilityName: string) => {
 	const player = await getPlayer(playerName)

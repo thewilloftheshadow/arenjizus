@@ -1,12 +1,21 @@
 import { Result } from "@sapphire/result"
 import type { Client } from "discord.js"
-import database, {
-	type Ability,
-} from "~/database"
 import { serverIds } from "~/config"
+import database, { type Ability } from "~/database"
 import { logger } from "~/logger"
-import { convertNumberToProperties, AbilityProperty, grantAbility } from "./ability"
-import { getPlayer, getItem, getAbility, getRole, getAllPlayers, getPlayerAbility } from "./getData"
+import {
+	AbilityProperty,
+	convertNumberToProperties,
+	grantAbility
+} from "./ability"
+import {
+	getAbility,
+	getAllPlayers,
+	getItem,
+	getPlayer,
+	getPlayerAbility,
+	getRole
+} from "./getData"
 
 export const addMoney = async (name: string, amount: number) => {
 	const player = await getPlayer(name)
@@ -233,20 +242,20 @@ export const syncDeathRoles = async (client: Client) => {
 				await guild.members
 					.resolve(player.discordId)
 					?.roles.remove(serverIds.roles.dead)
-					.catch(() => { })
+					.catch(() => {})
 				await guild.members
 					.resolve(player.discordId)
 					?.roles.add(serverIds.roles.player)
-					.catch(() => { })
+					.catch(() => {})
 			} else {
 				await guild.members
 					.resolve(player.discordId)
 					?.roles.remove(serverIds.roles.player)
-					.catch(() => { })
+					.catch(() => {})
 				await guild.members
 					.resolve(player.discordId)
 					?.roles.add(serverIds.roles.dead)
-					.catch(() => { })
+					.catch(() => {})
 			}
 		}
 	})
@@ -338,11 +347,13 @@ export const useAbility = async (playerName: string, abilityName: string) => {
 			}
 		}
 	})
-	await database.abilityQueue.delete({
-		where: {
-			abilityId: playerLink.id
-		}
-	}).catch(() => { })
+	await database.abilityQueue
+		.delete({
+			where: {
+				abilityId: playerLink.id
+			}
+		})
+		.catch(() => {})
 
 	if (ability.linkedItems.length > 0) {
 		for (const itemLink of ability.linkedItems) {
@@ -407,7 +418,7 @@ export const runAbilityProperties = async (
 				.send(
 					"🔒 An emergency meeting has been called! The chat is now locked! 🔒"
 				)
-				.catch(() => { })
+				.catch(() => {})
 			if (!m) {
 				result.push("Failed to send message")
 				continue

@@ -1,8 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-import database, {
-
-} from "~/database"
 import {
 	ActionRowBuilder,
 	type AutocompleteFocusedOption,
@@ -14,10 +9,31 @@ import {
 	StringSelectMenuBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
-import { grantAbility, AbilityProperty, resetAllAbilityUses, getPropertyDetails, allProperties, setPropertiesForAbility, resetAbilityUses } from "~/database/ability"
+import database, {} from "~/database"
+import {
+	AbilityProperty,
+	allProperties,
+	getPropertyDetails,
+	grantAbility,
+	resetAbilityUses,
+	resetAllAbilityUses,
+	setPropertiesForAbility
+} from "~/database/ability"
 import { abilityEmbed } from "~/database/embeds"
-import { getAllItems, getAllPlayers, getAllAbilities, getAllRoles, getAbilitiesWithProperty, getAbility, getRole, getItem, getPlayer } from "~/database/getData"
+import {
+	getAbilitiesWithProperty,
+	getAbility,
+	getAllAbilities,
+	getAllItems,
+	getAllPlayers,
+	getAllRoles,
+	getItem,
+	getPlayer,
+	getRole
+} from "~/database/getData"
 import { createAbility } from "~/database/thingys"
+import { ApplicationCommand } from "~/lib"
+import type { BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
@@ -291,7 +307,7 @@ export default class Ping extends ApplicationCommand {
 				{
 					type: ApplicationCommandOptionType.Subcommand,
 					name: "queue",
-					description: "View the ability queue",
+					description: "View the ability queue"
 				}
 			]
 		})
@@ -599,12 +615,14 @@ export default class Ping extends ApplicationCommand {
 						})
 					}
 					return interaction.editReply(
-						`${giveItemName
-							? `The ${abilityName} ability will now be given with the ${giveItemName} item`
-							: ""
-						}${subtractItemName
-							? `The ${abilityName} ability will now be subtracted with the ${subtractItemName} item`
-							: "No changes."
+						`${
+							giveItemName
+								? `The ${abilityName} ability will now be given with the ${giveItemName} item`
+								: ""
+						}${
+							subtractItemName
+								? `The ${abilityName} ability will now be subtracted with the ${subtractItemName} item`
+								: "No changes."
 						}`
 					)
 				}
@@ -641,18 +659,22 @@ export default class Ping extends ApplicationCommand {
 			}
 
 			case "queue": {
-				const queued = (await database.abilityQueue.findMany({
+				const queued = await database.abilityQueue.findMany({
 					include: {
-						ability: true,
+						ability: true
 					},
 					orderBy: {
 						createdAt: "asc"
 					}
-				}))
-				const embed = new EmbedBuilder().setColor("Random")
-					.setDescription(`** **\n${queued.map((x, i) => `${i === 0 ? "1." : "-"} ${x.ability.playerName}: ${x.ability.abilityName}`).join("\n")}`)
+				})
+				const embed = new EmbedBuilder()
+					.setColor("Random")
+					.setDescription(
+						`** **\n${queued.map((x, i) => `${i === 0 ? "1." : "-"} ${x.ability.playerName}: ${x.ability.abilityName}`).join("\n")}`
+					)
 					.setTitle("Ability Queue")
-					.setFooter({ text: "Last updated" }).setTimestamp()
+					.setFooter({ text: "Last updated" })
+					.setTimestamp()
 				const row = new ActionRowBuilder<StringSelectMenuBuilder>()
 				if (queued.length > 0) {
 					row.addComponents(
@@ -675,10 +697,12 @@ export default class Ping extends ApplicationCommand {
 							.setCustomId("use")
 							.setPlaceholder("Trigger an Ability")
 							.setDisabled(true)
-							.addOptions([{
-								label: "No abilities queued",
-								value: "No abilities queued"
-							}])
+							.addOptions([
+								{
+									label: "No abilities queued",
+									value: "No abilities queued"
+								}
+							])
 					])
 				}
 				return interaction.editReply({ embeds: [embed], components: [row] })

@@ -1,5 +1,7 @@
-import { logger } from "~/logger"
 import { Client, Collection, type Locale, type Snowflake } from "discord.js"
+import { getFiles } from "~/functions/getFiles"
+import { uploadHaste } from "~/functions/uploadHaste"
+import { logger } from "~/logger"
 import {
 	type ApplicationCommand,
 	ApplicationCommandHandler,
@@ -16,8 +18,6 @@ import {
 	type TextCommand,
 	TextCommandHandler
 } from "../"
-import { getFiles } from "~/functions/getFiles"
-import { uploadHaste } from "~/functions/uploadHaste"
 
 export default class BetterClient extends Client {
 	public readonly applicationCommandHandler: ApplicationCommandHandler

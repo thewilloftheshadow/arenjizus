@@ -1,7 +1,7 @@
-import { EventHandler } from "~/lib"
-import { serverIds } from "~/config"
-import { logger } from "~/logger"
 import type { GuildChannel } from "discord.js"
+import { serverIds } from "~/config"
+import { EventHandler } from "~/lib"
+import { logger } from "~/logger"
 
 export default class ChannelCreate extends EventHandler {
 	override async run(channel: GuildChannel) {

@@ -9,4 +9,3 @@ export * from "@prisma/client"
 export const kiai = new KiaiClient(
 	"aGl0aGVyZTU3NDAxMDQyOTYwMTIxODU2MA==.iOMIA83uuHFSL4p4i1X6LJOgCD6YVU"
 )
-

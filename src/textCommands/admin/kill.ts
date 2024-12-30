@@ -1,6 +1,6 @@
-import { type BetterClient, TextCommand } from "~/lib"
-import { parseUser } from "~/functions/parseUser"
 import type { Message } from "discord.js"
+import { parseUser } from "~/functions/parseUser"
+import { type BetterClient, TextCommand } from "~/lib"
 
 export default class Kill extends TextCommand {
 	constructor(client: BetterClient) {

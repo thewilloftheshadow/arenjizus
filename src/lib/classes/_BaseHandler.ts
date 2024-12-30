@@ -5,17 +5,17 @@ import {
 	type CommandInteraction,
 	Message
 } from "discord.js"
+import { generateErrorMessage } from "~/functions/generateMessage"
+import { getFiles } from "~/functions/getFiles"
 import {
-	ApplicationCommand,
+	type ApplicationCommand,
 	type BetterClient,
-	Button,
+	type Button,
 	type Dropdown,
 	type HandlerType,
 	LogLevel,
 	type _BaseComponent
 } from "../"
-import { getFiles } from "~/functions/getFiles"
-import { generateErrorMessage } from "~/functions/generateMessage"
 
 export default class BaseHandler {
 	private type: HandlerType
@@ -28,8 +28,7 @@ export default class BaseHandler {
 
 	public async loadFiles() {
 		try {
-			const typePath =
-				`${this.type}`
+			const typePath = `${this.type}`
 			const parentFolders = getFiles(typePath, "", true)
 
 			for (const parentFolder of parentFolders) {
@@ -52,7 +51,7 @@ export default class BaseHandler {
 		this.postLoad()
 	}
 
-	public postLoad() { }
+	public postLoad() {}
 
 	public reloadFiles() {
 		this.client[this.type].clear()
@@ -155,8 +154,10 @@ export default class BaseHandler {
 				}
 			}
 			this.client.log(
-				`${interaction.user.tag} [${interaction.user.id
-				}] executed slash command: ${component.key} ${optionString ? `\`${optionString}\`` : ""
+				`${interaction.user.tag} [${
+					interaction.user.id
+				}] executed slash command: ${component.key} ${
+					optionString ? `\`${optionString}\`` : ""
 				}`,
 				LogLevel.DEBUG
 			)
@@ -173,13 +174,11 @@ export default class BaseHandler {
 				this.client.log(`${error}`, LogLevel.ERROR)
 				if (error instanceof Error)
 					this.client.log(`${error.stack}`, LogLevel.ERROR)
-				const toSend = generateErrorMessage(
-					{
-						title: "An Error Has Occurred",
-						description:
-							"An unexpected error was encountered while processing your request. Please try again later. If the problem persists, please contact support."
-					},
-				)
+				const toSend = generateErrorMessage({
+					title: "An Error Has Occurred",
+					description:
+						"An unexpected error was encountered while processing your request. Please try again later. If the problem persists, please contact support."
+				})
 				if (interaction.replied) return interaction.followUp(toSend)
 				if (interaction.deferred) return interaction.editReply(toSend)
 				return interaction.reply({

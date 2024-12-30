@@ -1,8 +1,8 @@
-import { ApplicationCommand, type BetterClient } from "~/lib"
 import type { ChatInputCommandInteraction } from "discord.js"
 import { playerEmbed } from "~/database/embeds"
 import { getDiscordPlayer } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
+import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
