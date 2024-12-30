@@ -17,7 +17,7 @@ export const getFiles = (
 		if (createDirIfNotFound && !existsSync(directory)) mkdirSync(directory)
 		return readdirSync(`${import.meta.dir}/../${directory}`).filter((file) => file.endsWith(fileExtension))
 	} catch (error) {
-		logger.error(`${error}`)
+		logger.error(`${directory}/*.${fileExtension} failed to load: ${error}`)
 		return []
 	}
 }
