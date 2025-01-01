@@ -83,9 +83,9 @@ export default class Ping extends ApplicationCommand {
 			const name = x.name.replace(/ /g, "-").toLowerCase()
 			const message = interaction.options
 				.getString("question", true)
-				.replace(/;;/g, "\n")
+				.replaceAll(/;;/g, "\n")
 			const theirChannel = interaction.guild?.channels.cache.find(
-				(c) => c.name === `gm-${name.toLowerCase().replace(/ /g, "-")}`
+				(c) => c.name === `gm-${name.toLowerCase().replaceAll(/ /g, "-")}`
 			)
 			if (!theirChannel) {
 				interaction.followUp(`Couldn't find channel for ${x.name} (${user})!`)
@@ -100,9 +100,9 @@ export default class Ping extends ApplicationCommand {
 
 				hook.send({
 					content: `${ping ? `<@${user}> ` : ""}${message}`,
-					username: "The Newscaster",
+					username: "Phil",
 					avatarURL:
-						"https://thumbs.dreamstime.com/b/cheerful-interviewer-holding-microphone-gray-suit-looking-camera-isolated-white-background-60540771.jpg",
+						"https://c.pxhere.com/photos/e1/8e/animal_cat_scary_domestic_ears_eye_eyes_face-1259927.jpg",
 					allowedMentions: { users: [user] }
 				})
 			}
