@@ -6,6 +6,7 @@ import {
 	EmbedBuilder
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
+import { serverIds } from "~/config"
 import database, {} from "~/database"
 import { playerEmbed } from "~/database/embeds"
 import { getAllPlayers, getPlayer } from "~/database/getData"
@@ -51,6 +52,12 @@ export default class Ping extends ApplicationCommand {
 							type: ApplicationCommandOptionType.String,
 							name: "name",
 							description: "The name of the player",
+							required: true
+						},
+						{
+							type: ApplicationCommandOptionType.User,
+							name: "discord",
+							description: "The Discord account of the player",
 							required: true
 						},
 						{
@@ -270,6 +277,7 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
+		if (!interaction.guild) return
 		await interaction.deferReply({
 			ephemeral: !(
 				interaction.options.getBoolean("public-version", false) || false
@@ -332,7 +340,46 @@ export default class Ping extends ApplicationCommand {
 					name
 				}
 				const money = interaction.options.getInteger("money")
+				const discord = interaction.options.getUser("discord")
 				if (money) create.money = money
+				if (discord) {
+					const player = await database.player.create({
+						data: {
+							name,
+							discordId: discord.id
+						},
+						include: {
+							roles: true,
+							items: true,
+							abilities: true
+						}
+					})
+					const existingChannel = await getPlayerChannel(name, this.client)
+					if (!existingChannel) {
+						const channel = await interaction.guild.channels.create({
+							name: `gm-${name}`,
+							parent: "1105539810069860411"
+						})
+						await channel.lockPermissions()
+						await channel.permissionOverwrites.create(discord.id, {
+							ViewChannel: true
+						})
+						const member = await interaction.guild.members.fetch(discord.id)
+						await member.roles.add(serverIds.roles.player)
+						await member.roles.remove(serverIds.roles.spectator)
+						await member.setNickname(name).catch(() => {})
+						channel.send({
+							content: `Welcome to the game, ${name}!`
+						})
+					}
+					logger.gameLog(
+						`${name} has joined the game, linked to <@${discord.id}>!`
+					)
+					return interaction.editReply({
+						content: "Player successfully created:",
+						embeds: [playerEmbed(player)]
+					})
+				}
 				const player = await database.player.create({
 					data: {
 						name
