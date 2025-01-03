@@ -575,15 +575,15 @@ export default class Ping extends ApplicationCommand {
 					return interaction.editReply(
 						generateErrorMessage({
 							title: "Insufficient funds",
-							description: `The player ${from} does not have enough money to transfer ${amount} to ${to}.`
+							description: `The player ${from} does not have enough money to transfer $${amount} to ${to}.`
 						})
 					)
 				}
 				removeMoney(fromPlayer.name, amount)
 				addMoney(toPlayer.name, amount)
-				logger.gameLog(`Player ${from} transferred ${amount} to ${to}.`)
+				logger.gameLog(`Player ${from} transferred $${amount} to ${to}.`)
 				await interaction.editReply({
-					content: `${amount} has been successfully transferred.`
+					content: `$${amount} has been successfully transferred.`
 				})
 				const toPlayerChannel = await getPlayerChannel(
 					toPlayer.name,
@@ -591,7 +591,7 @@ export default class Ping extends ApplicationCommand {
 				)
 				if (toPlayerChannel) {
 					toPlayerChannel.send(
-						`You have received ${amount} from ${fromPlayer.name}.`
+						`You have received $${amount} from ${fromPlayer.name}.`
 					)
 				} else {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
