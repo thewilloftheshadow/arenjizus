@@ -42,8 +42,10 @@ export default class Buttony extends Button {
 		await interaction.followUp({
 			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`
 		})
-		await interaction.message.edit({
-			components: []
-		})
+		await interaction.message
+			.edit({
+				components: []
+			})
+			.catch(() => {})
 	}
 }
