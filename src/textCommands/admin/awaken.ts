@@ -1,15 +1,15 @@
 import type { Message } from "discord.js"
+import { admins } from "~/config"
 import { parseUser } from "~/functions/parseUser"
 import { type BetterClient, TextCommand } from "~/lib"
 
 export default class Kill extends TextCommand {
 	constructor(client: BetterClient) {
-		super("awaken", client, {
-			restriction: "gamemaster"
-		})
+		super("awaken", client, {})
 	}
 
 	override async run(message: Message, args: string[]) {
+		if (!admins.includes(message.author.id)) return
 		if (!message.channel.isSendable()) return
 		if (args[0]) {
 			const user = await parseUser(args[0], this.client)
