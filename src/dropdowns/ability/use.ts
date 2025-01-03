@@ -33,7 +33,7 @@ export default class Droppy extends Dropdown {
 		if (!playerAbility)
 			return interaction.editReply("Ability queue entry not found.")
 
-		await interaction.reply({
+		await interaction.editReply({
 			content: `${
 				playerAbility.playerName
 			} wants to use ${playerAbility.abilityName}!`,
