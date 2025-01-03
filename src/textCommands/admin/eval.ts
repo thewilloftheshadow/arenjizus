@@ -3,6 +3,10 @@ import { EmbedBuilder, type Message } from "discord.js"
 import * as config from "~/config"
 import db from "~/database"
 import * as database from "~/database"
+import * as ability from "~/database/ability"
+import * as embeds from "~/database/embeds"
+import * as getData from "~/database/getData"
+import * as thingys from "~/database/thingys"
 import * as generateMessage from "~/functions/generateMessage"
 import * as generateTimestamp from "~/functions/generateTimestamp"
 import * as getFiles from "~/functions/getFiles"
@@ -20,7 +24,13 @@ import { logger } from "~/logger"
 
 const bot = {
 	db,
-	database,
+	database: {
+		...database,
+		...ability,
+		...embeds,
+		...getData,
+		...thingys
+	},
 	config,
 	lib,
 	logger,
