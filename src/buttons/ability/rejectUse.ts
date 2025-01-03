@@ -26,7 +26,10 @@ export default class Buttony extends Button {
 			}
 		})
 		if (!playerAbility)
-			return interaction.editReply("Ability queue entry not found.")
+			return interaction.editReply({
+				content: "Ability queue entry not found.",
+				components: []
+			})
 
 		await database.playerAbilities.delete({
 			where: {
@@ -34,12 +37,9 @@ export default class Buttony extends Button {
 			}
 		})
 
-		await interaction.message.edit({
+		interaction.editReply({
+			content: "Ability use has been denied.",
 			components: []
-		})
-
-		interaction.followUp({
-			content: "Ability use has been denied."
 		})
 	}
 }
