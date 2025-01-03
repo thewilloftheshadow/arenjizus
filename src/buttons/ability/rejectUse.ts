@@ -9,11 +9,10 @@ export default class Buttony extends Button {
 	}
 
 	override async run(interaction: ButtonInteraction) {
-		await interaction.deferUpdate()
 		const member = await interaction.guild?.members.fetch(interaction.user.id)
 		if (!member) return
-		if (!member.roles.cache.has(serverIds.roles.gamemaster))
-			return interaction.editReply("You are not a gamemaster.")
+		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return
+		await interaction.deferUpdate()
 
 		const id = interaction.customId.split(":")[1]
 		const playerAbility = await database.playerAbilities.findFirst({
