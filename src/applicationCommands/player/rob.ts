@@ -69,7 +69,12 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		if (!this.client.user || !interaction.channel) return
+		if (
+			!this.client.user ||
+			!interaction.channel ||
+			!interaction.channel.isSendable()
+		)
+			return
 		await interaction.reply({
 			content: `Robbery has begun...`,
 			ephemeral: true
@@ -146,8 +151,8 @@ export default class Ping extends ApplicationCommand {
 		})
 		if (!msg) return
 
-		await interaction.followUp({
-			content: `<@${byPlayer.discordId}>, you are now robbing ${who}! Time is up ${timeCounter} (at ${timeString})! ||<@&${serverIds.roles.gamemaster}>||`,
+		await interaction.channel.send({
+			content: `<@${byPlayer.discordId}>, you are now robbing ${who} for $${amount}! Time is up ${timeCounter} (at ${timeString})! ||<@&${serverIds.roles.gamemaster}>||`,
 			allowedMentions: {
 				users: [interaction.user.id],
 				roles: [serverIds.roles.gamemaster]
