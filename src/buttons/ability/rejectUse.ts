@@ -29,6 +29,16 @@ export default class Buttony extends Button {
 				content: "Ability queue entry not found.",
 				components: []
 			})
+		if (playerAbility.ability.customOneOff && playerAbility.usesLeft !== 0) {
+			await database.playerAbilities.update({
+				where: {
+					id
+				},
+				data: {
+					usesLeft: 0
+				}
+			})
+		}
 
 		await database.playerAbilities.delete({
 			where: {
