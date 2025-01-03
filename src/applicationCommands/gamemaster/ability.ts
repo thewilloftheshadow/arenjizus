@@ -325,19 +325,23 @@ export default class Ping extends ApplicationCommand {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						players.map((player: { name: string }) => ({
+					return interaction
+						.respond(
+							players.map((player: { name: string }) => ({
+								name: player.name,
+								value: player.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allPlayers.map((player: { name: string }) => ({
 							name: player.name,
 							value: player.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allPlayers.map((player: { name: string }) => ({
-						name: player.name,
-						value: player.name
-					}))
-				)
+					.catch(() => {})
 			}
 			case "ability": {
 				const allAbilities = await getAllAbilities()
@@ -345,19 +349,23 @@ export default class Ping extends ApplicationCommand {
 					const abilities = allAbilities.filter((ability: { name: string }) =>
 						ability.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						abilities.map((ability: { name: string }) => ({
+					return interaction
+						.respond(
+							abilities.map((ability: { name: string }) => ({
+								name: ability.name,
+								value: ability.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allAbilities.map((ability: { name: string }) => ({
 							name: ability.name,
 							value: ability.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allAbilities.map((ability: { name: string }) => ({
-						name: ability.name,
-						value: ability.name
-					}))
-				)
+					.catch(() => {})
 			}
 			case "role": {
 				const allRoles = await getAllRoles()
@@ -365,19 +373,23 @@ export default class Ping extends ApplicationCommand {
 					const roles = allRoles.filter((role: { name: string }) =>
 						role.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						roles.map((role: { name: string }) => ({
+					return interaction
+						.respond(
+							roles.map((role: { name: string }) => ({
+								name: role.name,
+								value: role.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allRoles.map((role: { name: string }) => ({
 							name: role.name,
 							value: role.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allRoles.map((role: { name: string }) => ({
-						name: role.name,
-						value: role.name
-					}))
-				)
+					.catch(() => {})
 			}
 			case "give_item":
 			case "subtract_item":
@@ -386,19 +398,23 @@ export default class Ping extends ApplicationCommand {
 					const items = allItems.filter((item: { name: string }) =>
 						item.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						items.map((item: { name: string }) => ({
+					return interaction
+						.respond(
+							items.map((item: { name: string }) => ({
+								name: item.name,
+								value: item.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allItems.map((item: { name: string }) => ({
 							name: item.name,
 							value: item.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allItems.map((item: { name: string }) => ({
-						name: item.name,
-						value: item.name
-					}))
-				)
+					.catch(() => {})
 		}
 	}
 

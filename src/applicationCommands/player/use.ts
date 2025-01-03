@@ -66,27 +66,31 @@ export default class Ping extends ApplicationCommand {
 							.toLowerCase()
 							.includes(option.value.toLowerCase())
 					)
-					return interaction.respond([
-						...abilities.map((ability) => ({
+					return interaction
+						.respond([
+							...abilities.map((ability) => ({
+								name: ability.abilityName,
+								value: ability.abilityName
+							})),
+							{
+								name: option.value,
+								value: option.value
+							}
+						])
+						.catch(() => {})
+				}
+				return interaction
+					.respond([
+						...allAbilities.map((ability) => ({
 							name: ability.abilityName,
 							value: ability.abilityName
 						})),
 						{
-							name: option.value,
-							value: option.value
+							name: "You can also type in a custom ability you want to do!",
+							value: "x"
 						}
 					])
-				}
-				return interaction.respond([
-					...allAbilities.map((ability) => ({
-						name: ability.abilityName,
-						value: ability.abilityName
-					})),
-					{
-						name: "You can also type in a custom ability you want to do!",
-						value: "x"
-					}
-				])
+					.catch(() => {})
 			}
 			case "target": {
 				const allPlayers = await getAllPlayers()
@@ -94,16 +98,23 @@ export default class Ping extends ApplicationCommand {
 					const players = allPlayers.filter((player) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						players.map((player) => ({ name: player.name, value: player.name }))
-					)
+					return interaction
+						.respond(
+							players.map((player) => ({
+								name: player.name,
+								value: player.name
+							}))
+						)
+						.catch(() => {})
 				}
-				return interaction.respond(
-					allPlayers.map((player) => ({
-						name: player.name,
-						value: player.name
-					}))
-				)
+				return interaction
+					.respond(
+						allPlayers.map((player) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
+					.catch(() => {})
 			}
 		}
 	}

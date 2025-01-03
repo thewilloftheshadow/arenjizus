@@ -169,19 +169,23 @@ export default class Ping extends ApplicationCommand {
 					const locations = allLocations.filter((location: { name: string }) =>
 						location.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						locations.map((location: { name: string }) => ({
+					return interaction
+						.respond(
+							locations.map((location: { name: string }) => ({
+								name: location.name,
+								value: location.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allLocations.map((location: { name: string }) => ({
 							name: location.name,
 							value: location.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allLocations.map((location: { name: string }) => ({
-						name: location.name,
-						value: location.name
-					}))
-				)
+					.catch(() => {})
 			case "player": {
 				const players = await database.player.findMany({
 					where: {
@@ -190,12 +194,14 @@ export default class Ping extends ApplicationCommand {
 						}
 					}
 				})
-				return interaction.respond(
-					players.map((player) => ({
-						name: player.name,
-						value: player.name
-					}))
-				)
+				return interaction
+					.respond(
+						players.map((player) => ({
+							name: player.name,
+							value: player.name
+						}))
+					)
+					.catch(() => {})
 			}
 		}
 	}

@@ -39,16 +39,18 @@ export default class Ping extends ApplicationCommand {
 		const locations = await getAllLocations()
 		switch (option.name) {
 			case "to":
-				return interaction.respond(
-					locations
-						.filter((x) =>
-							option.value ? x.name.includes(option.value) : true
-						)
-						.map((location) => ({
-							name: location.name,
-							value: location.name
-						}))
-				)
+				return interaction
+					.respond(
+						locations
+							.filter((x) =>
+								option.value ? x.name.includes(option.value) : true
+							)
+							.map((location) => ({
+								name: location.name,
+								value: location.name
+							}))
+					)
+					.catch(() => {})
 		}
 	}
 

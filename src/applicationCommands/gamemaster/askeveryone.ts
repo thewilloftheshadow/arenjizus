@@ -48,19 +48,23 @@ export default class Ping extends ApplicationCommand {
 					const players = allPlayers.filter((player: { name: string }) =>
 						player.name.toLowerCase().includes(option.value.toLowerCase())
 					)
-					return interaction.respond(
-						players.map((player: { name: string }) => ({
+					return interaction
+						.respond(
+							players.map((player: { name: string }) => ({
+								name: player.name,
+								value: player.name
+							}))
+						)
+						.catch(() => {})
+				}
+				return interaction
+					.respond(
+						allPlayers.map((player: { name: string }) => ({
 							name: player.name,
 							value: player.name
 						}))
 					)
-				}
-				return interaction.respond(
-					allPlayers.map((player: { name: string }) => ({
-						name: player.name,
-						value: player.name
-					}))
-				)
+					.catch(() => {})
 		}
 	}
 
