@@ -20,7 +20,7 @@ export default class Droppy extends Dropdown {
 		if (!member.roles.cache.has(serverIds.roles.gamemaster))
 			return interaction.editReply("You are not a gamemaster.")
 
-		const [id, playerName] = interaction.customId.split(":")
+		const [id, playerName] = interaction.values[0].split(":")
 		console.log(id, playerName)
 		const playerAbility = await database.playerAbilities.findFirst({
 			where: {
