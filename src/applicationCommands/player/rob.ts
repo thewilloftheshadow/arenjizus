@@ -152,7 +152,7 @@ export default class Ping extends ApplicationCommand {
 		if (!msg) return
 
 		await interaction.channel.send({
-			content: `<@${byPlayer.discordId}>, you are now robbing ${who} for $${amount}! Time is up ${timeCounter} (at ${timeString})! ||<@&${serverIds.roles.gamemaster}>||`,
+			content: `<@${byPlayer.discordId}>, you are now robbing ${who} for $${amountInput}! Time is up ${timeCounter} (at ${timeString})! ||<@&${serverIds.roles.gamemaster}>||`,
 			allowedMentions: {
 				users: [interaction.user.id],
 				roles: [serverIds.roles.gamemaster]
