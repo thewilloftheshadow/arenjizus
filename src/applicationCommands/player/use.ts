@@ -1,3 +1,4 @@
+import { sleep } from "bun"
 import {
 	ActionRowBuilder,
 	ApplicationCommandOptionType,
@@ -136,6 +137,7 @@ export default class Ping extends ApplicationCommand {
 			interaction.options.getString("ability", true),
 			player.id
 		)
+		await sleep(2000)
 		if (!ability) return interaction.editReply("Ability not found.")
 		const playerAbility = await getPlayerAbility(player.name, ability.name)
 
