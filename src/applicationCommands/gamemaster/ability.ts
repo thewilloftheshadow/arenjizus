@@ -680,7 +680,7 @@ export default class Ping extends ApplicationCommand {
 					row.addComponents(
 						new StringSelectMenuBuilder()
 							.setCustomId("use")
-							.setPlaceholder("Trigger an Ability")
+							.setPlaceholder("Select an Ability")
 							.addOptions(
 								queued.map((x) => {
 									return {

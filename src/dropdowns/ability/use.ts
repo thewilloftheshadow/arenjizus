@@ -1,10 +1,12 @@
-import type { StringSelectMenuInteraction } from "discord.js"
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	type StringSelectMenuInteraction
+} from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
-import { runAbilityProperties, useAbility } from "~/database/thingys"
-import { getPlayerChannel } from "~/functions/player"
 import { type BetterClient, Dropdown } from "~/lib"
-import { logger } from "~/logger"
 
 export default class Droppy extends Dropdown {
 	constructor(client: BetterClient) {
@@ -31,23 +33,23 @@ export default class Droppy extends Dropdown {
 		if (!playerAbility)
 			return interaction.editReply("Ability queue entry not found.")
 
-		await useAbility(playerAbility.playerName, playerAbility.abilityName)
-		const done = await runAbilityProperties(
-			playerAbility.ability,
-			"",
-			this.client
-		)
-		await interaction.editReply(`Done\n${done ? done.join("\n") : ""}`)
-		logger.gameLog(
-			`${playerAbility.playerName} used ${playerAbility.abilityName}.`
-		)
-		const playerChannel = await getPlayerChannel(
-			playerAbility.playerName,
-			this.client
-		)
-		if (!playerChannel) return
-		await playerChannel.send({
-			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`
+		await interaction.reply({
+			content: `${
+				playerAbility.playerName
+			} wants to use ${playerAbility.abilityName}!`,
+			components: [
+				new ActionRowBuilder<ButtonBuilder>().addComponents([
+					new ButtonBuilder()
+						.setCustomId(`use:${playerAbility.id}`)
+						.setLabel("Approve")
+						.setStyle(ButtonStyle.Success),
+					new ButtonBuilder()
+						.setCustomId(`rejectUse:${playerAbility.id}`)
+						.setLabel("Deny")
+						.setStyle(ButtonStyle.Danger)
+				])
+			],
+			allowedMentions: { roles: [serverIds.roles.gamemaster] }
 		})
 	}
 }

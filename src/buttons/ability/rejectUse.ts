@@ -1,5 +1,6 @@
 import type { ButtonInteraction } from "discord.js"
 import { serverIds } from "~/config"
+import database from "~/database"
 import { type BetterClient, Button } from "~/lib"
 
 export default class Buttony extends Button {
@@ -13,6 +14,25 @@ export default class Buttony extends Button {
 		if (!member) return
 		if (!member.roles.cache.has(serverIds.roles.gamemaster))
 			return interaction.editReply("You are not a gamemaster.")
+
+		const id = interaction.customId.split(":")[1]
+		const playerAbility = await database.playerAbilities.findFirst({
+			where: {
+				id
+			},
+			include: {
+				player: true,
+				ability: true
+			}
+		})
+		if (!playerAbility)
+			return interaction.editReply("Ability queue entry not found.")
+
+		await database.playerAbilities.delete({
+			where: {
+				id
+			}
+		})
 
 		await interaction.message.edit({
 			components: []

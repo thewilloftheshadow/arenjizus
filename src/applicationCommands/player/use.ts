@@ -9,6 +9,7 @@ import {
 } from "discord.js"
 import { serverIds } from "~/config"
 import database, {} from "~/database"
+import { queueAbility } from "~/database/ability"
 import {
 	getAbility,
 	getAllPlayers,
@@ -205,6 +206,8 @@ export default class Ping extends ApplicationCommand {
 			}
 		}
 
+		await queueAbility(playerAbility.id)
+
 		await channel.send({
 			content: `<@&${serverIds.roles.gamemaster}>, ${
 				player.name
@@ -216,11 +219,7 @@ export default class Ping extends ApplicationCommand {
 						.setLabel("Approve")
 						.setStyle(ButtonStyle.Success),
 					new ButtonBuilder()
-						.setCustomId(`queue:${playerAbility.id}`)
-						.setLabel("Add to Queue")
-						.setStyle(ButtonStyle.Primary),
-					new ButtonBuilder()
-						.setCustomId(`rejectUse`)
+						.setCustomId(`rejectUse:${playerAbility.id}`)
 						.setLabel("Deny")
 						.setStyle(ButtonStyle.Danger)
 				])
