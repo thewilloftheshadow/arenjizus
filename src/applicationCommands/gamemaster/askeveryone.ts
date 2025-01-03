@@ -101,8 +101,7 @@ export default class Ping extends ApplicationCommand {
 				hook.send({
 					content: `${ping ? `<@${user}> ` : ""}${message}`,
 					username: "Phil",
-					avatarURL:
-						"https://c.pxhere.com/photos/e1/8e/animal_cat_scary_domestic_ears_eye_eyes_face-1259927.jpg",
+					avatarURL: "https://cdn-raw.buape.com/angry-cat.jpeg",
 					allowedMentions: { users: [user] }
 				})
 			}
