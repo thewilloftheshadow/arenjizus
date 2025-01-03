@@ -47,7 +47,7 @@ export default class Ping extends ApplicationCommand {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Not enough money",
-					description: `You only have ${player.money} money`
+					description: `You only have $${player.money}`
 				})
 			)
 		}
@@ -73,9 +73,9 @@ export default class Ping extends ApplicationCommand {
 			})}`
 		)
 		return interaction.editReply({
-			content: `You have invested $${amount}, and will receive ${
+			content: `You have invested $${amount}, and will receive $${
 				amount * 2
-			} money ${generateTimestamp({
+			} ${generateTimestamp({
 				timestamp: new Date(Date.now() + 1000 * 60 * 60 * 24),
 				type: "R"
 			})}`
