@@ -21,6 +21,7 @@ export default class Droppy extends Dropdown {
 			return interaction.editReply("You are not a gamemaster.")
 
 		const [id, playerName] = interaction.customId.split(":")
+		console.log(id, playerName)
 		const playerAbility = await database.playerAbilities.findFirst({
 			where: {
 				id,
