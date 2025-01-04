@@ -573,7 +573,7 @@ export default class Ping extends ApplicationCommand {
 					logger.gameLog(`${from} gave ${amount} ${name} to ${player.name}.`)
 					const playerChannel = await getPlayerChannel(player.name, this.client)
 					interaction.editReply({
-						content: `${amount}x ${item.name} has been successfully transferred.`
+						content: `${amount}x ${item.name} has been successfully transferred to ${players.length} players (total ${neededAmount}).`
 					})
 					if (playerChannel) {
 						playerChannel.send(
