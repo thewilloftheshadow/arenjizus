@@ -34,7 +34,8 @@ export default class Ping extends ApplicationCommand {
 					name: "ability",
 					description: "The name of the ability",
 					required: true,
-					autocomplete: true
+					autocomplete: true,
+					maxLength: 90
 				},
 				{
 					type: ApplicationCommandOptionType.String,
