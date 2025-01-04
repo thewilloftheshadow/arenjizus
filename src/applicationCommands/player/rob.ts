@@ -135,6 +135,15 @@ export default class Ping extends ApplicationCommand {
 			return interaction.followUp(`Couldn't find GM channel for ${who}!`)
 		}
 
+		await database.player.update({
+			where: {
+				name: byPlayer.name
+			},
+			data: {
+				robberiesLeft: byPlayer.robberiesLeft - 1
+			}
+		})
+
 		const time = 60000 * Math.ceil(amountInput / 5)
 		const timestamp = Date.now() + time
 		const timeCounter = generateTimestamp({
@@ -198,14 +207,5 @@ export default class Ping extends ApplicationCommand {
 				`${byPlayer.name} robbed ${who} and took $${amount} from them!`
 			)
 		}
-
-		await database.player.update({
-			where: {
-				name: byPlayer.name
-			},
-			data: {
-				robberiesLeft: byPlayer.robberiesLeft - 1
-			}
-		})
 	}
 }
