@@ -2,9 +2,9 @@ import type { Message } from "discord.js"
 import database from "~/database"
 import { type BetterClient, TextCommand } from "~/lib"
 
-export default class Loot extends TextCommand {
+export default class Cleanup extends TextCommand {
 	constructor(client: BetterClient) {
-		super("loot", client, {})
+		super("cleanup", client, {})
 	}
 
 	override async run(message: Message) {
