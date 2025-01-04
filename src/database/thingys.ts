@@ -1,5 +1,5 @@
 import { Result } from "@sapphire/result"
-import type { Client } from "discord.js"
+import { EmbedBuilder, type Client } from "discord.js"
 import { serverIds } from "~/config"
 import database, { type Ability } from "~/database"
 import { logger } from "~/logger"
@@ -259,6 +259,62 @@ export const syncDeathRoles = async (client: Client) => {
 			}
 		}
 	})
+}
+
+export const playerListUpdate = async (client: Client) => {
+	const guild = await client.guilds.fetch(serverIds.guild)
+	if (!guild)
+		throw new Error(
+			`Primary guild ${serverIds.guild} not found for player list update`
+		)
+	const allChannels = await guild.channels.fetch()
+	const playerListChannel = allChannels.find(
+		(c) => c && c.name === "player-list"
+	)
+	if (!playerListChannel || !playerListChannel.isSendable()) return
+	const players = await getAllPlayers()
+
+	const embed = new EmbedBuilder()
+		.setTitle("All Players")
+		.setDescription("\n")
+		.setFooter({
+			text: `${players.filter((x) => x.isAlive).length} alive, ${
+				players.filter((x) => !x.isAlive).length
+			} dead`
+		})
+	// biome-ignore lint/complexity/noForEach: no
+	players
+		.sort((a, b) => {
+			if (a.name < b.name) {
+				return -1
+			}
+			if (a.name > b.name) {
+				return 1
+			}
+			return 0
+		})
+		.forEach((player) => {
+			const deathEmoji = player.isAlive ? "😃" : !player.isAlive ? "💀" : "??"
+			embed.data.description += `${deathEmoji} ${player.name}\n`
+		})
+
+	const mId = (
+		await database.keyV.findFirst({
+			where: {
+				key: "player-list-message-id"
+			}
+		})
+	)?.value
+	if (mId) {
+		const m = await playerListChannel.messages.fetch(mId)
+		if (m) {
+			await m.edit({ embeds: [embed] })
+		} else {
+			await playerListChannel.send({ embeds: [embed] })
+		}
+	} else {
+		await playerListChannel.send({ embeds: [embed] })
+	}
 }
 
 export const setVoteWorth = async (name: string, amount: number) => {

@@ -3,7 +3,7 @@ import { ApplicationCommandOptionType } from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
 import { getPlayer } from "~/database/getData"
-import { toggleDeath } from "~/database/thingys"
+import { playerListUpdate, toggleDeath } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
@@ -67,6 +67,7 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		await toggleDeath(name, false, fake)
+		await playerListUpdate(this.client)
 
 		logger.gameLog(`${name} has died${fake ? " (faked)" : ""}!`)
 		if (player.discordId) {

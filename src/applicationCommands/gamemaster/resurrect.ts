@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 import { serverIds } from "~/config"
 import { getPlayer } from "~/database/getData"
-import { toggleDeath } from "~/database/thingys"
+import { playerListUpdate, toggleDeath } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
@@ -38,6 +38,7 @@ export default class Ping extends ApplicationCommand {
 		}
 
 		await toggleDeath(name, true)
+		await playerListUpdate(this.client)
 
 		if (player.discordId) {
 			await interaction.guild?.members
