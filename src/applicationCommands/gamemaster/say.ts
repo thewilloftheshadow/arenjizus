@@ -2,7 +2,6 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
-	ChannelType,
 	type ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
@@ -38,7 +37,7 @@ export default class Ping extends ApplicationCommand {
 				interaction.channelId
 		)
 
-		if (channel?.type !== ChannelType.GuildText) {
+		if (!channel || !channel.isSendable()) {
 			return interaction.editReply(
 				generateErrorMessage({
 					title: "Invalid channel",
