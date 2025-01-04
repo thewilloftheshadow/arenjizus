@@ -2,6 +2,7 @@ import type { ButtonInteraction } from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
 import { runAbilityProperties, useAbility } from "~/database/thingys"
+import { getPlayerChannel } from "~/functions/player"
 import { type BetterClient, Button } from "~/lib"
 import { logger } from "~/logger"
 
@@ -14,7 +15,7 @@ export default class Buttony extends Button {
 		const member = await interaction.guild?.members.fetch(interaction.user.id)
 		if (!member) return
 		if (!member.roles.cache.has(serverIds.roles.gamemaster)) return
-		await interaction.deferReply()
+		await interaction.deferUpdate()
 
 		const [_, id] = interaction.customId.split(":")
 		const playerAbility = await database.playerAbilities.findFirst({
@@ -34,16 +35,21 @@ export default class Buttony extends Button {
 			"",
 			this.client
 		)
-		await interaction.editReply(`Done\n${done ? done.join("\n") : ""}`)
 		logger.gameLog(
 			`${playerAbility.playerName} used ${playerAbility.abilityName}.`
 		)
-		await interaction.followUp({
+		const channel = await getPlayerChannel(
+			playerAbility.playerName,
+			interaction.client
+		)
+		if (!channel || !channel.isSendable()) return
+		await channel.send({
 			content: `<@${playerAbility.player.discordId}>, you used ${playerAbility.abilityName}.`
 		})
 		await interaction.message
 			.edit({
-				components: []
+				components: [],
+				content: `Done\n${done ? done.join("\n") : ""}`
 			})
 			.catch(() => {})
 	}
