@@ -34,7 +34,7 @@ export default class Cleanup extends TextCommand {
 			}
 		})
 		message.reply(
-			`Cleaned up ${done} playerAbility entries and ${done2} ability entries`
+			`Cleaned up ${done.count} playerAbility entries and ${done2.count} ability entries`
 		)
 	}
 }
