@@ -553,9 +553,11 @@ export default class Ping extends ApplicationCommand {
 					return player.isAlive
 				})
 				const neededAmount = amount * players.length
-				const hasEnough =
-					(fromPlayer.items.find((item) => item.itemName === itemName)
-						?.amount || 0) >= neededAmount
+
+				const fromPlayerItems = fromPlayer.items.find(
+					(item) => item.itemName === itemName
+				)
+				const hasEnough = (fromPlayerItems?.amount || 0) >= neededAmount
 				if (!hasEnough) {
 					return interaction.editReply(
 						generateErrorMessage({
@@ -564,16 +566,9 @@ export default class Ping extends ApplicationCommand {
 						})
 					)
 				}
-				const fromPlayerItems = fromPlayer.items.filter(
-					(item) => item.itemName === itemName
-				)
 				for (const player of players) {
-					const playerItem = fromPlayerItems.find(
-						(item) => item.amount >= amount
-					)
-					if (!playerItem) continue
-					removePlayerItem(fromPlayer.name, item.name, amount)
-					givePlayerItem(player.name, item.name, amount)
+					await removePlayerItem(fromPlayer.name, item.name, amount)
+					await givePlayerItem(player.name, item.name, amount)
 					logger.gameLog(`${from} gave ${amount} ${name} to ${player.name}.`)
 					const playerChannel = await getPlayerChannel(player.name, this.client)
 					interaction.editReply({
