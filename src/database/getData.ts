@@ -145,6 +145,7 @@ export const getAbility = async (
 				usesLeft: 1
 			}
 		})
+		return ability
 	}
 	return ability
 }
