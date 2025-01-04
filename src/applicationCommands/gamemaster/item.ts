@@ -211,6 +211,46 @@ export default class Ping extends ApplicationCommand {
 							required: true
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "bulk-transfer",
+					description: "Bulk transfer items between players",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "from",
+							description: "The name of the player to transfer from",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "name",
+							description: "The item to transfer",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.Integer,
+							name: "amount",
+							description: "The amount of items to transfer",
+							required: true
+						},
+						{
+							type: ApplicationCommandOptionType.Boolean,
+							name: "show_from",
+							description: "Whether to show the player its from (default yes)",
+							required: false
+						},
+						{
+							type: ApplicationCommandOptionType.Boolean,
+							name: "dead",
+							description:
+								"Whether dead players should be included (default no)",
+							required: false
+						}
+					]
 				}
 			]
 		})
@@ -482,6 +522,72 @@ export default class Ping extends ApplicationCommand {
 					interaction.followUp(`Failed to send message to ${toPlayer.name}.`)
 				}
 				return
+			}
+			case "bulk-transfer": {
+				const from = interaction.options.getString("from", true)
+				const itemName = interaction.options.getString("name", true)
+				const amount = interaction.options.getInteger("amount", true)
+				const showFrom =
+					interaction.options.getBoolean("show_from", false) || true
+				const allowDead = interaction.options.getBoolean("dead", false) || false
+				const fromPlayer = await getPlayer(from)
+				const item = await getItem(itemName)
+				if (!fromPlayer) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Player not found",
+							description: `The player ${from} was not found in the database.`
+						})
+					)
+				}
+				if (!item) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Item not found",
+							description: `The item ${name} was not found in the database.`
+						})
+					)
+				}
+				const players = (await getAllPlayers()).filter((player) => {
+					if (allowDead) return true
+					return player.isAlive
+				})
+				const neededAmount = amount * players.length
+				const hasEnough =
+					(fromPlayer.items.find((item) => item.itemName === itemName)
+						?.amount || 0) >= neededAmount
+				if (!hasEnough) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Player does not have enough of this item",
+							description: `${from} does not have ${neededAmount} ${name} needed for all transfers`
+						})
+					)
+				}
+				const fromPlayerItems = fromPlayer.items.filter(
+					(item) => item.itemName === itemName
+				)
+				for (const player of players) {
+					const playerItem = fromPlayerItems.find(
+						(item) => item.amount >= amount
+					)
+					if (!playerItem) continue
+					removePlayerItem(fromPlayer.name, item.name, amount)
+					givePlayerItem(player.name, item.name, amount)
+					logger.gameLog(`${from} gave ${amount} ${name} to ${player.name}.`)
+					const playerChannel = await getPlayerChannel(player.name, this.client)
+					interaction.editReply({
+						content: `${amount}x ${item.name} has been successfully transferred.`
+					})
+					if (playerChannel) {
+						playerChannel.send(
+							`You have received ${amount}x ${item.name}${showFrom ? ` from ${fromPlayer.name}` : ""}.`
+						)
+					} else {
+						interaction.followUp(`Failed to send message to ${player.name}.`)
+					}
+				}
+				break
 			}
 			default:
 				break
