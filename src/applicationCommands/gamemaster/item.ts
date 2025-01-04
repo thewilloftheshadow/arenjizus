@@ -550,6 +550,7 @@ export default class Ping extends ApplicationCommand {
 				}
 				const players = (await getAllPlayers()).filter((player) => {
 					if (allowDead) return true
+					if (player.name === fromPlayer.name) return false
 					return player.isAlive
 				})
 				const neededAmount = amount * players.length
