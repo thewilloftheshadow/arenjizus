@@ -1,6 +1,7 @@
 import {
 	ApplicationCommandOptionType,
 	AttachmentBuilder,
+	ChannelType,
 	type ChatInputCommandInteraction,
 	type GuildChannel
 } from "discord.js"
@@ -35,6 +36,13 @@ export default class Ping extends ApplicationCommand {
 							value: "day"
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.Channel,
+					name: "channel",
+					description: "The channel to dump",
+					required: false,
+					channelTypes: [ChannelType.GuildAnnouncement, ChannelType.GuildText]
 				}
 			]
 		})
@@ -48,7 +56,11 @@ export default class Ping extends ApplicationCommand {
 				? new Date(Date.now() - 24 * 60 * 60 * 1000)
 				: null
 
-		const channels = await interaction.guild.channels.fetch()
+		const channelFilter = interaction.options.getChannel("channel")
+
+		const channels = channelFilter
+			? await interaction.guild.channels.fetch()
+			: [channelFilter]
 		const messages: MessageStored[] = []
 
 		const blacklisted = [
