@@ -61,7 +61,9 @@ export default class Ping extends ApplicationCommand {
 			"welcome",
 			"about-the-game",
 			"bot-spam",
-			"rwlboard"
+			"rwlboard",
+			"xp-logs",
+			"commands"
 		]
 
 		for await (const chan of channels.values()) {
