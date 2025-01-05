@@ -132,6 +132,9 @@ export default class Ping extends ApplicationCommand {
 			Buffer.from(formatted.join("\n"), "utf-8"),
 			{ name: "messages.tsv" }
 		)
-		return interaction.editReply({ files: [attachment] })
+		return interaction.followUp({
+			content: `<@${interaction.user.id}>`,
+			files: [attachment]
+		})
 	}
 }
