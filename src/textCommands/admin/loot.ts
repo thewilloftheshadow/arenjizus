@@ -19,7 +19,7 @@ export default class Loot extends TextCommand {
 			return
 		if (!message.channel.isSendable()) return
 		const players = await database.player.findMany()
-		players.map((a) => grantAbility(a.name, "Loot"))
+		players.map((a) => grantAbility(a.name, "Loot a Body"))
 		message.reply("Loot ability granted to all players")
 	}
 }
