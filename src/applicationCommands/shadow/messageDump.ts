@@ -59,8 +59,8 @@ export default class Ping extends ApplicationCommand {
 		const channelFilter = interaction.options.getChannel("channel")
 
 		const channels = channelFilter
-			? await interaction.guild.channels.fetch()
-			: [channelFilter]
+			? [await interaction.guild.channels.fetch(channelFilter.id)]
+			: await interaction.guild.channels.fetch()
 		const messages: MessageStored[] = []
 
 		const blacklisted = [
