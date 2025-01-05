@@ -18,7 +18,6 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("messagedump", client, {
 			description: `Dump the server`,
-			restriction: "gamemaster",
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
