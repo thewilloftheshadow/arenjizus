@@ -1,4 +1,5 @@
 import {
+	ApplicationCommandOptionType,
 	AttachmentBuilder,
 	type ChatInputCommandInteraction,
 	type GuildChannel
@@ -17,18 +18,45 @@ export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("messagedump", client, {
 			description: `Dump the server`,
-			restriction: "gamemaster"
+			restriction: "gamemaster",
+			options: [
+				{
+					type: ApplicationCommandOptionType.String,
+					name: "length",
+					description: "The length of the dump",
+					required: false,
+					choices: [
+						{
+							name: "All",
+							value: "all"
+						},
+
+						{
+							name: "One Day",
+							value: "day"
+						}
+					]
+				}
+			]
 		})
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply()
+		await interaction.reply("Dumping messages...")
 		if (!interaction.guild) return
+		const dayFilter =
+			interaction.options.getString("length") === "day"
+				? new Date(Date.now() - 24 * 60 * 60 * 1000)
+				: null
+
 		const channels = await interaction.guild.channels.fetch()
 		const messages: MessageStored[] = []
 
 		const blacklisted = [
-			"highlights",
+			"best-of-v4",
+			"best-of-v3",
+			"best-of-v2",
+			"best-of",
 			"status-tracker",
 			"discord-log",
 			"welcome",
@@ -45,7 +73,13 @@ export default class Ping extends ApplicationCommand {
 						limit: 100,
 						...(lastID && { before: lastID })
 					})
+
 					for await (const msg of channelMessages.values()) {
+						// Skip messages older than 24 hours if day filter is active
+						if (dayFilter && msg.createdAt < dayFilter) {
+							break
+						}
+
 						let content = msg.content.replace(/\n/g, " ")
 						for (const user of msg.mentions.users.values()) {
 							content = content.split(`<@${user.id}>`).join(`@${user.tag}`)
@@ -70,7 +104,16 @@ export default class Ping extends ApplicationCommand {
 							channel: chan.name
 						})
 					}
-					if (channelMessages.size === 0) break
+
+					// Break the channel loop if we hit messages older than 24 hours
+					if (
+						channelMessages.size === 0 ||
+						(dayFilter &&
+							channelMessages.last()?.createdAt &&
+							// biome-ignore lint/style/noNonNullAssertion: <explanation>
+							channelMessages.last()!.createdAt < dayFilter)
+					)
+						break
 					lastID = channelMessages.last()?.id
 				}
 			}
