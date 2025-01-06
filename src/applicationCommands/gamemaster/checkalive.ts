@@ -35,7 +35,7 @@ export default class Ping extends ApplicationCommand {
 		const filtered = players.filter((x) => x.isAlive && x.discordId !== null)
 
 		await interaction.guild.channels.fetch()
-		sleep(10000)
+		await sleep(10000)
 
 		const channels = interaction.guild.channels.cache
 			.filter((x) => x.type === ChannelType.GuildText)
