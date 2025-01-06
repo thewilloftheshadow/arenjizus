@@ -33,6 +33,8 @@ export default class Ping extends ApplicationCommand {
 		const players = await getAllPlayers()
 		const filtered = players.filter((x) => x.isAlive && x.discordId !== null)
 
+		await interaction.guild.channels.fetch()
+
 		const channels = interaction.guild.channels.cache
 			.filter((x) => x.type === ChannelType.GuildText)
 			.filter((x) => serverIds.inGameCategories.includes(x.parentId ?? ""))
