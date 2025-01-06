@@ -55,7 +55,13 @@ export default class Ping extends ApplicationCommand {
 
 		return interaction.editReply(
 			`Found ${channels.size} alliance channels that ${all ? "all" : "at least some"} alive players have access to:\n${channels
-				.map((x) => `<#${x.id}>`)
+				.map(
+					(x) =>
+						`<#${x.id}> - ${x.permissionOverwrites.cache
+							.filter((x) => players.find((a) => a.discordId === x.id))
+							.map((y) => `<@${y.id}>`)
+							.join(", ")}`
+				)
 				.join("\n")}`
 		)
 	}
