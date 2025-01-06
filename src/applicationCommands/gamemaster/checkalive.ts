@@ -34,23 +34,22 @@ export default class Ping extends ApplicationCommand {
 		const filtered = players.filter((x) => x.isAlive && x.discordId !== null)
 
 		await interaction.guild.channels.fetch()
+		console.log(interaction.guild.channels.cache.size)
 
 		const channels = interaction.guild.channels.cache
 			.filter((x) => x.type === ChannelType.GuildText)
 			.filter((x) => serverIds.inGameCategories.includes(x.parentId ?? ""))
 			.filter((x) => {
 				if (all)
-					return filtered.every((member) =>
-						x
-							// biome-ignore lint/style/noNonNullAssertion: hrm
-							.permissionsFor(member.discordId!)
-							?.has("ViewChannel")
+					return filtered.every(
+						(member) =>
+							member.discordId &&
+							x.permissionsFor(member.discordId)?.has("ViewChannel")
 					)
-				return filtered.some((member) =>
-					x
-						// biome-ignore lint/style/noNonNullAssertion: hrm
-						.permissionsFor(member.discordId!)
-						?.has("ViewChannel")
+				return filtered.some(
+					(member) =>
+						member.discordId &&
+						x.permissionsFor(member.discordId)?.has("ViewChannel")
 				)
 			})
 			.filter((x) => x.name !== "instructions")
