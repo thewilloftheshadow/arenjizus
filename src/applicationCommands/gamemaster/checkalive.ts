@@ -2,6 +2,8 @@ import { sleep } from "bun"
 import {
 	ApplicationCommandOptionType,
 	ChannelType,
+	type Collection,
+	type GuildTextBasedChannel,
 	type ChatInputCommandInteraction
 } from "discord.js"
 import { serverIds } from "~/config"
@@ -34,10 +36,13 @@ export default class Ping extends ApplicationCommand {
 		const players = await getAllPlayers()
 		const filtered = players.filter((x) => x.isAlive && x.discordId !== null)
 
-		await interaction.guild.channels.fetch()
-		await sleep(10000)
+		const allOfChannels = await interaction.guild.channels.fetch()
+		const allChannels = allOfChannels.filter(
+			(x) => x && x.type === ChannelType.GuildText
+		) as Collection<string, GuildTextBasedChannel>
+		await sleep(5000)
 
-		const channels = interaction.guild.channels.cache
+		const channels = allChannels
 			.filter((x) => x.type === ChannelType.GuildText)
 			.filter((x) => serverIds.inGameCategories.includes(x.parentId ?? ""))
 			.filter((x) => {
