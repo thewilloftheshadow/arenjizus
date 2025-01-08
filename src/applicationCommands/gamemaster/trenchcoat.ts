@@ -57,15 +57,13 @@ export default class Ping extends ApplicationCommand {
 			hook = await channel.createWebhook({ name: "Arenjizus" })
 		}
 
-		hook.send({
+		const msg = await hook.send({
 			content: `${text}`,
 			username: "Trenchcoat",
 			avatarURL:
 				"https://cdnd.lystit.com/photos/2012/06/01/burberry-mercury-midlength-heritage-cotton-trench-coat-product-1-3824627-326438071.jpeg",
 			allowedMentions: {}
 		})
-
-		const msg = await channel.send(text)
 
 		return interaction.editReply({
 			content: "Sent!",
