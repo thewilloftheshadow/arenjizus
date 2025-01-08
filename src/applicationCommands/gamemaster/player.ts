@@ -688,6 +688,11 @@ export default class Ping extends ApplicationCommand {
 					await member.roles.remove(serverIds.roles.player).catch(() => {})
 					await member.roles.remove(serverIds.roles.dead).catch(() => {})
 					await member.roles.add(serverIds.roles.spectator).catch(() => {})
+
+					const channel = await getPlayerChannel(player.name, this.client)
+					if (channel) {
+						await channel.permissionOverwrites.delete(member.id).catch(() => {})
+					}
 				}
 				return interaction.editReply({
 					content: "Players have been reset"
