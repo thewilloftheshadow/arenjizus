@@ -242,6 +242,11 @@ export default class Ping extends ApplicationCommand {
 							required: true
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "reset",
+					description: "Reset all players"
 				}
 			]
 		})
