@@ -674,6 +674,20 @@ export default class Ping extends ApplicationCommand {
 					content: `Note has been added to ${player.name}`
 				})
 			}
+			case "reset": {
+				const allPlayers = await getAllPlayers()
+				for (const player of allPlayers) {
+					if (!player.discordId) continue
+					const member = await interaction.guild.members.fetch(player.discordId)
+					if (!member) continue
+					await member.roles.remove(serverIds.roles.player).catch(() => {})
+					await member.roles.remove(serverIds.roles.dead).catch(() => {})
+					await member.roles.add(serverIds.roles.spectator).catch(() => {})
+				}
+				return interaction.editReply({
+					content: "Players have been reset"
+				})
+			}
 			default:
 				break
 		}
