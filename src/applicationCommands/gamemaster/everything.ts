@@ -1,5 +1,8 @@
-import { type ChatInputCommandInteraction, EmbedBuilder } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
+import {
+	ApplicationCommandOptionType,
+	type ChatInputCommandInteraction,
+	EmbedBuilder
+} from "discord.js"
 import {
 	getAllAbilities,
 	getAllItems,
@@ -8,8 +11,8 @@ import {
 	getAllRoles
 } from "~/database/getData"
 import { Paginator } from "~/functions/paginator"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

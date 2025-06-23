@@ -1,7 +1,9 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"allowImportingTsExtensions": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
+		"allowImportingTsExtensions": false,
 		"isolatedModules": true,
 		"module": "ESNext",
 		"moduleDetection": "force",
@@ -16,7 +18,10 @@
 		"target": "ESNext",
 		"paths": {
 			"~/*": ["./src/*"]
-		}
+		},
+		"types": ["bun-types"],
+		"lib": ["ESNext", "DOM"]
 	},
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["node_modules", "dist"]
 }

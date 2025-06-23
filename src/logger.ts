@@ -1,9 +1,9 @@
 import { WebhookClient } from "discord.js"
 import {
-	type Logger as WinstonLogger,
 	createLogger,
 	format,
-	transports
+	transports,
+	type Logger as WinstonLogger
 } from "winston"
 
 export default class Logger {

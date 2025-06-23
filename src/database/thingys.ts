@@ -1,5 +1,5 @@
 import { Result } from "@sapphire/result"
-import { EmbedBuilder, type Client } from "discord.js"
+import { type Client, EmbedBuilder } from "discord.js"
 import { serverIds } from "~/config"
 import database, { type Ability } from "~/database"
 import { logger } from "~/logger"

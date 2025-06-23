@@ -5,13 +5,13 @@ import type {
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 import { serverIds } from "~/config"
-import database, {} from "~/database"
+import database from "~/database"
 import { getAllPlayers, getDiscordPlayer, getPlayer } from "~/database/getData"
 import { addMoney, removeMoney } from "~/database/thingys"
 import { generateTimestamp } from "~/functions/generateTimestamp"
 import { getPlayerChannel } from "~/functions/player"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {

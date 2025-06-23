@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { KiaiClient } from "kiai.js"
+
 const database = new PrismaClient()
 
 export default database

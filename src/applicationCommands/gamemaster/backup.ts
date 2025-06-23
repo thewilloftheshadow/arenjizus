@@ -1,7 +1,7 @@
 import { copyFileSync } from "node:fs"
 import type { ChatInputCommandInteraction } from "discord.js"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

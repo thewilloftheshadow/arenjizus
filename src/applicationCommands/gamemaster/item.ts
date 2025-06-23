@@ -1,6 +1,3 @@
-import { ApplicationCommand } from "~/lib"
-import type { BetterClient } from "~/lib"
-
 import type {
 	AutocompleteFocusedOption,
 	AutocompleteInteraction,
@@ -24,6 +21,8 @@ import {
 } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getPlayerChannel } from "~/functions/player"
+import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {

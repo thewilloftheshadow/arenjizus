@@ -8,13 +8,13 @@ import {
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getFiles } from "~/functions/getFiles"
 import {
+	type _BaseComponent,
 	type ApplicationCommand,
 	type BetterClient,
 	type Button,
 	type Dropdown,
 	type HandlerType,
-	LogLevel,
-	type _BaseComponent
+	LogLevel
 } from "../"
 
 export default class BaseHandler {

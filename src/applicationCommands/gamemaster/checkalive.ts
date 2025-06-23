@@ -2,14 +2,14 @@ import { sleep } from "bun"
 import {
 	ApplicationCommandOptionType,
 	ChannelType,
+	type ChatInputCommandInteraction,
 	type Collection,
-	type GuildTextBasedChannel,
-	type ChatInputCommandInteraction
+	type GuildTextBasedChannel
 } from "discord.js"
 import { serverIds } from "~/config"
 import { getAllPlayers } from "~/database/getData"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

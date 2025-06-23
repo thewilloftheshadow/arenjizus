@@ -1,16 +1,16 @@
 import {
+	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
 	ChannelType,
 	type ChatInputCommandInteraction,
 	EmbedBuilder
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
-import database, {} from "~/database"
+import database from "~/database"
 import { getAllPlayers, getPlayer } from "~/database/getData"
 import { setVote, setVoteWorth } from "~/database/thingys"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

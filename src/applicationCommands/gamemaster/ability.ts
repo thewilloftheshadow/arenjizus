@@ -1,5 +1,6 @@
 import {
 	ActionRowBuilder,
+	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
 	type CacheType,
@@ -8,8 +9,7 @@ import {
 	EmbedBuilder,
 	StringSelectMenuBuilder
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
-import database, {} from "~/database"
+import database from "~/database"
 import {
 	AbilityProperty,
 	allProperties,
@@ -32,8 +32,8 @@ import {
 	getRole
 } from "~/database/getData"
 import { createAbility } from "~/database/thingys"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

@@ -1,6 +1,6 @@
 import {
-	type APIEmbed,
 	type ActionRowBuilder,
+	type APIEmbed,
 	type ButtonBuilder,
 	EmbedBuilder
 } from "discord.js"

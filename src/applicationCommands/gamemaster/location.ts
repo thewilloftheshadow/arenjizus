@@ -1,17 +1,17 @@
 import {
+	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
 	ChannelType,
 	type ChatInputCommandInteraction,
 	type GuildChannel
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
 import database from "~/database"
 import { locationEmbed } from "~/database/embeds"
 import { getAllLocations, getLocation } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 const category = "1189790054411943979"

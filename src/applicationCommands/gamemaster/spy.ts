@@ -1,11 +1,11 @@
 import {
+	ApplicationCommandOptionType,
 	ChannelType,
 	type ChatInputCommandInteraction,
 	type TextChannel
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

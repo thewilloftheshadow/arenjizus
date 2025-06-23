@@ -4,8 +4,8 @@ import {
 	ButtonStyle,
 	type ChatInputCommandInteraction
 } from "discord.js"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Vote extends ApplicationCommand {
 	constructor(client: BetterClient) {

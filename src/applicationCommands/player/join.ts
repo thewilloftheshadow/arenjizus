@@ -4,8 +4,8 @@ import {
 } from "discord.js"
 import { serverIds } from "~/config"
 import database from "~/database"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Vote extends ApplicationCommand {

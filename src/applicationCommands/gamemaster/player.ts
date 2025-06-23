@@ -1,20 +1,20 @@
 import type { Prisma } from "@prisma/client"
 import {
+	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
 	type ChatInputCommandInteraction,
 	EmbedBuilder
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
 import { serverIds } from "~/config"
-import database, {} from "~/database"
+import database from "~/database"
 import { playerEmbed } from "~/database/embeds"
 import { getAllPlayers, getPlayer } from "~/database/getData"
 import { addMoney, removeMoney } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { getPlayerChannel } from "~/functions/player"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {

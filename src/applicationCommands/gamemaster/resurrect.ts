@@ -4,8 +4,8 @@ import { serverIds } from "~/config"
 import { getPlayer } from "~/database/getData"
 import { playerListUpdate, toggleDeath } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {

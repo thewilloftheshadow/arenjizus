@@ -1,5 +1,5 @@
-import type { APIEmbed, AnySelectMenuInteraction } from "discord.js"
-import { type BetterClient, type DropdownOptions, _BaseComponent } from "../"
+import type { AnySelectMenuInteraction, APIEmbed } from "discord.js"
+import { _BaseComponent, type BetterClient, type DropdownOptions } from "../"
 
 export default class Dropdown extends _BaseComponent {
 	constructor(key: string, client: BetterClient, options?: DropdownOptions) {

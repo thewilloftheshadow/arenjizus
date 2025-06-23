@@ -7,8 +7,8 @@ import {
 import database from "~/database"
 import { getAllPlayers } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Vote extends ApplicationCommand {

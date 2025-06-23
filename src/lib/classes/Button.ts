@@ -1,5 +1,5 @@
 import type { APIEmbed, ButtonInteraction } from "discord.js"
-import { type BetterClient, type ButtonOptions, _BaseComponent } from "../"
+import { _BaseComponent, type BetterClient, type ButtonOptions } from "../"
 
 export default class Button extends _BaseComponent {
 	constructor(key: string, client: BetterClient, options?: ButtonOptions) {

@@ -9,7 +9,7 @@ import {
 	type ChatInputCommandInteraction
 } from "discord.js"
 import { serverIds } from "~/config"
-import database, {} from "~/database"
+import database from "~/database"
 import { queueAbility } from "~/database/ability"
 import {
 	getAbility,

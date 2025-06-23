@@ -1,10 +1,11 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"files": {
-		"ignore": [
-			"dist",
-			".next",
-			"generated"
+		"includes": [
+			"**",
+			"!**/dist",
+			"!**/.next",
+			"!**/generated"
 		]
 	},
 	"formatter": {
@@ -20,7 +21,17 @@
 				"noUndeclaredVariables": "error"
 			},
 			"style": {
-				"noUnusedTemplateLiteral": "off"
+				"noUnusedTemplateLiteral": "off",
+				"noParameterAssign": "error",
+				"useAsConstAssertion": "error",
+				"useDefaultParameterLast": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useSingleVarDeclarator": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"noUselessElse": "error",
+				"noNonNullAssertion": "off"
 			}
 		}
 	},
@@ -28,6 +39,9 @@
 		"formatter": {
 			"semicolons": "asNeeded",
 			"trailingCommas": "none"
-		}
+		},
+		"globals": [
+			"Bun"
+		]
 	}
 }

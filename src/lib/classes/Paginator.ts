@@ -1,7 +1,7 @@
 import { EventEmitter } from "node:events"
 import {
-	type APIEmbed,
 	ActionRowBuilder,
+	type APIEmbed,
 	ButtonBuilder,
 	type ButtonInteraction,
 	type ChatInputCommandInteraction,

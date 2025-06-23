@@ -4,7 +4,7 @@ import type {
 	ChatInputCommandInteraction
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
-import database, {} from "~/database"
+import database from "~/database"
 import { roleEmbed } from "~/database/embeds"
 import {
 	getAllPlayers,
@@ -14,8 +14,8 @@ import {
 } from "~/database/getData"
 import { givePlayerRole, removePlayerRole } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Ping extends ApplicationCommand {

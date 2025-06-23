@@ -2,8 +2,8 @@ import { generateTimestamp } from "@buape/functions"
 import type { ChatInputCommandInteraction } from "discord.js"
 import database from "~/database"
 import { generateSuccessMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

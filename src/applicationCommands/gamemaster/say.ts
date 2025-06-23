@@ -1,13 +1,13 @@
 import {
 	ActionRowBuilder,
+	ApplicationCommandOptionType,
 	ButtonBuilder,
 	ButtonStyle,
 	type ChatInputCommandInteraction
 } from "discord.js"
-import { ApplicationCommandOptionType } from "discord.js"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

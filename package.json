@@ -18,15 +18,20 @@
 		"node": ">=22.12.0"
 	},
 	"dependencies": {
-		"@biomejs/biome": "1.9.4",
+		"@biomejs/biome": "^2.0.4",
 		"@buape/functions": "^1.0.4",
 		"@prisma/client": "6.1.0",
 		"@sapphire/discord.js-utilities": "7.3.1",
 		"@sapphire/result": "2.7.2",
 		"@types/bun": "^1.1.14",
+		"@types/react": "^19.1.8",
+		"@types/react-dom": "^19.1.6",
 		"croner": "9.0.0",
 		"discord.js": "14.16.3",
+		"hono": "^4.8.2",
 		"kiai.js": "2.2.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
 		"unb-api": "1.4.0",
 		"winston": "3.17.0"
 	},

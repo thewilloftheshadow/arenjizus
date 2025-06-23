@@ -6,11 +6,11 @@ import {
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { generateTimestamp } from "~/functions/generateTimestamp"
 import {
+	type _BaseComponent,
 	type ApplicationCommand,
 	type BetterClient,
 	HandlerType,
-	LogLevel,
-	type _BaseComponent
+	LogLevel
 } from "../"
 import _BaseHandler from "./_BaseHandler"
 

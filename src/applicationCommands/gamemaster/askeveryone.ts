@@ -6,8 +6,8 @@ import type {
 } from "discord.js"
 import { ApplicationCommandOptionType } from "discord.js"
 import { getAllPlayers } from "~/database/getData"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {

@@ -7,8 +7,8 @@ import database from "~/database"
 import { getDiscordPlayer, getPlayer } from "~/database/getData"
 import { removeMoney } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
-import { ApplicationCommand } from "~/lib"
 import type { BetterClient } from "~/lib"
+import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
 export default class Want extends ApplicationCommand {
