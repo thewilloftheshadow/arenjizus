@@ -29,6 +29,7 @@ export default class Buttony extends Button {
 		})
 		if (!playerAbility) return interaction.editReply("Ability not found.")
 
+		// biome-ignore lint/correctness/useHookAtTopLevel: this isnt a hook
 		await useAbility(playerAbility.playerName, playerAbility.abilityName)
 		const done = await runAbilityProperties(
 			playerAbility.ability,

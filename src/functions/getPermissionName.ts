@@ -7,7 +7,6 @@ import { permissionNames } from "./permissions.js"
  * @returns The proper name of the permission.
  */
 export const getPermissionName = (permission: PermissionsString): string => {
-	// biome-ignore lint/style/noNonNullAssertion: hi
 	if (permissionNames.has(permission)) return permissionNames.get(permission)!
 	return permission
 }

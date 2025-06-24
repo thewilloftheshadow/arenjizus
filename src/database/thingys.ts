@@ -282,7 +282,6 @@ export const playerListUpdate = async (client: Client) => {
 				players.filter((x) => !x.isAlive).length
 			} dead`
 		})
-	// biome-ignore lint/complexity/noForEach: no
 	players
 		.sort((a, b) => {
 			if (a.name < b.name) {

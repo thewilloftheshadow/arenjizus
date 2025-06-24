@@ -436,10 +436,7 @@ export default class Ping extends ApplicationCommand {
 
 					for (const player of location.players) {
 						const discordPlayer = await interaction.guild?.members
-							.fetch(
-								// biome-ignore lint/style/noNonNullAssertion: ugh
-								player.discordId!
-							)
+							.fetch(player.discordId!)
 							.catch(() => null)
 						if (!discordPlayer) {
 							interaction.editReply(

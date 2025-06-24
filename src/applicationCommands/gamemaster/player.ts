@@ -508,7 +508,6 @@ export default class Ping extends ApplicationCommand {
 									players.filter((x) => !x.isAlive && x.isFaked).length
 								} faked`
 					})
-				// biome-ignore lint/complexity/noForEach: no
 				players
 					.sort((a, b) => {
 						if (a.name < b.name) {

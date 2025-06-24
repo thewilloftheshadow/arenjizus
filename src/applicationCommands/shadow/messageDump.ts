@@ -123,7 +123,6 @@ export default class Ping extends ApplicationCommand {
 						channelMessages.size === 0 ||
 						(dayFilter &&
 							channelMessages.last()?.createdAt &&
-							// biome-ignore lint/style/noNonNullAssertion: <explanation>
 							channelMessages.last()!.createdAt < dayFilter)
 					)
 						break

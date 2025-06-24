@@ -120,9 +120,9 @@ export default class Eval extends TextCommand {
 		let type
 		try {
 			if (message.content.includes("--async"))
-				// biome-ignore lint/style/noParameterAssign: <explanation>
+				// biome-ignore lint/style/noParameterAssign: ahhh
 				code = `(async () => {\n${code}\n})();`
-			// biome-ignore lint/security/noGlobalEval: <explanation>
+			// biome-ignore lint/security/noGlobalEval: ahhh
 			result = eval(code)
 			type = new Type(result)
 			if (this.isThenable(result)) {

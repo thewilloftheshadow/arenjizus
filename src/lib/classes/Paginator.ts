@@ -120,7 +120,6 @@ export class Paginator extends EventEmitter {
 
 	private async handleDiscordInteraction(interaction: ButtonInteraction) {
 		const page = Number.parseInt(
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			interaction.customId.split("-")[1]?.split(",")[1]!
 		)
 		const message = this.getDiscordMessage(page)
