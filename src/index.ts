@@ -1,6 +1,7 @@
 import * as config from "~/config"
 import { BetterClient } from "~/lib"
 import { logger } from "~/logger"
+import webServer from "~/web"
 
 const client = new BetterClient({
 	clientOptions: {
@@ -19,6 +20,10 @@ const client = new BetterClient({
 	prefix: config.prefix
 })
 
+// Start the web server
+const server = Bun.serve(webServer)
+
+// Start the Discord bot
 client.login(process.env.DISCORD_TOKEN).catch((error) => {
 	logger.thrownError(error)
 })
@@ -28,3 +33,4 @@ process.on("uncaughtException", (err) => {
 })
 
 logger.info("Arenjizus has started!")
+logger.info(`Web server running on port ${server.port}`)

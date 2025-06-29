@@ -40,7 +40,8 @@ export const getAllPlayers = async () => {
 		include: {
 			roles: { include: { role: true } },
 			items: { include: { item: true } },
-			location: true
+			location: true,
+			abilities: true
 		},
 		orderBy: [{ isAlive: "desc" }, { name: "asc" }]
 	})
@@ -50,8 +51,9 @@ export const getAllWebPlayers = async () => {
 	const players = await getAllPlayers()
 	return players.map((p) => ({
 		...p,
-		roles: p.roles.map((r) => r.role.name),
-		items: p.items.map((i) => ({ name: i.item.name, amount: i.amount }))
+		roles: p.roles,
+		items: p.items.filter((x) => x.amount > 0),
+		abilities: p.abilities
 	}))
 }
 

@@ -19,7 +19,7 @@
 		"paths": {
 			"~/*": ["./src/*"]
 		},
-		"types": ["bun-types"],
+		"types": ["bun-types", "react"],
 		"lib": ["ESNext", "DOM"]
 	},
 	"include": ["src/**/*.ts", "src/**/*.tsx"],

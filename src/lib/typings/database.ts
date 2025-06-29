@@ -42,4 +42,5 @@ export type Players = PlayerWithRelations[]
 export type WebPlayer = Omit<PlayerWithRelations, "roles" | "items"> & {
 	roles: string[]
 	items: { name: string; amount: number }[]
+	abilities: { abilityName: string; usesLeft: number }[]
 }
