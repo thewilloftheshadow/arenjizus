@@ -7,7 +7,7 @@ import {
 export const prefix = "!"
 
 export const botName = "Arenjizus"
-export const admins = ["439223656200273932", "461298571786977309"]
+export const admins = ["439223656200273932", "461298571786977309", "960888903764676618", "389840562112561183"]
 
 export const serverIds = {
 	inGameCategories: [
