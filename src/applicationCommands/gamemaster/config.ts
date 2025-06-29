@@ -85,7 +85,12 @@ export default class Web extends ApplicationCommand {
 			const embed = new EmbedBuilder().setTitle("Configuration").setDescription(
 				gameConfig
 					.map((option) => {
-						const value = data.find((item) => item.key === option.key)?.value
+						const value =
+							option.type === "boolean"
+								? data.find((k) => k.key === option.key)?.valueBoolean
+								: option.type === "integer"
+									? data.find((k) => k.key === option.key)?.valueInt
+									: data.find((k) => k.key === option.key)?.value
 						return `**${option.key}**: \`${value}\`\n(${option.description})`
 					})
 					.join("\n\n")
