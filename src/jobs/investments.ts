@@ -19,8 +19,14 @@ const startCron = (client: BetterClient) => {
 		const guild = await client.guilds.fetch(serverIds.guild)
 		if (!guild) return
 		await guild.channels.fetch()
+		const investmentChance =
+			(
+				await database.keyV.findFirst({
+					where: { key: "investmentChance" }
+				})
+			)?.valueInt ?? 75
 		for await (const investment of investments) {
-			const fail = randomInt(0, 3) === 0
+			const fail = randomInt(0, 100) > investmentChance
 			if (fail) {
 				await database.investment.delete({
 					where: {

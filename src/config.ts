@@ -4,6 +4,38 @@ import {
 	PermissionsBitField
 } from "discord.js"
 
+export const gameConfig: {
+	key: string
+	type: "string" | "integer" | "boolean"
+	description: string
+}[] = [
+	{
+		key: "playerListMessageId",
+		type: "string",
+		description: "The message ID of the player list message"
+	},
+	{
+		key: "dayChat",
+		type: "string",
+		description: "The channel ID of the day chat"
+	},
+	{
+		key: "voteEnabled",
+		type: "boolean",
+		description: "Whether to enable voting"
+	},
+	{
+		key: "wantedPrice",
+		type: "integer",
+		description: "The price to declare a wanted person"
+	},
+	{
+		key: "investmentChance",
+		type: "integer",
+		description: "The chance of an investment being successful (0-100)"
+	}
+]
+
 export const prefix = "!"
 
 export const botName = "Arenjizus"

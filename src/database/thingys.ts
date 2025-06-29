@@ -300,7 +300,7 @@ export const playerListUpdate = async (client: Client) => {
 	const mId = (
 		await database.keyV.findFirst({
 			where: {
-				key: "player-list-message-id"
+				key: "playerListMessageId"
 			}
 		})
 	)?.value

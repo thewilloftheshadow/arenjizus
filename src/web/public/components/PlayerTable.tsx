@@ -13,14 +13,11 @@ type ModalItem = ItemWithPlayers & {
 type ModalData =
 	| { type: "role"; data: ModalRole }
 	| { type: "item"; data: ModalItem }
-	| { type: "ability"; data: any }
 	| null
 
 export const PlayerTable = ({ players }: { players: Player[] }) => {
 	const [modalOpen, setModalOpen] = useState(false)
-	const [modalType, setModalType] = useState<
-		"role" | "item" | "ability" | null
-	>(null)
+	const [modalType, setModalType] = useState<"role" | "item" | null>(null)
 	const [modalName, setModalName] = useState<string>("")
 	const [modalData, setModalData] = useState<ModalData>(null)
 	const [loading, setLoading] = useState(false)
@@ -31,7 +28,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 	const tableContainerRef = useRef<HTMLDivElement>(null)
 	const [isScrollable, setIsScrollable] = useState(false)
 
-	const handleOpenModal = (type: "role" | "item" | "ability", name: string) => {
+	const handleOpenModal = (type: "role" | "item", name: string) => {
 		setModalType(type)
 		setModalName(name)
 		setModalOpen(true)
@@ -57,8 +54,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 		if (modalOpen && modalType && modalName) {
 			setLoading(true)
 			setError(null)
-			const apiType = modalType === "ability" ? "ability" : modalType
-			fetch(`/api/${apiType}/${encodeURIComponent(modalName)}`)
+			fetch(`/api/${modalType}/${encodeURIComponent(modalName)}`)
 				.then(async (res) => {
 					if (!res.ok)
 						throw new Error((await res.json()).error || "Failed to fetch info")
@@ -274,34 +270,6 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 													(p: (typeof modalData.data.players)[number]) =>
 														`${p.playerName} (x${p.amount})`
 												)
-												.join(", ")}
-										</div>
-									)}
-							</div>
-						)}
-						{modalData.type === "ability" && (
-							<div>
-								{modalData.data.description && (
-									<p>{modalData.data.description}</p>
-								)}
-								{typeof modalData.data.uses !== "undefined" && (
-									<p>Default Uses: {modalData.data.uses}</p>
-								)}
-								{modalData.data.properties &&
-									modalData.data.properties !== 0 && (
-										<div>
-											<strong>Properties:</strong>{" "}
-											{Array.isArray(modalData.data.properties)
-												? modalData.data.properties.join(", ")
-												: modalData.data.properties}
-										</div>
-									)}
-								{modalData.data.linkedRoles &&
-									modalData.data.linkedRoles.length > 0 && (
-										<div>
-											<strong>Linked Roles:</strong>{" "}
-											{modalData.data.linkedRoles
-												.map((r: any) => r.roleName)
 												.join(", ")}
 										</div>
 									)}
