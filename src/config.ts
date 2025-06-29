@@ -20,11 +20,6 @@ export const gameConfig: {
 		description: "The channel ID of the day chat"
 	},
 	{
-		key: "voteEnabled",
-		type: "boolean",
-		description: "Whether to enable voting"
-	},
-	{
 		key: "wantedPrice",
 		type: "integer",
 		description: "The price to declare a wanted person"
@@ -33,6 +28,26 @@ export const gameConfig: {
 		key: "investmentChance",
 		type: "integer",
 		description: "The chance of an investment being successful (0-100)"
+	},
+	{
+		key: "canVote",
+		type: "boolean",
+		description: "Whether voting is enabled"
+	},
+	{
+		key: "canInvest",
+		type: "boolean",
+		description: "Whether investing is enabled"
+	},
+	{
+		key: "canRob",
+		type: "boolean",
+		description: "Whether robbing is enabled"
+	},
+	{
+		key: "canTravel",
+		type: "boolean",
+		description: "Whether traveling is enabled"
 	}
 ]
 

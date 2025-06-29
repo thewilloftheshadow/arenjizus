@@ -72,6 +72,18 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
+		const canTravel = await database.keyV.findFirst({
+			where: { key: "canTravel" }
+		})
+		if (!canTravel?.valueBoolean) {
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Traveling is disabled",
+					description: "Traveling is currently disabled by the gamemasters."
+				})
+			)
+		}
+
 		const locationName = interaction.options.getString("to", true)
 		const location = await getLocation(locationName)
 		if (!location) {
@@ -99,82 +111,55 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		const votingEnabled = await database.keyV.upsert({
-			where: { key: "voteEnabled" },
-			create: { key: "voteEnabled", valueBoolean: false },
-			update: {}
-		})
-		if (!votingEnabled.valueBoolean) {
-			if (player.teleports <= 0) {
-				return interaction.editReply(
-					generateErrorMessage(
-						{
-							title: "No Teleports Left",
-							description: `You have no teleports left.`
-						},
-						false,
-						true
-					)
+		const chanId = location.channel
+		const channel = chanId
+			? await interaction.guild?.channels.fetch(chanId)
+			: undefined
+		if (
+			!channel ||
+			!channel.guild ||
+			!channel.isTextBased() ||
+			channel.type !== ChannelType.GuildText
+		) {
+			return interaction.editReply(
+				generateErrorMessage(
+					{
+						title: "Location not found",
+						description: `The location ${locationName} was not found.`
+					},
+					false,
+					true
 				)
-			}
-			const chanId = location.channel
-			const channel = chanId
-				? await interaction.guild?.channels.fetch(chanId)
-				: undefined
-			if (
-				!channel ||
-				!channel.guild ||
-				!channel.isTextBased() ||
-				channel.type !== ChannelType.GuildText
-			) {
-				return interaction.editReply(
-					generateErrorMessage(
-						{
-							title: "Location not found",
-							description: `The location ${locationName} was not found.`
-						},
-						false,
-						true
-					)
-				)
-			}
-			const oldChannel = player.location?.channel
-				? await interaction.guild?.channels.fetch(player.location.channel)
-				: undefined
-			if (
-				oldChannel?.guild &&
-				oldChannel?.isTextBased() &&
-				oldChannel?.type === ChannelType.GuildText
-			) {
-				await oldChannel.permissionOverwrites.delete(player.discordId)
-			}
-			channel.permissionOverwrites
-				.create(player.discordId, {
-					ViewChannel: true
-				})
-				.catch(() => {
-					logger.gameLog(
-						`Failed to give ${player.name} access to ${channel.name} <@&${serverIds.roles.gamemaster}>`
-					)
-				})
-			await database.player.update({
-				where: { id: player.id },
-				data: {
-					location: { connect: { id: location.id } },
-					teleports: { decrement: 1 }
-				}
-			})
-			logger.gameLog(`${player.name} teleported to ${location.name}`)
-
-			return interaction.editReply(`You have teleported to ${location.name}`)
+			)
 		}
-
+		const oldChannel = player.location?.channel
+			? await interaction.guild?.channels.fetch(player.location.channel)
+			: undefined
+		if (
+			oldChannel?.guild &&
+			oldChannel?.isTextBased() &&
+			oldChannel?.type === ChannelType.GuildText
+		) {
+			await oldChannel.permissionOverwrites.delete(player.discordId)
+		}
+		channel.permissionOverwrites
+			.create(player.discordId, {
+				ViewChannel: true
+			})
+			.catch(() => {
+				logger.gameLog(
+					`Failed to give ${player.name} access to ${channel.name} <@&${serverIds.roles.gamemaster}>`
+				)
+			})
 		await database.player.update({
 			where: { id: player.id },
-			data: { location: { connect: { id: location.id } } }
+			data: {
+				location: { connect: { id: location.id } },
+				teleports: { decrement: 1 }
+			}
 		})
+		logger.gameLog(`${player.name} teleported to ${location.name}`)
 
-		logger.gameLog(`${player.name} will now travel to ${location.name}`)
-		return interaction.editReply(`You will now travel to ${location.name}`)
+		return interaction.editReply(`You have teleported to ${location.name}`)
 	}
 }

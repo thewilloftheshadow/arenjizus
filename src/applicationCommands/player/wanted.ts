@@ -31,7 +31,7 @@ export default class Want extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 		const enabled = await database.keyV.findFirst({
 			where: {
-				key: "voteEnabled"
+				key: "canVote"
 			}
 		})
 		if (!enabled?.valueBoolean) {

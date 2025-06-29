@@ -80,18 +80,14 @@ export default class Ping extends ApplicationCommand {
 			ephemeral: true
 		})
 
-		const isDay = (
-			await database.keyV.upsert({
-				where: {
-					key: "voteEnabled"
-				},
-				create: {
-					key: "voteEnabled",
-					valueBoolean: false
-				},
-				update: {}
+		const canRob = await database.keyV.findFirst({
+			where: { key: "canRob" }
+		})
+		if (!canRob?.valueBoolean) {
+			return interaction.editReply({
+				content: "Robbing is currently disabled by the gamemasters."
 			})
-		).valueBoolean
+		}
 
 		const who = interaction.options.getString("who", true)
 		const amountInput = interaction.options.getInteger("amount", true)
@@ -121,7 +117,13 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		if (!isDay && whoPlayer.locationId !== byPlayer.locationId) {
+		const canTravel = await database.keyV.findFirst({
+			where: { key: "canTravel" }
+		})
+		if (
+			!canTravel?.valueBoolean &&
+			whoPlayer.locationId !== byPlayer.locationId
+		) {
 			return interaction.editReply(
 				`You are not in the same location as ${who}.`
 			)

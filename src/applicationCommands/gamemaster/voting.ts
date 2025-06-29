@@ -179,13 +179,13 @@ export default class Ping extends ApplicationCommand {
 			case "close":
 				await database.keyV.upsert({
 					where: {
-						key: "voteEnabled"
+						key: "canVote"
 					},
 					update: {
 						valueBoolean: false
 					},
 					create: {
-						key: "voteEnabled",
+						key: "canVote",
 						valueBoolean: false
 					}
 				})
@@ -194,13 +194,13 @@ export default class Ping extends ApplicationCommand {
 			case "open":
 				await database.keyV.upsert({
 					where: {
-						key: "voteEnabled"
+						key: "canVote"
 					},
 					update: {
 						valueBoolean: true
 					},
 					create: {
-						key: "voteEnabled",
+						key: "canVote",
 						valueBoolean: true
 					}
 				})

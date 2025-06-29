@@ -28,6 +28,17 @@ export default class Ping extends ApplicationCommand {
 
 	override async run(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply()
+		const canInvest = await database.keyV.findFirst({
+			where: { key: "canInvest" }
+		})
+		if (!canInvest?.valueBoolean) {
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Investing is disabled",
+					description: "Investing is currently disabled by the gamemasters."
+				})
+			)
+		}
 		const player = await getDiscordPlayer(interaction.user.id)
 		if (!player) {
 			return interaction.editReply(
