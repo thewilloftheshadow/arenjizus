@@ -62,6 +62,15 @@ export default class Web extends ApplicationCommand {
 	override async autocomplete(interaction: AutocompleteInteraction) {
 		const focusedOption = interaction.options.getFocused(true)
 		const key = focusedOption.name
+		if (focusedOption.value.length < 2) {
+			await interaction.respond(
+				gameConfig.map((option) => ({
+					name: option.key,
+					value: option.key
+				}))
+			)
+			return
+		}
 		const options = gameConfig.filter((option) =>
 			option.key.toLowerCase().startsWith(key.toLowerCase())
 		)
