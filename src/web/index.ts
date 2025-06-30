@@ -1,13 +1,24 @@
 import { readFileSync } from "node:fs"
 import { Hono } from "hono"
 import { serveStatic } from "hono/bun"
+import database, { Investment, KeyV } from "~/database"
 import {
+	getAbility,
 	getAllWebPlayers,
 	getItem,
-	getRole,
-	getAbility
+	getRole
 } from "~/database/getData"
 import { logger } from "~/logger"
+import { gameConfig } from "~/config"
+
+export type DashboardData = {
+	config: KeyV[]
+	wanted: {
+		name: string | null
+		price: number | null
+	}
+	investments: Investment[]
+}
 
 const app = new Hono()
 
@@ -67,6 +78,30 @@ app.get("/api/ability/:name", async (c) => {
 	} catch (error) {
 		logger.error("Error fetching ability:", error as Error)
 		return c.json({ error: "Failed to fetch ability" }, 500)
+	}
+})
+
+// API endpoint to get game config
+app.get("/api/dashboard", async (c) => {
+	try {
+		const kv = await database.keyV.findMany()
+		const config = kv.filter((c) => gameConfig.some((g) => g.key === c.key))
+		const wantedPlayer = kv.find((c) => c.key === "wantedPlayer")
+		const wantedPrice = kv.find((c) => c.key === "wantedPrice")
+		const investments = await database.investment.findMany({
+			where: { expiresAt: { gt: new Date() } }
+		})
+		return c.json<DashboardData>({
+			config,
+			wanted: {
+				name: wantedPlayer?.value ?? null,
+				price: wantedPrice?.valueInt ?? null
+			},
+			investments
+		})
+	} catch (error) {
+		logger.error("Error fetching dashboard data:", error as Error)
+		return c.json({ error: "Failed to fetch dashboard data" }, 500)
 	}
 })
 

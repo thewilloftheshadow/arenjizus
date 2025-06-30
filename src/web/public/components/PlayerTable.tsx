@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getAllWebPlayers } from "~/database/getData"
 import type { ItemWithPlayers, RoleWithPlayers } from "~/lib/typings/database"
 import Modal from "./Modal"
@@ -129,17 +129,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 												<>
 													<button
 														key={`${player.name}-${role.role.name}`}
-														className="role-item"
-														style={{
-															cursor: "pointer",
-															textDecoration: "underline",
-															background: "none",
-															border: "none",
-															padding: 0,
-															margin: 0,
-															color: "inherit",
-															marginRight: 4
-														}}
+														className="role-item role-link"
 														onClick={() =>
 															handleOpenModal("role", role.role.name)
 														}
@@ -167,20 +157,12 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 											{expandedPlayers[player.name] ? "Hide" : "Expand"} Items
 										</button>
 										{expandedPlayers[player.name] && (
-											<div style={{ margin: 0, paddingLeft: 16 }}>
+											<div className="expanded-items">
 												{player.items.map((item) => (
 													<>
 														<button
 															key={`${player.name}-item-${item.item.name}`}
-															style={{
-																cursor: "pointer",
-																textDecoration: "underline",
-																marginRight: 4,
-																background: "none",
-																border: "none",
-																padding: 0,
-																color: "inherit"
-															}}
+															className="item-button"
 															onClick={() =>
 																handleOpenModal("item", item.item.name)
 															}
@@ -206,10 +188,10 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 				{loading ? (
 					<div>Loading...</div>
 				) : error ? (
-					<div style={{ color: "red" }}>{error}</div>
+					<div className="error-message">{error}</div>
 				) : modalData ? (
 					<div>
-						<h2 style={{ marginTop: 0 }}>{modalData.data.name}</h2>
+						<h2 className="modal-title">{modalData.data.name}</h2>
 						{modalData.type === "role" && (
 							<div>
 								{modalData.data.description && (

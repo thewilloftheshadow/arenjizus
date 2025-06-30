@@ -121,6 +121,20 @@ export default class Want extends ApplicationCommand {
 			}
 		})
 
+		// Store the wanted player's name in KeyV
+		await database.keyV.upsert({
+			where: {
+				key: "wantedPlayer"
+			},
+			update: {
+				value: playerChosen.name
+			},
+			create: {
+				key: "wantedPlayer",
+				value: playerChosen.name
+			}
+		})
+
 		logger.gameLog(
 			`${player.name} has declared ${playerChosen.name} as wanted for ${wantedPrice}!`
 		)

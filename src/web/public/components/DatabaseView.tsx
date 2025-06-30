@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { getAllWebPlayers } from "~/database/getData.js"
+import { DashboardData } from "~/web/index.js"
+import { Accordion } from "./Accordion.js"
+import { GameConfigSection } from "./GameConfigSection.js"
+import { InvestmentsSection } from "./InvestmentsSection.js"
 import { PlayerTable } from "./PlayerTable.js"
 import { RefreshIcon } from "./RefreshIcon.js"
+import { WantedSection } from "./WantedSection.js"
 
 export const DatabaseView = () => {
 	const [players, setPlayers] = useState<
@@ -9,6 +14,10 @@ export const DatabaseView = () => {
 	>([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
+
+	const [dashboard, setDashboard] = useState<DashboardData | null>(null)
+	const [loadingExtras, setLoadingExtras] = useState(true)
+	const [errorExtras, setErrorExtras] = useState<string | null>(null)
 
 	const fetchPlayers = useCallback(async () => {
 		try {
@@ -27,12 +36,29 @@ export const DatabaseView = () => {
 		}
 	}, [])
 
+	const fetchExtras = useCallback(async () => {
+		try {
+			setLoadingExtras(true)
+			setErrorExtras(null)
+			const res = await fetch("/api/dashboard")
+			if (!res.ok) throw new Error("Failed to fetch dashboard data")
+			const data: DashboardData = await res.json()
+			setDashboard(data)
+		} catch (err) {
+			setErrorExtras(`${err}`)
+		} finally {
+			setLoadingExtras(false)
+		}
+	}, [])
+
 	useEffect(() => {
 		fetchPlayers()
-	}, [fetchPlayers])
+		fetchExtras()
+	}, [fetchPlayers, fetchExtras])
 
 	const handleRefresh = () => {
 		fetchPlayers()
+		fetchExtras()
 	}
 
 	return (
@@ -46,9 +72,31 @@ export const DatabaseView = () => {
 				Refresh
 			</button>
 
-			{loading && <div className="loading">Loading players...</div>}
-			{error && <div className="error">Error: {error}</div>}
-			{!loading && !error && <PlayerTable players={players} />}
+			{loadingExtras && (
+				<div className="loading">Loading dashboard data...</div>
+			)}
+			{errorExtras && <div className="error">Error: {errorExtras}</div>}
+
+			{!loadingExtras && !errorExtras && dashboard && (
+				<>
+					<WantedSection wanted={dashboard.wanted} />
+					<Accordion title={`Players (${players.length})`}>
+						{loading ? (
+							<div className="loading">Loading players...</div>
+						) : error ? (
+							<div className="error">Error: {error}</div>
+						) : (
+							<PlayerTable players={players} />
+						)}
+					</Accordion>
+					<Accordion title="Investments">
+						<InvestmentsSection investments={dashboard.investments} />
+					</Accordion>
+					<Accordion title="Game Config" defaultOpen>
+						<GameConfigSection config={dashboard.config} />
+					</Accordion>
+				</>
+			)}
 		</>
 	)
 }

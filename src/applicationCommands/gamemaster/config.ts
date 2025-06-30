@@ -1,8 +1,8 @@
 import {
 	ApplicationCommandOptionType,
 	AutocompleteInteraction,
-	EmbedBuilder,
-	type ChatInputCommandInteraction
+	type ChatInputCommandInteraction,
+	EmbedBuilder
 } from "discord.js"
 import { admins, gameConfig } from "~/config"
 import database from "~/database"
