@@ -111,7 +111,8 @@ export const getAllItems = async () => {
 export const getAllRoles = async () => {
 	return await database.role.findMany({
 		include: {
-			players: true
+			players: true,
+			linkedAbilities: true
 		}
 	})
 }

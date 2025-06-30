@@ -6,7 +6,9 @@ import {
 	getAbility,
 	getAllWebPlayers,
 	getItem,
-	getRole
+	getRole,
+	getAllItems,
+	getAllRoles
 } from "~/database/getData"
 import { logger } from "~/logger"
 import { gameConfig } from "~/config"
@@ -18,6 +20,8 @@ export type DashboardData = {
 		price: number | null
 	}
 	investments: Investment[]
+	items: Awaited<ReturnType<typeof getAllItems>>
+	roles: Awaited<ReturnType<typeof getAllRoles>>
 }
 
 const app = new Hono()
@@ -81,6 +85,28 @@ app.get("/api/ability/:name", async (c) => {
 	}
 })
 
+// API endpoint to get all items
+app.get("/api/items", async (c) => {
+	try {
+		const items = await getAllItems()
+		return c.json(items)
+	} catch (error) {
+		logger.error("Error fetching items:", error as Error)
+		return c.json({ error: "Failed to fetch items" }, 500)
+	}
+})
+
+// API endpoint to get all roles
+app.get("/api/roles", async (c) => {
+	try {
+		const roles = await getAllRoles()
+		return c.json(roles)
+	} catch (error) {
+		logger.error("Error fetching roles:", error as Error)
+		return c.json({ error: "Failed to fetch roles" }, 500)
+	}
+})
+
 // API endpoint to get game config
 app.get("/api/dashboard", async (c) => {
 	try {
@@ -91,13 +117,17 @@ app.get("/api/dashboard", async (c) => {
 		const investments = await database.investment.findMany({
 			where: { expiresAt: { gt: new Date() } }
 		})
+		const items = await getAllItems()
+		const roles = await getAllRoles()
 		return c.json<DashboardData>({
 			config,
 			wanted: {
 				name: wantedPlayer?.value ?? null,
 				price: wantedPrice?.valueInt ?? null
 			},
-			investments
+			investments,
+			items,
+			roles
 		})
 	} catch (error) {
 		logger.error("Error fetching dashboard data:", error as Error)

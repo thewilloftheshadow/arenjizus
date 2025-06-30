@@ -47,7 +47,6 @@ body {
 	font-weight: 500;
 	cursor: pointer;
 	transition: background-color 0.2s ease;
-	margin-bottom: 24px;
 }
 
 .refresh-button:hover {
