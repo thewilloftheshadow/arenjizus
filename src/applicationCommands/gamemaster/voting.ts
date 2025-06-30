@@ -2,7 +2,6 @@ import {
 	ApplicationCommandOptionType,
 	type AutocompleteFocusedOption,
 	type AutocompleteInteraction,
-	ChannelType,
 	type ChatInputCommandInteraction,
 	EmbedBuilder
 } from "discord.js"
@@ -74,24 +73,6 @@ export default class Ping extends ApplicationCommand {
 							required: false
 						}
 					]
-				},
-				{
-					type: ApplicationCommandOptionType.Subcommand,
-					name: "set_daychat",
-					description: "Set the daychat channel",
-					options: [
-						{
-							type: ApplicationCommandOptionType.Channel,
-							name: "channel",
-							description: "The channel to set as the daychat channel",
-							required: true
-						}
-					]
-				},
-				{
-					type: ApplicationCommandOptionType.Subcommand,
-					name: "resetwanted",
-					description: "Reset wanted prices"
 				}
 			]
 		})
@@ -230,41 +211,6 @@ export default class Ping extends ApplicationCommand {
 				if (!playerData2) return interaction.editReply("Player not found")
 				setVote(player2, vote)
 				return interaction.editReply(`Set ${player2}'s vote to ${vote}`)
-			}
-
-			case "set_daychat": {
-				const channel = interaction.options.getChannel("channel", true)
-				if (channel.type !== ChannelType.GuildText)
-					return interaction.editReply("Channel must be a text channel")
-				await database.keyV.upsert({
-					where: {
-						key: "dayChat"
-					},
-					update: {
-						value: channel.id
-					},
-					create: {
-						key: "dayChat",
-						value: channel.id
-					}
-				})
-				return interaction.editReply(`Set daychat to ${channel}`)
-			}
-
-			case "resetwanted": {
-				await database.keyV.upsert({
-					where: {
-						key: "wantedPrice"
-					},
-					update: {
-						valueInt: 0
-					},
-					create: {
-						key: "wantedPrice",
-						valueInt: 0
-					}
-				})
-				return interaction.editReply("Wanted prices have been reset")
 			}
 		}
 	}

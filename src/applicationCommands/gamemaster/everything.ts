@@ -116,7 +116,13 @@ export default class Ping extends ApplicationCommand {
 						new EmbedBuilder()
 							.setTitle("Locations")
 							.setColor("Random")
-							.setDescription(locationData.join("\n") || "**")
+							.setDescription(
+								locationData
+									.map(
+										(location) => `${location.name} - ${location.description}`
+									)
+									.join("\n") || "**"
+							)
 							.toJSON()
 					]
 				}
