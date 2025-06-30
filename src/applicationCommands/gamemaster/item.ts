@@ -250,6 +250,26 @@ export default class Ping extends ApplicationCommand {
 							required: false
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "bulk",
+					description: "Give an item to every alive player",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "item",
+							description: "The name of the item",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.Integer,
+							name: "amount",
+							description: "The amount of items to give to each player",
+							required: true
+						}
+					]
 				}
 			]
 		})
@@ -314,8 +334,12 @@ export default class Ping extends ApplicationCommand {
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
-		await interaction.deferReply()
 		const type = interaction.options.getSubcommand(false)
+		if (type === "bulk") {
+			await interaction.deferReply({ ephemeral: true })
+		} else {
+			await interaction.deferReply()
+		}
 		const name = interaction.options.getString("name") || ""
 
 		switch (type) {
@@ -583,6 +607,33 @@ export default class Ping extends ApplicationCommand {
 					}
 				}
 				break
+			}
+			case "bulk": {
+				const itemName = interaction.options.getString("item", true)
+				const amount = interaction.options.getInteger("amount", true)
+				const item = await getItem(itemName)
+				if (!item) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Item not found",
+							description: `The item ${itemName} was not found in the database.`
+						})
+					)
+				}
+				const players = (await getAllPlayers()).filter(
+					(player) => player.isAlive
+				)
+				const recipients: string[] = []
+				for (const player of players) {
+					await givePlayerItem(player.name, item.name, amount)
+					recipients.push(player.name)
+					logger.gameLog(
+						`${player.name} has been given ${amount} ${item.name} (bulk)`
+					)
+				}
+				return interaction.editReply({
+					content: `Gave ${amount}x ${item.name} to every alive player.\nRecipients: ${recipients.join(", ")}`
+				})
 			}
 			default:
 				break
