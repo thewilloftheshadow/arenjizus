@@ -1,17 +1,16 @@
 import {
-	type ActionRowBuilder,
 	type APIEmbed,
-	type ButtonBuilder,
-	EmbedBuilder
+	EmbedBuilder,
+	type InteractionEditReplyOptions
 } from "discord.js"
 import { colors } from "~/config"
 import { logger } from "~/logger"
 
-export type GeneratedMessage = {
-	embeds?: APIEmbed[]
-	components?: ActionRowBuilder<ButtonBuilder>[]
+export type GeneratedMessage = Omit<
+	InteractionEditReplyOptions,
+	"flags" | "fetchReply"
+> & {
 	ephemeral?: boolean
-	content?: string
 }
 
 /**
@@ -36,7 +35,7 @@ export const generateErrorMessage = (
 
 export const generateSuccessMessage = (
 	embedInfo: APIEmbed,
-	components: ActionRowBuilder<ButtonBuilder>[] = [],
+	components: NonNullable<InteractionEditReplyOptions["components"]> = [],
 	ephemeral = false
 ): GeneratedMessage => {
 	return {
@@ -48,7 +47,7 @@ export const generateSuccessMessage = (
 
 export const generateWarningMessage = (
 	embedInfo: APIEmbed,
-	components: ActionRowBuilder<ButtonBuilder>[] = [],
+	components: NonNullable<InteractionEditReplyOptions["components"]> = [],
 	ephemeral = false
 ): GeneratedMessage => {
 	return {
