@@ -86,6 +86,7 @@ export default class Ping extends ApplicationCommand {
 
 		const locationName = interaction.options.getString("to", true)
 		const location = await getLocation(locationName)
+		console.log(locationName, location)
 		if (!location) {
 			return interaction.editReply(
 				generateErrorMessage(
