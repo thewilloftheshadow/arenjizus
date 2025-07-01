@@ -13,6 +13,7 @@ import * as getPermissionName from "~/functions/getPermissionName"
 import * as isAdmin from "~/functions/isAdmin"
 import * as paginator from "~/functions/paginator"
 import * as parseUser from "~/functions/parseUser"
+import * as player from "~/functions/player"
 import * as randomInt from "~/functions/randomInt"
 import * as shuffle from "~/functions/shuffle"
 import * as titleCase from "~/functions/titleCase"
@@ -41,6 +42,7 @@ const bot = {
 		...isAdmin,
 		...paginator,
 		...parseUser,
+		...player,
 		...randomInt,
 		...shuffle,
 		...titleCase,
