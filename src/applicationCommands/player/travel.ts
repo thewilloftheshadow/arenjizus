@@ -112,55 +112,77 @@ export default class Ping extends ApplicationCommand {
 			)
 		}
 
-		const chanId = location.channel
-		const channel = chanId
-			? await interaction.guild?.channels.fetch(chanId)
-			: undefined
-		if (
-			!channel ||
-			!channel.guild ||
-			!channel.isTextBased() ||
-			channel.type !== ChannelType.GuildText
-		) {
-			return interaction.editReply(
-				generateErrorMessage(
-					{
-						title: "Location not found",
-						description: `The location ${locationName} was not found.`
-					},
-					false,
-					true
+		const canFreeTravel = await database.keyV.findFirst({
+			where: { key: "canFreeTravel" }
+		})
+		if (!canFreeTravel?.valueBoolean) {
+			if (player.teleports <= 0) {
+				return interaction.editReply(
+					generateErrorMessage({
+						title: "No teleports remaining",
+						description: "You have no teleports remaining."
+					})
 				)
-			)
-		}
-		const oldChannel = player.location?.channel
-			? await interaction.guild?.channels.fetch(player.location.channel)
-			: undefined
-		if (
-			oldChannel?.guild &&
-			oldChannel?.isTextBased() &&
-			oldChannel?.type === ChannelType.GuildText
-		) {
-			await oldChannel.permissionOverwrites.delete(player.discordId)
-		}
-		channel.permissionOverwrites
-			.create(player.discordId, {
-				ViewChannel: true
-			})
-			.catch(() => {
-				logger.gameLog(
-					`Failed to give ${player.name} access to ${channel.name} <@&${serverIds.roles.gamemaster}>`
+			}
+
+			const chanId = location.channel
+			const channel = chanId
+				? await interaction.guild?.channels.fetch(chanId)
+				: undefined
+			if (
+				!channel ||
+				!channel.guild ||
+				!channel.isTextBased() ||
+				channel.type !== ChannelType.GuildText
+			) {
+				return interaction.editReply(
+					generateErrorMessage(
+						{
+							title: "Location not found",
+							description: `The location ${locationName} was not found.`
+						},
+						false,
+						true
+					)
 				)
+			}
+			const oldChannel = player.location?.channel
+				? await interaction.guild?.channels.fetch(player.location.channel)
+				: undefined
+			if (
+				oldChannel?.guild &&
+				oldChannel?.isTextBased() &&
+				oldChannel?.type === ChannelType.GuildText
+			) {
+				await oldChannel.permissionOverwrites.delete(player.discordId)
+			}
+			channel.permissionOverwrites
+				.create(player.discordId, {
+					ViewChannel: true
+				})
+				.catch(() => {
+					logger.gameLog(
+						`Failed to give ${player.name} access to ${channel.name} <@&${serverIds.roles.gamemaster}>`
+					)
+				})
+			await database.player.update({
+				where: { id: player.id },
+				data: {
+					location: { connect: { id: location.id } },
+					teleports: { decrement: 1 }
+				}
 			})
+			logger.gameLog(`${player.name} teleported to ${location.name}`)
+			return interaction.editReply(`You have teleported to ${location.name}`)
+		}
+
 		await database.player.update({
 			where: { id: player.id },
 			data: {
-				location: { connect: { id: location.id } },
-				teleports: { decrement: 1 }
+				location: { connect: { id: location.id } }
 			}
 		})
-		logger.gameLog(`${player.name} teleported to ${location.name}`)
-
-		return interaction.editReply(`You have teleported to ${location.name}`)
+		logger.gameLog(`${player.name} will travel to ${location.name}`)
+		return interaction.editReply(`You will travel to ${location.name} tonight.`)
 	}
 }

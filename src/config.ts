@@ -45,9 +45,10 @@ export const gameConfig: {
 		description: "Whether robbing is enabled"
 	},
 	{
-		key: "canTravel",
+		key: "canFreeTravel",
 		type: "boolean",
-		description: "Whether traveling is enabled"
+		description:
+			"Whether traveling is unlimited (if disabled, travel uses up a night teleport)"
 	}
 ]
 
