@@ -1,10 +1,11 @@
 import {
 	ApplicationCommandOptionType,
+	AutocompleteInteraction,
 	type ChatInputCommandInteraction,
 	type TextChannel
 } from "discord.js"
 import database from "~/database"
-import { getDiscordPlayer, getPlayer } from "~/database/getData"
+import { getAllPlayers, getDiscordPlayer, getPlayer } from "~/database/getData"
 import { removeMoney } from "~/database/thingys"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import type { BetterClient } from "~/lib"
@@ -25,6 +26,25 @@ export default class Want extends ApplicationCommand {
 				}
 			]
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction) {
+		const focusedOption = interaction.options.getFocused(true)
+		if (focusedOption.name !== "name") return
+		const players = await getAllPlayers()
+		const choices = players.map((player) => ({
+			name: player.name,
+			value: player.name
+		}))
+		if (focusedOption.value) {
+			await interaction.respond(
+				choices.filter((choice) =>
+					choice.name.toLowerCase().includes(focusedOption.value.toLowerCase())
+				)
+			)
+			return
+		}
+		await interaction.respond(choices)
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
