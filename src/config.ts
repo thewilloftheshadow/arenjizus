@@ -45,6 +45,11 @@ export const gameConfig: {
 		description: "Whether robbing is enabled"
 	},
 	{
+		key: "canTravel",
+		type: "boolean",
+		description: "Whether traveling is enabled at all"
+	},
+	{
 		key: "canFreeTravel",
 		type: "boolean",
 		description:
