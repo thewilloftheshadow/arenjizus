@@ -9,6 +9,7 @@ import { PlayerTable } from "./PlayerTable.js"
 import { RefreshIcon } from "./RefreshIcon.js"
 import { RolesSection } from "./RolesSection.js"
 import { WantedSection } from "./WantedSection.js"
+import { VotesSection } from "./VotesSection.js"
 
 export const DatabaseView = () => {
 	const [players, setPlayers] = useState<
@@ -137,6 +138,30 @@ export const DatabaseView = () => {
 			{!loadingExtras && !errorExtras && dashboard && (
 				<>
 					<WantedSection wanted={dashboard.wanted} />
+					{(() => {
+						const voteTotals: Record<string, number> = {}
+						for (const v of dashboard.votes) {
+							if (v.votedFor) {
+								voteTotals[v.votedFor] =
+									(voteTotals[v.votedFor] || 0) + v.voteWorth
+							}
+						}
+						const entries = Object.entries(voteTotals)
+						const top =
+							entries.length > 0
+								? entries.reduce((a, b) => (a[1] > b[1] ? a : b))
+								: null
+						const title = top
+							? `Votes (${top[0]}: ${top[1]} vote${top[1] === 1 ? "" : "s"})`
+							: "Votes"
+						return (
+							<Accordion title={title}>
+								<VotesSection
+									votes={dashboard.votes.filter((v) => v.votedFor !== null)}
+								/>
+							</Accordion>
+						)
+					})()}
 					<Accordion title={`Players (${players.length})`}>
 						{loading ? (
 							<div className="loading">Loading players...</div>

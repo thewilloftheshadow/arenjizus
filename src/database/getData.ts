@@ -207,3 +207,20 @@ export const getLocation = async (name: string) => {
 		}
 	})
 }
+
+export const getAllVotes = async () => {
+	const players = await database.player.findMany({
+		select: {
+			name: true,
+			voteWorth: true,
+			votedForName: true
+		}
+	})
+	return players
+		.filter((p) => p.votedForName)
+		.map((p) => ({
+			name: p.name,
+			voteWorth: p.voteWorth,
+			votedFor: p.votedForName
+		}))
+}

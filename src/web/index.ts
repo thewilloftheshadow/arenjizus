@@ -9,7 +9,8 @@ import {
 	getAllRoles,
 	getAllWebPlayers,
 	getItem,
-	getRole
+	getRole,
+	getAllVotes
 } from "~/database/getData"
 import { logger } from "~/logger"
 
@@ -22,6 +23,7 @@ export type DashboardData = {
 	investments: Investment[]
 	items: Awaited<ReturnType<typeof getAllItems>>
 	roles: Awaited<ReturnType<typeof getAllRoles>>
+	votes: Awaited<ReturnType<typeof getAllVotes>>
 }
 
 const app = new Hono()
@@ -119,6 +121,7 @@ app.get("/api/dashboard", async (c) => {
 		})
 		const items = await getAllItems()
 		const roles = await getAllRoles()
+		const votes = await getAllVotes()
 		return c.json<DashboardData>({
 			config,
 			wanted: {
@@ -127,7 +130,8 @@ app.get("/api/dashboard", async (c) => {
 			},
 			investments,
 			items,
-			roles
+			roles,
+			votes
 		})
 	} catch (error) {
 		logger.error("Error fetching dashboard data:", error as Error)

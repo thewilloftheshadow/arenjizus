@@ -106,6 +106,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 						<th>MONEY</th>
 						<th>STATUS</th>
 						<th>LOCATION</th>
+						<th>VOTED FOR</th>
 						<th>ROLES</th>
 						<th>ITEMS</th>
 					</tr>
@@ -120,6 +121,10 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 							</td>
 							<td className="table-cell location">
 								{player.location?.name || "N/A"}
+							</td>
+							<td className="table-cell voted-for">
+								{player.votedForName || "No Vote"} (worth{" "}
+								{player.voteWorth || 0} vote{player.voteWorth === 1 ? "" : "s"})
 							</td>
 							<td className="table-cell roles">
 								{player.roles && player.roles.length > 0 ? (
