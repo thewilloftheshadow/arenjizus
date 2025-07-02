@@ -226,7 +226,10 @@ export const DatabaseView = () => {
 						)}
 					</Accordion>
 					<Accordion
-						title="Investments"
+						title={`Investments (Total: $${dashboard.investments.reduce(
+							(acc, curr) => acc + curr.amount,
+							0
+						)})`}
 						open={!!openSections.Investments}
 						onToggle={(open) => setSectionOpen("Investments", open)}
 					>
