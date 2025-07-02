@@ -7,10 +7,10 @@ import {
 	getAbility,
 	getAllItems,
 	getAllRoles,
+	getAllVotes,
 	getAllWebPlayers,
 	getItem,
-	getRole,
-	getAllVotes
+	getRole
 } from "~/database/getData"
 import { logger } from "~/logger"
 

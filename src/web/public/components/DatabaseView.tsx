@@ -8,8 +8,10 @@ import { ItemsSection } from "./ItemsSection.js"
 import { PlayerTable } from "./PlayerTable.js"
 import { RefreshIcon } from "./RefreshIcon.js"
 import { RolesSection } from "./RolesSection.js"
-import { WantedSection } from "./WantedSection.js"
 import { VotesSection } from "./VotesSection.js"
+import { WantedSection } from "./WantedSection.js"
+
+const ACCORDION_STORAGE_KEY = "dbview_accordion_open_sections"
 
 export const DatabaseView = () => {
 	const [players, setPlayers] = useState<
@@ -24,6 +26,43 @@ export const DatabaseView = () => {
 
 	const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
 	const [secondsAgo, setSecondsAgo] = useState<number>(0)
+
+	const sectionKeys = [
+		"Votes",
+		"Players",
+		"Investments",
+		"Items",
+		"Roles",
+		"Game Config"
+	]
+
+	const [openSections, setOpenSections] = useState<Record<string, boolean>>(
+		() => {
+			if (typeof window !== "undefined") {
+				try {
+					const raw = localStorage.getItem(ACCORDION_STORAGE_KEY)
+					if (raw) return JSON.parse(raw)
+				} catch {}
+			}
+			// Default: only Game Config open
+			return { "Game Config": true }
+		}
+	)
+
+	const setSectionOpen = (key: string, open: boolean) => {
+		setOpenSections((prev) => {
+			const next = { ...prev, [key]: open }
+			localStorage.setItem(ACCORDION_STORAGE_KEY, JSON.stringify(next))
+			return next
+		})
+	}
+
+	const handleCloseAll = () => {
+		const closed: Record<string, boolean> = {}
+		for (const k of sectionKeys) closed[k] = false
+		setOpenSections(closed)
+		localStorage.setItem(ACCORDION_STORAGE_KEY, JSON.stringify(closed))
+	}
 
 	function formatAgo(seconds: number) {
 		const h = Math.floor(seconds / 3600)
@@ -127,6 +166,13 @@ export const DatabaseView = () => {
 						<RefreshIcon />
 						Refresh
 					</button>
+					<button
+						type="button"
+						className="refresh-button"
+						onClick={handleCloseAll}
+					>
+						Close All
+					</button>
 				</div>
 			</div>
 
@@ -155,14 +201,22 @@ export const DatabaseView = () => {
 							? `Votes (${top[0]}: ${top[1]} vote${top[1] === 1 ? "" : "s"})`
 							: "Votes"
 						return (
-							<Accordion title={title}>
+							<Accordion
+								title={title}
+								open={!!openSections.Votes}
+								onToggle={(open) => setSectionOpen("Votes", open)}
+							>
 								<VotesSection
 									votes={dashboard.votes.filter((v) => v.votedFor !== null)}
 								/>
 							</Accordion>
 						)
 					})()}
-					<Accordion title={`Players (${players.length})`}>
+					<Accordion
+						title={`Players (${players.length})`}
+						open={!!openSections.Players}
+						onToggle={(open) => setSectionOpen("Players", open)}
+					>
 						{loading ? (
 							<div className="loading">Loading players...</div>
 						) : error ? (
@@ -171,16 +225,32 @@ export const DatabaseView = () => {
 							<PlayerTable players={players} />
 						)}
 					</Accordion>
-					<Accordion title="Investments">
+					<Accordion
+						title="Investments"
+						open={!!openSections.Investments}
+						onToggle={(open) => setSectionOpen("Investments", open)}
+					>
 						<InvestmentsSection investments={dashboard.investments} />
 					</Accordion>
-					<Accordion title={`Items (${dashboard.items.length})`}>
+					<Accordion
+						title={`Items (${dashboard.items.length})`}
+						open={!!openSections.Items}
+						onToggle={(open) => setSectionOpen("Items", open)}
+					>
 						<ItemsSection items={dashboard.items} />
 					</Accordion>
-					<Accordion title={`Roles (${dashboard.roles.length})`}>
+					<Accordion
+						title={`Roles (${dashboard.roles.length})`}
+						open={!!openSections.Roles}
+						onToggle={(open) => setSectionOpen("Roles", open)}
+					>
 						<RolesSection roles={dashboard.roles} />
 					</Accordion>
-					<Accordion title="Game Config" defaultOpen>
+					<Accordion
+						title="Game Config"
+						open={!!openSections["Game Config"]}
+						onToggle={(open) => setSectionOpen("Game Config", open)}
+					>
 						<GameConfigSection config={dashboard.config} />
 					</Accordion>
 				</>

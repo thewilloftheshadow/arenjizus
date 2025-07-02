@@ -4,14 +4,26 @@ interface AccordionProps {
 	title: string
 	children: ReactNode
 	defaultOpen?: boolean
+	open?: boolean
+	onToggle?: (open: boolean) => void
 }
 
 export const Accordion = ({
 	title,
 	children,
-	defaultOpen = false
+	defaultOpen = false,
+	open: controlledOpen,
+	onToggle
 }: AccordionProps) => {
-	const [open, setOpen] = useState(defaultOpen)
+	const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
+	const open = controlledOpen !== undefined ? controlledOpen : uncontrolledOpen
+	const handleToggle = () => {
+		if (onToggle) {
+			onToggle(!open)
+		} else {
+			setUncontrolledOpen((o) => !o)
+		}
+	}
 	return (
 		<div className="accordion-section">
 			<button
@@ -19,7 +31,7 @@ export const Accordion = ({
 				className="accordion-header"
 				aria-expanded={open}
 				aria-controls={`section-${title}`}
-				onClick={() => setOpen((o) => !o)}
+				onClick={handleToggle}
 			>
 				{open ? "▼" : "►"} {title}
 			</button>
