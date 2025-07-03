@@ -165,7 +165,7 @@ export default class Ping extends ApplicationCommand {
 							options: [
 								{
 									type: ApplicationCommandOptionType.String,
-									name: "location",
+									name: "name",
 									description: "The location to lock",
 									required: true,
 									autocomplete: true
