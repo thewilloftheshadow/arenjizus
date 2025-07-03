@@ -31,7 +31,7 @@ model Player {
 
     playersVotedFor Player[] @relation("votedFor")
 
-    location   Location? @relation(fields: [locationId], references: [id])
+    location   Location? @relation(fields: [locationId], references: [id], onDelete: SetNull, onUpdate: NoAction)
     locationId String?
 
     notes       PlayerNotes[]
