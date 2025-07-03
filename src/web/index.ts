@@ -39,7 +39,8 @@ app.get("/api/players", async (c) => {
 		const players = await getAllWebPlayers()
 		return c.json(players)
 	} catch (error) {
-		logger.error("Error fetching players:", error as Error)
+		logger.error("Error fetching players")
+		console.error(error)
 		return c.json({ error: "Failed to fetch players" }, 500)
 	}
 })
@@ -54,7 +55,8 @@ app.get("/api/role/:name", async (c) => {
 		}
 		return c.json(role)
 	} catch (error) {
-		logger.error("Error fetching role:", error as Error)
+		logger.error("Error fetching role")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch role" }, 500)
 	}
 })
@@ -69,7 +71,8 @@ app.get("/api/item/:name", async (c) => {
 		}
 		return c.json(item)
 	} catch (error) {
-		logger.error("Error fetching item:", error as Error)
+		logger.error("Error fetching item")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch item" }, 500)
 	}
 })
@@ -84,7 +87,8 @@ app.get("/api/ability/:name", async (c) => {
 		}
 		return c.json(ability)
 	} catch (error) {
-		logger.error("Error fetching ability:", error as Error)
+		logger.error("Error fetching ability")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch ability" }, 500)
 	}
 })
@@ -95,7 +99,8 @@ app.get("/api/items", async (c) => {
 		const items = await getAllItems()
 		return c.json(items)
 	} catch (error) {
-		logger.error("Error fetching items:", error as Error)
+		logger.error("Error fetching items")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch items" }, 500)
 	}
 })
@@ -106,7 +111,8 @@ app.get("/api/roles", async (c) => {
 		const roles = await getAllRoles()
 		return c.json(roles)
 	} catch (error) {
-		logger.error("Error fetching roles:", error as Error)
+		logger.error("Error fetching roles")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch roles" }, 500)
 	}
 })
@@ -138,7 +144,8 @@ app.get("/api/dashboard", async (c) => {
 			locations
 		})
 	} catch (error) {
-		logger.error("Error fetching dashboard data:", error as Error)
+		logger.error("Error fetching dashboard data")
+		console.error(error as Error)
 		return c.json({ error: "Failed to fetch dashboard data" }, 500)
 	}
 })
