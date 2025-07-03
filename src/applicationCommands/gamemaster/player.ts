@@ -247,6 +247,26 @@ export default class Ping extends ApplicationCommand {
 					type: ApplicationCommandOptionType.Subcommand,
 					name: "reset",
 					description: "Reset all players"
+				},
+				{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: "alias",
+					description: "Set a player's alias",
+					options: [
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "name",
+							description: "The name of the player",
+							required: true,
+							autocomplete: true
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "alias",
+							description: "The alias to set (leave blank to remove)",
+							required: false
+						}
+					]
 				}
 			]
 		})
@@ -695,6 +715,45 @@ export default class Ping extends ApplicationCommand {
 				}
 				return interaction.editReply({
 					content: "Players have been reset"
+				})
+			}
+			case "alias": {
+				const alias = interaction.options.getString("alias")
+				const player = await database.player.findFirst({
+					where: {
+						name
+					}
+				})
+				if (!player) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Player not found",
+							description: `The player ${name} was not found in the database.`
+						})
+					)
+				}
+				if (alias) {
+					await database.player
+						.update({
+							where: { id: player.id },
+							data: { alias }
+						})
+						.catch(() => {
+							return interaction.editReply(
+								generateErrorMessage({
+									title: "Alias already exists",
+									description: `The alias ${alias} already exists.`
+								})
+							)
+						})
+				} else {
+					await database.player.update({
+						where: { id: player.id },
+						data: { alias: null }
+					})
+				}
+				return interaction.editReply({
+					content: `Player ${player.name} has been updated`
 				})
 			}
 			default:

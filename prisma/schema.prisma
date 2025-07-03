@@ -8,19 +8,22 @@ datasource db {
 }
 
 model Player {
-    id            String            @id @unique @default(cuid())
+    id            String  @id @unique @default(cuid())
     discordId     String?
-    name          String            @unique
-    money         Int               @default(10)
-    isAlive       Boolean           @default(true)
-    isFaked       Boolean           @default(false)
-    robberiesLeft Int               @default(3)
-    teleports     Int               @default(3)
-    lastKiaiLevel Int               @default(0)
-    roles         PlayerRoles[]
-    items         PlayerItems[]
-    ballData      PlayerBallData?
-    abilities     PlayerAbilities[]
+    name          String  @unique
+    money         Int     @default(10)
+    isAlive       Boolean @default(true)
+    isFaked       Boolean @default(false)
+    robberiesLeft Int     @default(3)
+    teleports     Int     @default(3)
+    lastKiaiLevel Int     @default(0)
+
+    alias String? @unique
+
+    roles     PlayerRoles[]
+    items     PlayerItems[]
+    ballData  PlayerBallData?
+    abilities PlayerAbilities[]
 
     votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
     votedForName String?
