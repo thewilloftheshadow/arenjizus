@@ -152,6 +152,34 @@ export default class Ping extends ApplicationCommand {
 							autocomplete: true
 						}
 					]
+				},
+				{
+					type: ApplicationCommandOptionType.SubcommandGroup,
+					name: "require",
+					description: "Lock a location to require something",
+					options: [
+						{
+							type: ApplicationCommandOptionType.Subcommand,
+							name: "item",
+							description: "Lock a location to require an item",
+							options: [
+								{
+									type: ApplicationCommandOptionType.String,
+									name: "location",
+									description: "The location to lock",
+									required: true,
+									autocomplete: true
+								},
+								{
+									type: ApplicationCommandOptionType.String,
+									name: "item",
+									description: "The item to require",
+									required: true,
+									autocomplete: true
+								}
+							]
+						}
+					]
 				}
 			]
 		})
@@ -199,6 +227,23 @@ export default class Ping extends ApplicationCommand {
 						players.map((player) => ({
 							name: player.name,
 							value: player.name
+						}))
+					)
+					.catch(() => {})
+			}
+			case "item": {
+				const items = await database.item.findMany({
+					where: {
+						name: {
+							contains: option.value
+						}
+					}
+				})
+				return interaction
+					.respond(
+						items.map((item) => ({
+							name: item.name,
+							value: item.name
 						}))
 					)
 					.catch(() => {})
@@ -486,7 +531,41 @@ export default class Ping extends ApplicationCommand {
 					content: "Channels successfully closed."
 				})
 			}
-
+			case "item": {
+				const location = await getLocation(name)
+				if (!location) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Location not found",
+							description: `The location ${name} was not found in the database.`
+						})
+					)
+				}
+				const item = await database.item.findFirst({
+					where: {
+						name: interaction.options.getString("item") || ""
+					}
+				})
+				if (!item) {
+					return interaction.editReply(
+						generateErrorMessage({
+							title: "Item not found",
+							description: `The item ${interaction.options.getString("item") || ""} was not found in the database.`
+						})
+					)
+				}
+				await database.location.update({
+					where: {
+						id: location.id
+					},
+					data: {
+						requiredItemName: item.name
+					}
+				})
+				return interaction.editReply({
+					content: `Location ${location.name} now requires players to have ${item.name}.`
+				})
+			}
 			default:
 				break
 		}

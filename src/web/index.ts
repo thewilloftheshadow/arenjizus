@@ -6,6 +6,7 @@ import database, { Investment, KeyV } from "~/database"
 import {
 	getAbility,
 	getAllItems,
+	getAllLocations,
 	getAllRoles,
 	getAllVotes,
 	getAllWebPlayers,
@@ -24,6 +25,7 @@ export type DashboardData = {
 	items: Awaited<ReturnType<typeof getAllItems>>
 	roles: Awaited<ReturnType<typeof getAllRoles>>
 	votes: Awaited<ReturnType<typeof getAllVotes>>
+	locations: Awaited<ReturnType<typeof getAllLocations>>
 }
 
 const app = new Hono()
@@ -122,6 +124,7 @@ app.get("/api/dashboard", async (c) => {
 		const items = await getAllItems()
 		const roles = await getAllRoles()
 		const votes = await getAllVotes()
+		const locations = await getAllLocations()
 		return c.json<DashboardData>({
 			config,
 			wanted: {
@@ -131,7 +134,8 @@ app.get("/api/dashboard", async (c) => {
 			investments,
 			items,
 			roles,
-			votes
+			votes,
+			locations
 		})
 	} catch (error) {
 		logger.error("Error fetching dashboard data:", error as Error)

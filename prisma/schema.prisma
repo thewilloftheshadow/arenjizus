@@ -73,6 +73,7 @@ model Item {
     players     PlayerItems[]
 
     linkedAbilities AbilityItemLink[]
+    locations       Location[]
 }
 
 model PlayerItems {
@@ -156,6 +157,9 @@ model Location {
     channel     String?  @unique
     maxPlayers  Int?
     players     Player[]
+
+    requiredItemName String?
+    requiredItem     Item?   @relation(fields: [requiredItemName], references: [name], onDelete: SetNull, onUpdate: SetNull)
 }
 
 model PlayerNotes {

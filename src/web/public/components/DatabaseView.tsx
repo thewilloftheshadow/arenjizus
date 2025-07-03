@@ -5,6 +5,7 @@ import { Accordion } from "./Accordion.js"
 import { GameConfigSection } from "./GameConfigSection.js"
 import { InvestmentsSection } from "./InvestmentsSection.js"
 import { ItemsSection } from "./ItemsSection.js"
+import LocationsSection from "./LocationsSection.js"
 import { PlayerTable } from "./PlayerTable.js"
 import { RefreshIcon } from "./RefreshIcon.js"
 import { RolesSection } from "./RolesSection.js"
@@ -33,6 +34,7 @@ export const DatabaseView = () => {
 		"Investments",
 		"Items",
 		"Roles",
+		"Locations",
 		"Game Config"
 	]
 
@@ -248,6 +250,13 @@ export const DatabaseView = () => {
 						onToggle={(open) => setSectionOpen("Roles", open)}
 					>
 						<RolesSection roles={dashboard.roles} />
+					</Accordion>
+					<Accordion
+						title={`Locations (${dashboard.locations.length})`}
+						open={!!openSections.Locations}
+						onToggle={(open) => setSectionOpen("Locations", open)}
+					>
+						<LocationsSection locations={dashboard.locations} />
 					</Accordion>
 					<Accordion
 						title="Game Config"

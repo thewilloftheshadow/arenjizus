@@ -86,7 +86,7 @@ export default class Ping extends ApplicationCommand {
 
 		const locationName = interaction.options.getString("to", true)
 		const location = await getLocation(locationName)
-		console.log(locationName, location)
+
 		if (!location) {
 			return interaction.editReply(
 				generateErrorMessage(
@@ -110,6 +110,20 @@ export default class Ping extends ApplicationCommand {
 					true
 				)
 			)
+		}
+
+		if (location.requiredItemName) {
+			const playerItem = player.items.find(
+				(x) => x.itemName === location.requiredItemName
+			)
+			if (!playerItem || playerItem.amount < 1) {
+				return interaction.editReply(
+					generateErrorMessage({
+						title: "No Access",
+						description: `You do not have what you need.`
+					})
+				)
+			}
 		}
 
 		const canFreeTravel = await database.keyV.findFirst({
