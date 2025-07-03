@@ -25,7 +25,7 @@ model Player {
     ballData  PlayerBallData?
     abilities PlayerAbilities[]
 
-    votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: NoAction, onUpdate: NoAction)
+    votedFor     Player? @relation("votedFor", fields: [votedForName], references: [name], onDelete: SetNull, onUpdate: NoAction)
     votedForName String?
     voteWorth    Int     @default(1)
 

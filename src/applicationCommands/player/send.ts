@@ -131,7 +131,7 @@ export default class Send extends ApplicationCommand {
 		const playerChannel = await getPlayerChannel(playerChosen.name, this.client)
 		if (playerChannel) {
 			playerChannel.send(
-				`You have received $${amount} from ${player.name}${isAlias ? ` via ${player.alias}` : ""}.`
+				`You have received $${amount} from ${player.name}${isAlias ? ` via ${playerChosen.alias}` : ""}.`
 			)
 		}
 
