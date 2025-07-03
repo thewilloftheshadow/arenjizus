@@ -532,7 +532,11 @@ export default class Ping extends ApplicationCommand {
 				})
 			}
 			case "item": {
-				const location = await getLocation(name)
+				const location = await database.location.findFirst({
+					where: {
+						name
+					}
+				})
 				if (!location) {
 					return interaction.editReply(
 						generateErrorMessage({
