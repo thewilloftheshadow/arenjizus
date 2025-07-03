@@ -105,6 +105,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 						<th>NAME</th>
 						<th>MONEY</th>
 						<th>STATUS</th>
+						<th>ALIAS</th>
 						<th>LOCATION</th>
 						<th>VOTED FOR</th>
 						<th>ROLES</th>
@@ -119,6 +120,7 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 							<td className="table-cell status">
 								{player.isAlive ? "Alive" : player.isFaked ? "Faked" : "Dead"}
 							</td>
+							<td className="table-cell alias">{player.alias || "N/A"}</td>
 							<td className="table-cell location">
 								{player.location?.name || "N/A"}
 							</td>
