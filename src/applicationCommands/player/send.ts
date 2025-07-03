@@ -121,6 +121,14 @@ export default class Send extends ApplicationCommand {
 		}
 
 		const amount = interaction.options.getInteger("amount", true)
+		if (amount <= 0) {
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Invalid amount",
+					description: "The amount must be greater than 0."
+				})
+			)
+		}
 		await removeMoney(player.name, amount)
 		await addMoney(playerChosen.name, amount)
 
