@@ -218,6 +218,10 @@ export const locationEmbed = (
 			{
 				name: `Players:`,
 				value: location.players.map((x) => x.name).join(", ") || "** **"
+			},
+			{
+				name: `Required Item:`,
+				value: location.requiredItemName || "None"
 			}
 		])
 	}
