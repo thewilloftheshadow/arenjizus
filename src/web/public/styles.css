@@ -143,8 +143,16 @@ body {
 		monospace;
 }
 
-.table-cell.status {
+.table-cell.status-dead {
 	color: #f87171;
+}
+
+.table-cell.status-faked {
+	color: #f87171;
+}
+
+.table-cell.status-alive {
+	color: #10b981;
 }
 
 .table-cell.location {

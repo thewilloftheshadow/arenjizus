@@ -117,7 +117,11 @@ export const PlayerTable = ({ players }: { players: Player[] }) => {
 						<tr key={player.name} className="table-row">
 							<td className="table-cell name">{player.name}</td>
 							<td className="table-cell money">{player.money}</td>
-							<td className="table-cell status">
+							<td
+								className={`table-cell status-${
+									player.isAlive ? "alive" : player.isFaked ? "faked" : "dead"
+								}`}
+							>
 								{player.isAlive ? "Alive" : player.isFaked ? "Faked" : "Dead"}
 							</td>
 							<td className="table-cell alias">{player.alias || "N/A"}</td>
