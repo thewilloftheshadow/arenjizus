@@ -30,6 +30,12 @@ export default class Send extends ApplicationCommand {
 					name: "amount",
 					description: "The amount of money to send",
 					required: true
+				},
+				{
+					type: ApplicationCommandOptionType.String,
+					name: "reason",
+					description: "The reason for the transaction",
+					required: true
 				}
 			]
 		})
@@ -137,17 +143,18 @@ export default class Send extends ApplicationCommand {
 				})
 			)
 		}
+		const reason = interaction.options.getString("reason")
 		await removeMoney(player.name, amount)
 		await addMoney(playerChosen.name, amount)
 
 		logger.gameLog(
-			`${player.name} has sent $${amount} to ${playerChosen.name}${isAlias ? ` (via ${playerChosen.alias})` : ""}.`
+			`${player.name} has sent $${amount} to ${playerChosen.name}${isAlias ? ` (via ${playerChosen.alias})` : ""}${reason ? `: ${reason}` : ""}.`
 		)
 
 		const playerChannel = await getPlayerChannel(playerChosen.name, this.client)
 		if (playerChannel) {
 			playerChannel.send(
-				`You have received $${amount} from ${player.name}${isAlias ? ` via ${playerChosen.alias}` : ""}.`
+				`You have received $${amount} from ${player.name}${isAlias ? ` via ${playerChosen.alias}` : ""}${reason ? `: ${reason}` : ""}.`
 			)
 		}
 
