@@ -129,6 +129,14 @@ export default class Send extends ApplicationCommand {
 				})
 			)
 		}
+		if (amount > player.money) {
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Insufficient funds",
+					description: "You do not have enough money to send."
+				})
+			)
+		}
 		await removeMoney(player.name, amount)
 		await addMoney(playerChosen.name, amount)
 
