@@ -5,7 +5,7 @@ import { generateSuccessMessage } from "~/functions/generateMessage"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Investments extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("investments", client, {
 			description: `View pending investments`

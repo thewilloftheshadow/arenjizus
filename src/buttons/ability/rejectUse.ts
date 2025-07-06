@@ -3,7 +3,7 @@ import { serverIds } from "~/config"
 import database from "~/database"
 import { type BetterClient, Button } from "~/lib"
 
-export default class Buttony extends Button {
+export default class RejectUse extends Button {
 	constructor(client: BetterClient) {
 		super("rejectUse", client, {})
 	}

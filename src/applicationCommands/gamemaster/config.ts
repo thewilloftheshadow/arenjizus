@@ -9,7 +9,7 @@ import database from "~/database"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Web extends ApplicationCommand {
+export default class Config extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("config", client, {
 			description: `Configure the game`,

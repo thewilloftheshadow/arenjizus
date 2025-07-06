@@ -6,7 +6,7 @@ import { getPlayerChannel } from "~/functions/player"
 import { type BetterClient, Button } from "~/lib"
 import { logger } from "~/logger"
 
-export default class Buttony extends Button {
+export default class Use extends Button {
 	constructor(client: BetterClient) {
 		super("use", client, {})
 	}

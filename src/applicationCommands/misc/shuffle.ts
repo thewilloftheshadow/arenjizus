@@ -5,7 +5,7 @@ import {
 import { shuffle } from "~/functions/shuffle"
 import { ApplicationCommand, type BetterClient } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Shuffle extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("shuffle", client, {
 			description: `Shuffle a list of items`,

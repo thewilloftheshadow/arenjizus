@@ -11,7 +11,7 @@ import { getAllPlayers } from "~/database/getData"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class CheckAlive extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("checkalive", client, {
 			description: `Check alive players for mutual channels`,

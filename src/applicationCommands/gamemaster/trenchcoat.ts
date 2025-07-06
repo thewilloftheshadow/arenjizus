@@ -10,7 +10,7 @@ import { generateErrorMessage } from "~/functions/generateMessage"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Trenchcoat extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("trenchcoat", client, {
 			description: `Yay trenchcoat`,

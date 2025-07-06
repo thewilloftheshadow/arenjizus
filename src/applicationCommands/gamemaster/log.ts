@@ -4,7 +4,7 @@ import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
-export default class Ping extends ApplicationCommand {
+export default class Log extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("log", client, {
 			description: `Add an entry to the game log`,

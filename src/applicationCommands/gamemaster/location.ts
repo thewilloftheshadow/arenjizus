@@ -16,7 +16,7 @@ import { logger } from "~/logger"
 
 const category = "1189790054411943979"
 
-export default class Ping extends ApplicationCommand {
+export default class Location extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("location", client, {
 			description: `Manage an location in the game`,

@@ -9,7 +9,7 @@ import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
-export default class Ping extends ApplicationCommand {
+export default class Kill extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("kill", client, {
 			description: `Kill a player`,

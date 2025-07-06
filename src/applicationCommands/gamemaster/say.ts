@@ -9,7 +9,7 @@ import { generateErrorMessage } from "~/functions/generateMessage"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Say extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("say", client, {
 			description: `Make me say something`,

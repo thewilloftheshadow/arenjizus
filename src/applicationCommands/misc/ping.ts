@@ -1,7 +1,7 @@
 import type { ChatInputCommandInteraction, Message } from "discord.js"
 import { ApplicationCommand, type BetterClient } from "~/lib"
 
-export default class Command extends ApplicationCommand {
+export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("ping", client, {
 			description: "Check the bot's latency"

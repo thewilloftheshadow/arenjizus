@@ -10,7 +10,7 @@ import { logger } from "~/logger"
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export default class Ping extends ApplicationCommand {
+export default class Spy extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("spy", client, {
 			description: `Send messages from one channel into another`,

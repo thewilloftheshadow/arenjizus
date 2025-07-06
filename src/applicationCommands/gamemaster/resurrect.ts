@@ -8,7 +8,7 @@ import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
-export default class Ping extends ApplicationCommand {
+export default class Resurrect extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("resurrect", client, {
 			description: `Resurrect a player`,

@@ -3,7 +3,7 @@ import type { ChatInputCommandInteraction } from "discord.js"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Backup extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("backup", client, {
 			description: `Take a backup of the current state of the db for future rollback`

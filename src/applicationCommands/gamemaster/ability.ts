@@ -35,7 +35,7 @@ import { createAbility } from "~/database/thingys"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Ability extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("ability", client, {
 			description: `Manage abilities`,
