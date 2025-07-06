@@ -15,7 +15,7 @@ type MessageStored = {
 	channel: string
 }
 
-export default class Ping extends ApplicationCommand {
+export default class MessageDump extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("messagedump", client, {
 			description: `Dump the server`,

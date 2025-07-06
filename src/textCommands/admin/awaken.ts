@@ -3,7 +3,7 @@ import { admins } from "~/config"
 import { parseUser } from "~/functions/parseUser"
 import { type BetterClient, TextCommand } from "~/lib"
 
-export default class Kill extends TextCommand {
+export default class Awaken extends TextCommand {
 	constructor(client: BetterClient) {
 		super("awaken", client, {})
 	}

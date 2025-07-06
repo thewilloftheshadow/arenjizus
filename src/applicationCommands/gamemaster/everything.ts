@@ -14,7 +14,7 @@ import { Paginator } from "~/functions/paginator"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Everything extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("everything", client, {
 			description: `See a list of *everything*`,

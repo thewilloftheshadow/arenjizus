@@ -11,7 +11,7 @@ import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
-export default class Ping extends ApplicationCommand {
+export default class Loot extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("loot", client, {
 			description: `Loot a player's items and money`,

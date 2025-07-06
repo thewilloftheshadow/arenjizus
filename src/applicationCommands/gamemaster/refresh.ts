@@ -3,7 +3,7 @@ import { playerListUpdate } from "~/database/thingys"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Refresh extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("refresh", client, {
 			description: `Refresh the player list if it failed to update`

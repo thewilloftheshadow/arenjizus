@@ -9,7 +9,7 @@ import { getAllPlayers } from "~/database/getData"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class AskEveryone extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("askeveryone", client, {
 			description: `Ask everyone something, Office cutaway style`,

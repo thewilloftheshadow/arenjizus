@@ -11,7 +11,7 @@ import { setVote, setVoteWorth } from "~/database/thingys"
 import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 
-export default class Ping extends ApplicationCommand {
+export default class Voting extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("voting", client, {
 			description: `Manage voting in the game`,

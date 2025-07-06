@@ -8,7 +8,7 @@ import { serverIds } from "~/config"
 import database from "~/database"
 import { type BetterClient, Dropdown } from "~/lib"
 
-export default class Droppy extends Dropdown {
+export default class Use extends Dropdown {
 	constructor(client: BetterClient) {
 		super("use", client, {})
 	}

@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from "discord.js"
 import { type BetterClient, Button } from "~/lib"
 
-export default class Buttony extends Button {
+export default class CancelAction extends Button {
 	constructor(client: BetterClient) {
 		super("cancelAction", client, {
 			authorOnly: true
