@@ -3,7 +3,6 @@ import {
 	type ChatInputCommandInteraction
 } from "discord.js"
 import database, { s3 } from "~/database"
-import { playerEmbed } from "~/database/embeds"
 import { getDiscordPlayer } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { ApplicationCommand, type BetterClient } from "~/lib"
@@ -87,10 +86,18 @@ export default class Ping extends ApplicationCommand {
 			await s3.write(`avatars/${fileName}`, buffer, {
 				type: avatar.contentType || "image/png"
 			})
-			// set the avatar in the database
-			player.webhookName = name
-			player.webhookAvatar = fileName
+			await database.player.update({
+				where: {
+					id: player.id
+				},
+				data: {
+					webhookName: name,
+					webhookAvatar: fileName
+				}
+			})
 		}
-		return interaction.editReply({ embeds: [playerEmbed(player)] })
+		return interaction.editReply({
+			content: "Your data has been updated."
+		})
 	}
 }
