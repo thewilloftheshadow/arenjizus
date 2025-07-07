@@ -33,8 +33,13 @@ export default class Cleanup extends TextCommand {
 				}
 			}
 		})
+		const done3 = await database.playerItems.deleteMany({
+			where: {
+				amount: 0
+			}
+		})
 		message.reply(
-			`Cleaned up ${done.count} playerAbility entries and ${done2.count} ability entries`
+			`Cleaned up ${done.count} playerAbility entries and ${done2.count} ability entries and ${done3.count} playerItems entries`
 		)
 	}
 }
