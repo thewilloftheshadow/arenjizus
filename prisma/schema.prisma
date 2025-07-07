@@ -18,6 +18,9 @@ model Player {
     teleports     Int     @default(3)
     lastKiaiLevel Int     @default(0)
 
+    webhookName   String?
+    webhookAvatar String?
+
     alias String? @unique
 
     roles     PlayerRoles[]

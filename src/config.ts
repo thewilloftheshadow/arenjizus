@@ -54,6 +54,11 @@ export const gameConfig: {
 		type: "boolean",
 		description:
 			"Whether traveling is unlimited (if disabled, travel uses up a night teleport)"
+	},
+	{
+		key: "anonymous",
+		type: "boolean",
+		description: "Whether anonymous is enabled (a la ball)"
 	}
 ]
 

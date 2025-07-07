@@ -30,6 +30,9 @@ export type DashboardData = {
 
 const app = new Hono()
 
+// Serve avatars statically
+app.use("/avatars/*", serveStatic({ root: "./avatars" }))
+
 // Serve static files from dist directory
 app.use("/*", serveStatic({ root: "./src/web/dist" }))
 
