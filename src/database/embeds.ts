@@ -225,5 +225,13 @@ export const locationEmbed = (
 			}
 		])
 	}
+	if (location.autoMessage) {
+		embed.addFields([
+			{
+				name: `Auto Message:`,
+				value: location.autoMessage
+			}
+		])
+	}
 	return embed
 }

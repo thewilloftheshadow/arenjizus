@@ -62,6 +62,12 @@ export default class Ping extends ApplicationCommand {
 							description: "The max number of players in this location",
 							required: false,
 							minValue: 0
+						},
+						{
+							type: ApplicationCommandOptionType.String,
+							name: "auto-message",
+							description: "The message to send when the location is opened",
+							required: false
 						}
 					]
 				},
@@ -418,7 +424,8 @@ export default class Ping extends ApplicationCommand {
 					data: {
 						name,
 						description: interaction.options.getString("description") || "",
-						maxPlayers: interaction.options.getInteger("max-players")
+						maxPlayers: interaction.options.getInteger("max-players"),
+						autoMessage: interaction.options.getString("auto-message")
 					},
 					include: {
 						players: true
