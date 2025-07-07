@@ -163,6 +163,7 @@ model Location {
     channel     String?  @unique
     maxPlayers  Int?
     players     Player[]
+    autoMessage String?
 
     requiredItemName String?
     requiredItem     Item?   @relation(fields: [requiredItemName], references: [name], onDelete: SetNull, onUpdate: SetNull)

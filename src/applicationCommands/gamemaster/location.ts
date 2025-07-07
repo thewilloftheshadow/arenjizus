@@ -14,8 +14,6 @@ import type { BetterClient } from "~/lib"
 import { ApplicationCommand } from "~/lib"
 import { logger } from "~/logger"
 
-const category = "1189790054411943979"
-
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("location", client, {
@@ -257,6 +255,21 @@ export default class Ping extends ApplicationCommand {
 		await interaction.deferReply()
 		const type = interaction.options.getSubcommand(false)
 		const name = interaction.options.getString("name") || ""
+		const category = (
+			await database.keyV.findFirst({
+				where: {
+					key: "locationCategory"
+				}
+			})
+		)?.value
+		if (!category) {
+			return interaction.editReply(
+				generateErrorMessage({
+					title: "Location category not found",
+					description: "The location category was not found in the database."
+				})
+			)
+		}
 
 		switch (type) {
 			case "view": {
@@ -495,6 +508,9 @@ export default class Ping extends ApplicationCommand {
 						await channel.permissionOverwrites.create(discordPlayer, {
 							ViewChannel: true
 						})
+					}
+					if (location.autoMessage) {
+						await channel.send(location.autoMessage)
 					}
 				}
 				return interaction.editReply({

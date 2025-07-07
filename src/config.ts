@@ -20,6 +20,11 @@ export const gameConfig: {
 		description: "The channel ID of the day chat"
 	},
 	{
+		key: "locationCategory",
+		type: "string",
+		description: "The category ID of the location category"
+	},
+	{
 		key: "wantedPrice",
 		type: "integer",
 		description: "The price to declare a wanted person"
