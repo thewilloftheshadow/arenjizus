@@ -1,17 +1,25 @@
 import {
 	ApplicationCommandOptionType,
+	AutocompleteInteraction,
 	type ChatInputCommandInteraction
 } from "discord.js"
 import database, { s3 } from "~/database"
-import { getDiscordPlayer } from "~/database/getData"
+import { getPlayer } from "~/database/getData"
 import { generateErrorMessage } from "~/functions/generateMessage"
 import { ApplicationCommand, type BetterClient } from "~/lib"
 
 export default class Ping extends ApplicationCommand {
 	constructor(client: BetterClient) {
 		super("set", client, {
-			description: `Set yourself`,
+			description: `Set a player's anon data`,
 			options: [
+				{
+					name: "player",
+					description: "The player to set",
+					type: ApplicationCommandOptionType.String,
+					required: true,
+					autocomplete: true
+				},
 				{
 					name: "name",
 					description: "Set your name",
@@ -26,6 +34,21 @@ export default class Ping extends ApplicationCommand {
 				}
 			]
 		})
+	}
+
+	override async autocomplete(interaction: AutocompleteInteraction) {
+		const players = await database.player.findMany({
+			where: {
+				name: {
+					contains: interaction.options.getString("player", true)
+				}
+			}
+		})
+		const choices = players.map((player) => ({
+			name: player.name,
+			value: player.name
+		}))
+		await interaction.respond(choices)
 	}
 
 	override async run(interaction: ChatInputCommandInteraction) {
@@ -47,14 +70,16 @@ export default class Ping extends ApplicationCommand {
 				)
 			)
 		}
-		const player = await getDiscordPlayer(interaction.user.id)
+		const player = await getPlayer(
+			interaction.options.getString("player", true)
+		)
+
 		if (!player) {
 			return interaction.editReply(
 				generateErrorMessage(
 					{
-						title: "Player not linked",
-						description:
-							"The gamemasters have not yet linked any player data to your Discord account. Please contact them to do so."
+						title: "Player not found",
+						description: `The player ${interaction.options.getString("player", true)} was not found.`
 					},
 					false,
 					true
@@ -67,7 +92,6 @@ export default class Ping extends ApplicationCommand {
 			player.name = name
 		}
 		if (avatar) {
-			// upload the avatar to S3 and set the file name in the database
 			const response = await fetch(avatar.url)
 			if (!response.ok) {
 				return interaction.editReply(
