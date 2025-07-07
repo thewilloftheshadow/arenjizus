@@ -74,14 +74,14 @@ export default class Send extends ApplicationCommand {
 		await interaction.deferReply({ ephemeral: true })
 		const enabled = await database.keyV.findFirst({
 			where: {
-				key: "canVote"
+				key: "canSend"
 			}
 		})
 		if (!enabled?.valueBoolean) {
 			return interaction.editReply(
 				generateErrorMessage({
-					title: "Voting is disabled",
-					description: "It is not currently time to vote."
+					title: "Sending money is disabled",
+					description: "It is not currently time to send money."
 				})
 			)
 		}

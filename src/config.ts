@@ -55,6 +55,11 @@ export const gameConfig: {
 		description: "Whether traveling is enabled at all"
 	},
 	{
+		key: "canSend",
+		type: "boolean",
+		description: "Whether sending money is enabled"
+	},
+	{
 		key: "canFreeTravel",
 		type: "boolean",
 		description:
